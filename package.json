@@ -2,7 +2,7 @@
   "name": "one-of-a-kind-design",
   "version": "0.1.0",
   "type": "module",
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "test": "bun test",
     "build": "bun tsc --noEmit",
