@@ -390,7 +390,11 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       pipe(
         Console.error(`\n${error}`),
-        Effect.flatMap(() => Effect.sync(() => { process.exitCode = 1; })),
+        Effect.flatMap(() =>
+          Effect.sync(() => {
+            process.exitCode = 1;
+          }),
+        ),
       ),
     ),
     Effect.runPromise,

@@ -303,9 +303,9 @@ export function selectModel(
       (m) => preferred.includes(m.name) && tierRank(m.tier) >= tierRank(requestedTier),
     );
     if (primary) {
-      const fallback = models.find(
-        (m) => m.name !== primary.name && tierRank(m.tier) >= tierRank("standard"),
-      )!;
+      const fallback =
+        models.find((m) => m.name !== primary.name && tierRank(m.tier) >= tierRank("standard")) ??
+        primary;
       return {
         primary,
         fallback,

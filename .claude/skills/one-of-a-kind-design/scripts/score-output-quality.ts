@@ -140,7 +140,7 @@ const program = Effect.gen(function* () {
     const report = computeComposite(demoScores);
     yield* Effect.sync(() => {
       console.log(report.scoreCard);
-      console.log("\n" + JSON.stringify(report, null, 2));
+      console.log(`\n${JSON.stringify(report, null, 2)}`);
     });
     return;
   }
@@ -165,7 +165,7 @@ const program = Effect.gen(function* () {
 
   yield* Effect.sync(() => {
     console.log(report.scoreCard);
-    console.log("\n" + JSON.stringify(report, null, 2));
+    console.log(`\n${JSON.stringify(report, null, 2)}`);
     if (!report.passed) process.exit(1);
   });
 });

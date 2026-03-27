@@ -59,7 +59,12 @@ const program = Effect.gen(function* () {
 
     const msg = `Rule violations in ${filePath} (${report.violations.length} total):\n${reasons}${report.violations.length > 8 ? `\n...and ${report.violations.length - 8} more` : ""}\nFix these violations before proceeding.`;
 
-    logHookBoth("PostToolUse", "Write|Edit", "DENY", `${report.violations.length} violations in ${basename}`);
+    logHookBoth(
+      "PostToolUse",
+      "Write|Edit",
+      "DENY",
+      `${report.violations.length} violations in ${basename}`,
+    );
     yield* Effect.sync(() => {
       console.error(msg);
       process.exitCode = 2;
@@ -72,8 +77,10 @@ const program = Effect.gen(function* () {
 
 pipe(
   program,
-  Effect.catchAll((e) => Effect.sync(() => {
-    logHookBoth("PostToolUse", "Write|Edit", "ERROR", e instanceof Error ? e.message : String(e));
-  })),
+  Effect.catchAll((e) =>
+    Effect.sync(() => {
+      logHookBoth("PostToolUse", "Write|Edit", "ERROR", e instanceof Error ? e.message : String(e));
+    }),
+  ),
   Effect.runPromise,
 );

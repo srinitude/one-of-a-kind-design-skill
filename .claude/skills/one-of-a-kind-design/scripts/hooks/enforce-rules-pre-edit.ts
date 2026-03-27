@@ -38,15 +38,22 @@ const program = Effect.gen(function* () {
       .map((v) => `L${v.line} [${v.rule}] ${v.pattern} → ${v.replacement}`)
       .join("\n");
 
-    logHook("PreToolUse", "Edit", "DENY", `${violations.length} violations in ${filePath.split("/").pop() ?? ""}`);
+    logHook(
+      "PreToolUse",
+      "Edit",
+      "DENY",
+      `${violations.length} violations in ${filePath.split("/").pop() ?? ""}`,
+    );
     yield* Effect.sync(() => {
-      console.log(JSON.stringify({
-        hookSpecificOutput: {
-          hookEventName: "PreToolUse",
-          permissionDecision: "deny",
-          permissionDecisionReason: `Rule violations in edit to ${filePath}:\n${reasons}${violations.length > 5 ? `\n...and ${violations.length - 5} more` : ""}`,
-        },
-      }));
+      console.log(
+        JSON.stringify({
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            permissionDecision: "deny",
+            permissionDecisionReason: `Rule violations in edit to ${filePath}:\n${reasons}${violations.length > 5 ? `\n...and ${violations.length - 5} more` : ""}`,
+          },
+        }),
+      );
     });
     return;
   }
@@ -56,8 +63,10 @@ const program = Effect.gen(function* () {
 
 pipe(
   program,
-  Effect.catchAll((e) => Effect.sync(() => {
-    logHook("PreToolUse", "Edit", "ERROR", e instanceof Error ? e.message : String(e));
-  })),
+  Effect.catchAll((e) =>
+    Effect.sync(() => {
+      logHook("PreToolUse", "Edit", "ERROR", e instanceof Error ? e.message : String(e));
+    }),
+  ),
   Effect.runPromise,
 );

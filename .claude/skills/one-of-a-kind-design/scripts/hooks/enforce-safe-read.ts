@@ -28,13 +28,16 @@ const program = Effect.gen(function* () {
   if (ENV_FILE_PATTERN.test(filePath)) {
     logHook("PreToolUse", "Read", "DENY", `blocked .env read: ${filePath.split("/").pop() ?? ""}`);
     yield* Effect.sync(() => {
-      console.log(JSON.stringify({
-        hookSpecificOutput: {
-          hookEventName: "PreToolUse",
-          permissionDecision: "deny",
-          permissionDecisionReason: "Blocked: reading .env files. Use Bun.env or check-api-keys.ts instead.",
-        },
-      }));
+      console.log(
+        JSON.stringify({
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            permissionDecision: "deny",
+            permissionDecisionReason:
+              "Blocked: reading .env files. Use Bun.env or check-api-keys.ts instead.",
+          },
+        }),
+      );
     });
     return;
   }
@@ -44,8 +47,10 @@ const program = Effect.gen(function* () {
 
 pipe(
   program,
-  Effect.catchAll((e) => Effect.sync(() => {
-    logHook("PreToolUse", "Read", "ERROR", e instanceof Error ? e.message : String(e));
-  })),
+  Effect.catchAll((e) =>
+    Effect.sync(() => {
+      logHook("PreToolUse", "Read", "ERROR", e instanceof Error ? e.message : String(e));
+    }),
+  ),
   Effect.runPromise,
 );

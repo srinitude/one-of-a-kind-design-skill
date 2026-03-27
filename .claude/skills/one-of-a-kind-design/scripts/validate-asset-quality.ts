@@ -78,7 +78,7 @@ export async function validateAsset(
 ): Promise<AssetQualityResult> {
   const file = Bun.file(filePath);
   const fileSize = file.size;
-  const ext = "." + filePath.split(".").pop()!.toLowerCase();
+  const ext = `.${filePath.split(".").pop()?.toLowerCase()}`;
   const type = assetType ?? detectAssetType(ext);
 
   const checks: AssetCheck[] = [];

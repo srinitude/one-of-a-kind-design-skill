@@ -45,12 +45,7 @@ const D = "\x1b[2m";
 
 export type HookStatus = "PASS" | "DENY" | "ERROR" | "INFO" | "SKIP";
 
-function formatLine(
-  event: string,
-  matcher: string,
-  status: HookStatus,
-  detail?: string,
-): string {
+function formatLine(event: string, matcher: string, status: HookStatus, detail?: string): string {
   const ec = EVENT_COLORS[event] ?? "\x1b[37m";
   const sc = STATUS_COLORS[status] ?? "\x1b[37m";
   const ts = new Date().toISOString().slice(11, 19);
@@ -59,16 +54,13 @@ function formatLine(
 }
 
 /** Log to stderr only. Use for PreToolUse hooks that output JSON to stdout. */
-export function logHook(
-  event: string,
-  matcher: string,
-  status: HookStatus,
-  detail?: string,
-): void {
+export function logHook(event: string, matcher: string, status: HookStatus, detail?: string): void {
   const line = formatLine(event, matcher, status, detail);
-  Effect.runSync(Effect.sync(() => {
-    console.error(line);
-  }));
+  Effect.runSync(
+    Effect.sync(() => {
+      console.error(line);
+    }),
+  );
 }
 
 /** Log to both stderr and stdout. Use for all non-PreToolUse hooks. */
@@ -79,15 +71,16 @@ export function logHookBoth(
   detail?: string,
 ): void {
   const line = formatLine(event, matcher, status, detail);
-  Effect.runSync(Effect.sync(() => {
-    console.error(line);
-    console.log(line);
-  }));
+  Effect.runSync(
+    Effect.sync(() => {
+      console.error(line);
+      console.log(line);
+    }),
+  );
 }
 
 if (import.meta.main) {
-  const [event = "Unknown", matcher = "*", status = "INFO", ...rest] =
-    Bun.argv.slice(2);
+  const [event = "Unknown", matcher = "*", status = "INFO", ...rest] = Bun.argv.slice(2);
   const detail = rest.join(" ") || undefined;
   logHookBoth(event, matcher, status as HookStatus, detail);
 }

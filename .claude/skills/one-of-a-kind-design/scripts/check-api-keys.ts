@@ -12,7 +12,7 @@ export const checkKeys = Effect.gen(function* () {
   const results: KeyCheckResult[] = REQUIRED_KEYS.map((name) => ({
     name,
     status: Bun.env[name] ? "present" : "missing",
-    value: Bun.env[name] ? `${Bun.env[name]!.slice(0, 6)}...` : undefined,
+    value: Bun.env[name] ? `${Bun.env[name]?.slice(0, 6)}...` : undefined,
   }));
 
   const missing = results.filter((r) => r.status === "missing");

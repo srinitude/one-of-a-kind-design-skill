@@ -257,7 +257,7 @@ const program = Effect.gen(function* () {
     audience: getArg("--audience"),
     dialOverrides: getArg("--dials")
       ? yield* Effect.try({
-          try: () => JSON.parse(getArg("--dials")!) as Record<string, number>,
+          try: () => JSON.parse(getArg("--dials") ?? "{}") as Record<string, number>,
           catch: () => new Error("Invalid --dials JSON"),
         })
       : undefined,

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "bun test",
-    "build": "bun tsc --noEmit",
+    "build": "bunx tsc --noEmit",
     "lint": "bunx @biomejs/biome check .claude/skills/one-of-a-kind-design/scripts/",
     "lint:fix": "bunx @biomejs/biome check --fix .claude/skills/one-of-a-kind-design/scripts/",
     "format": "bunx @biomejs/biome format --write .claude/skills/one-of-a-kind-design/scripts/",

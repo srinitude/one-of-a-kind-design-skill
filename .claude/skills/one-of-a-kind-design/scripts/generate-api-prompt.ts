@@ -134,12 +134,14 @@ const program = Effect.gen(function* () {
   const userIntent = getArg("--intent") ?? "";
 
   if (!stage) {
-    yield* Effect.fail(new Error("Missing --stage. Options: " + Object.keys(ROUTE_MAP).join(", ")));
+    return yield* Effect.fail(
+      new Error(`Missing --stage. Options: ${Object.keys(ROUTE_MAP).join(", ")}`),
+    );
   }
 
-  const route = ROUTE_MAP[stage!];
+  const route = ROUTE_MAP[stage];
   if (!route) {
-    yield* Effect.fail(
+    return yield* Effect.fail(
       new Error(`Unknown stage: ${stage}. Options: ${Object.keys(ROUTE_MAP).join(", ")}`),
     );
   }
@@ -150,19 +152,19 @@ const program = Effect.gen(function* () {
         catch: () => ({ id: "editorial-minimalism" }) as StyleData,
       })
     : { id: "editorial-minimalism" };
-  const crafterContext = buildCrafterContext(stage!, style, userIntent);
-  const model = DEFAULT_MODELS[stage!] ?? "fal-ai/flux-pro/v1.1-ultra";
+  const crafterContext = buildCrafterContext(stage, style, userIntent);
+  const model = DEFAULT_MODELS[stage] ?? "fal-ai/flux-pro/v1.1-ultra";
   const promptId = generatePromptId();
 
   // In production, this invokes the subagent via Claude Code agent system.
   // For CLI usage, we output the crafter context that would be sent.
   const result: PromptResult = {
-    craftedPrompt: `[CRAFTER: ${route!.crafter}] ${crafterContext}`,
+    craftedPrompt: `[CRAFTER: ${route?.crafter}] ${crafterContext}`,
     negativePrompt: style.generativeAi?.negativePrompt ?? "",
     model,
-    pipelineStage: stage!,
-    crafterUsed: route!.crafter,
-    targetApi: route!.api,
+    pipelineStage: stage,
+    crafterUsed: route?.crafter,
+    targetApi: route?.api,
     params: {
       style_id: style.id,
       motion_signature: style.motionSignature,

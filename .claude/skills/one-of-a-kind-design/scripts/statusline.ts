@@ -58,14 +58,7 @@ function contextBar(pct: number): string {
   const width = 8;
   const filled = Math.round((pct / 100) * width);
   const empty = width - filled;
-  const color =
-    pct >= 90
-      ? C.red
-      : pct >= 70
-        ? C.brightYellow
-        : pct >= 50
-          ? C.yellow
-          : C.green;
+  const color = pct >= 90 ? C.red : pct >= 70 ? C.brightYellow : pct >= 50 ? C.yellow : C.green;
   return `${color}${"█".repeat(filled)}${C.dim}${"░".repeat(empty)}${C.reset} ${color}${pct}%${C.reset}`;
 }
 
@@ -83,11 +76,7 @@ function formatDuration(ms: number): string {
 
 const sep = `${C.dimWhite} | ${C.reset}`;
 
-function buildLine(
-  data: SessionData,
-  state: WorkflowState,
-  branch: string,
-): string {
+function buildLine(data: SessionData, state: WorkflowState, branch: string): string {
   const pct = Math.floor(data.context_window?.used_percentage ?? 0);
   const durationMs = data.cost?.total_duration_ms ?? 0;
   const ratePct = data.rate_limits?.five_hour?.used_percentage;
