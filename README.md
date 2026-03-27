@@ -24,25 +24,32 @@ Give it a design brief ("luxury hotel landing page", "art-deco SVG logo", "cyber
   - [E2B](https://e2b.dev) — sandboxed code execution
   - [QuiverAI](https://quiverai.com) — SVG generation
 
-## Quick start
+## Install
 
 ```bash
-# Clone the repository
-git clone <repo-url> one-of-a-kind-design-skill
+npx skills add srinitude/one-of-a-kind-design-skill
+```
+
+Or clone manually:
+
+```bash
+git clone https://github.com/srinitude/one-of-a-kind-design-skill.git
 cd one-of-a-kind-design-skill
-
-# Install dependencies
 bun install
+```
 
-# Configure API keys
-cp .env.example .env
-# Edit .env with your FAL_KEY, E2B_API_KEY, QUIVERAI_API_KEY
+Configure API keys in `.env`:
 
-# Validate the setup
+```
+FAL_KEY=your-fal-ai-key
+E2B_API_KEY=your-e2b-key
+QUIVERAI_API_KEY=your-quiverai-key
+```
+
+Validate the setup:
+
+```bash
 bun run validate:full
-
-# Start Claude Code
-claude
 ```
 
 Then ask it to design something:
@@ -264,4 +271,4 @@ Composite score must be >= 7.0/10 to deliver. Below that is a hard stop.
 
 ## License
 
-Private.
+[MIT](LICENSE)
