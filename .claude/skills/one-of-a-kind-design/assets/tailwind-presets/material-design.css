@@ -1,0 +1,32 @@
+/* Material Design — Tailwind v4 @theme preset
+ * Category: Modern Digital / UI-Native Styles
+ * Tags: dimensional, clean, precise, ordered, minimalist
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #2563EB;
+  --color-secondary: #1E293B;
+  --color-accent: #F59E0B;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #111111;
+  --color-muted: #64748B;
+
+  --font-display: Roboto or system sans-serif with strict type scale;
+  --font-body: Roboto or system sans-serif with strict type scale;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 1px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 1px 16px rgba(0, 0, 0, 0.1);
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

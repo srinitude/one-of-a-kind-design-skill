@@ -1,0 +1,32 @@
+/* Fractal Art — Tailwind v4 @theme preset
+ * Category: Generative / Algorithmic Styles
+ * Tags: organic, dense, dimensional, polychromatic, abstract
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #2563EB;
+  --color-secondary: #1E293B;
+  --color-accent: #F59E0B;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #111111;
+  --color-muted: #64748B;
+
+  --font-display: thin geometric sans-serif;
+  --font-body: thin geometric sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 1px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 1px 16px rgba(0, 0, 0, 0.1);
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

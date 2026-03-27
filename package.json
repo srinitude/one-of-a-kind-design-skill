@@ -1,0 +1,35 @@
+{
+  "name": "one-of-a-kind-design",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "bun test",
+    "build": "bun tsc --noEmit",
+    "lint": "bunx @biomejs/biome check .claude/skills/one-of-a-kind-design/scripts/",
+    "lint:fix": "bunx @biomejs/biome check --fix .claude/skills/one-of-a-kind-design/scripts/",
+    "format": "bunx @biomejs/biome format --write .claude/skills/one-of-a-kind-design/scripts/",
+    "format:check": "bunx @biomejs/biome format .claude/skills/one-of-a-kind-design/scripts/",
+    "ci": "bun run .claude/skills/one-of-a-kind-design/scripts/ci-validate.ts",
+    "enforce": "bun run .claude/skills/one-of-a-kind-design/scripts/enforce-rules.ts",
+    "validate": "bun run build && bun run lint && bun run enforce && bun run test",
+    "validate:full": "bun run validate && bun run .claude/skills/one-of-a-kind-design/scripts/check-api-keys.ts",
+    "check-keys": "bun run .claude/skills/one-of-a-kind-design/scripts/check-api-keys.ts",
+    "generate-assets": "bun run .claude/skills/one-of-a-kind-design/generate-assets.ts"
+  },
+  "dependencies": {
+    "effect": "^3.14.0",
+    "@effect/platform": "^0.78.0",
+    "@fal-ai/client": "^1.2.0",
+    "@quiverai/sdk": "^0.4.0",
+    "@e2b/code-interpreter": "^1.2.0",
+    "yaml": "^2.7.0",
+    "archiver": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.0",
+    "@types/archiver": "^6.0.0",
+    "@biomejs/biome": "^2.0.0",
+    "typescript": "^5.8.0"
+  }
+}

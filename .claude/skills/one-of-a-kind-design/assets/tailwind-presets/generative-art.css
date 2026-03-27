@@ -1,0 +1,32 @@
+/* Generative Art — Tailwind v4 @theme preset
+ * Category: Generative / Algorithmic Styles
+ * Tags: abstract, organic, futuristic, polychromatic, chaotic
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #2563EB;
+  --color-secondary: #1E293B;
+  --color-accent: #F59E0B;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #111111;
+  --color-muted: #64748B;
+
+  --font-display: monospace or geometric sans-serif;
+  --font-body: monospace or geometric sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

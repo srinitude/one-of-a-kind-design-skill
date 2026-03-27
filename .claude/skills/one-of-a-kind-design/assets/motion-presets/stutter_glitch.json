@@ -1,0 +1,16 @@
+{
+  "css": "steps(4, jump-both)",
+  "framer_motion": {
+    "type": "tween",
+    "duration": 0.15,
+    "ease": "linear",
+    "repeat": 3
+  },
+  "duration": "100ms-300ms",
+  "feel": "broken, lo-fi, digital artifact",
+  "use_for": [
+    "glitch art",
+    "vaporwave transitions",
+    "pixel art frame-stepping"
+  ]
+}

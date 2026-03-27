@@ -1,0 +1,425 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+
+  "includeGitInstructions": false,
+  "respectGitignore": true,
+  "enableAllProjectMcpServers": true,
+
+  "statusLine": {
+    "type": "command",
+    "command": "bun run .claude/skills/one-of-a-kind-design/scripts/statusline.ts",
+    "padding": 0
+  },
+
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Designing",
+      "Crafting",
+      "Generating",
+      "Validating",
+      "Scoring",
+      "Composing",
+      "Resolving",
+      "Annotating",
+      "Enhancing",
+      "Exporting"
+    ]
+  },
+
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+
+  "env": {
+    "BUN_ENV": "development",
+    "FORCE_COLOR": "0"
+  },
+
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "filesystem": {
+      "denyWrite": ["//etc", "//usr", "//var"],
+      "denyRead": ["./.env"]
+    },
+    "network": {
+      "allowedDomains": [
+        "*.fal.ai",
+        "fal.ai",
+        "*.quiverai.com",
+        "quiverai.com",
+        "*.e2b.dev",
+        "e2b.dev",
+        "registry.npmjs.org",
+        "github.com",
+        "*.github.com",
+        "*.googleapis.com"
+      ]
+    }
+  },
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SessionStart startup INFO 'rules loaded'; echo '=== one-of-a-kind-design ==='; echo 'RULES: (1) Bun-only (2) Effect-native (3) Max nesting 3'; echo 'Quality threshold: composite >= 7.0'; printf '{\"step\":\"Ready\",\"icon\":\"◆\"}' > /tmp/ookd-statusline-state.json",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SessionStart startup INFO 'checking API keys'; bun run .claude/skills/one-of-a-kind-design/scripts/check-api-keys.ts 2>&1 || echo 'WARNING: API key check failed'",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SessionStart startup INFO 'building'; bun run build 2>&1 && echo 'Build OK' || { echo 'BUILD FAILED — codebase has type errors' >&2; exit 2; }",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SessionStart resume INFO 'rules reminder'; echo 'RULES: (1) Bun-only (2) Effect-native (3) Max nesting 3 | Quality >= 7.0 | 15 prompt-crafter subagents | 66-style taxonomy'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "InstructionsLoaded": [
+      {
+        "matcher": "session_start|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts InstructionsLoaded session_start INFO 'checking CLAUDE.md'; test -f CLAUDE.md && echo 'CLAUDE.md loaded' || { echo 'CLAUDE.md not found — rules may not be enforced' >&2; exit 2; }",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"step\":\"Enhancing\",\"icon\":\"✦\"}' > /tmp/ookd-statusline-state.json; bun run .claude/skills/one-of-a-kind-design/scripts/hooks/enhance-message.ts",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/enforce-bash-safety.ts",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/enforce-rules-pre-write.ts",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/enforce-rules-pre-edit.ts",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/enforce-safe-read.ts",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"step\":\"Validating\",\"icon\":\"⟐\"}' > /tmp/ookd-statusline-state.json; bun run .claude/skills/one-of-a-kind-design/scripts/hooks/enforce-rules-post-write.ts",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts PostToolUse Bash INFO 'checking lockfiles'; test -f package-lock.json && { echo 'package-lock.json detected — npm was used. This project uses Bun only. Remove it and use bun install.' >&2; exit 2; }; test -f yarn.lock && { echo 'yarn.lock detected — yarn was used. This project uses Bun only.' >&2; exit 2; }; test -f pnpm-lock.yaml && { echo 'pnpm-lock.yaml detected — pnpm was used. This project uses Bun only.' >&2; exit 2; }; bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts PostToolUse Bash PASS 'no lockfile violations'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts PostToolUseFailure Bash ERROR 'bash failed'; echo 'Bash failed. Check: (1) script exists (2) bun install ran (3) API keys in .env (4) no Node.js commands'",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts PostToolUseFailure Write|Edit ERROR 'write/edit failed'; echo 'Write/Edit failed. Check: (1) file path valid (2) directory exists (3) permissions'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts Notification idle_prompt INFO 'quality reminder'; echo 'Idle: Enforce .claude/rules/quality-scoring.md — composite >= 7.0 required. Run score-output-quality.ts before delivering.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "SubagentStart": [
+      {
+        "matcher": "prompt-crafter.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SubagentStart prompt-crafter INFO 'crafting prompt'; printf '{\"step\":\"Crafting Prompt\",\"icon\":\"✎\"}' > /tmp/ookd-statusline-state.json; echo 'Prompt crafter: output EXACTLY one prompt. Zero commentary, zero markdown. Verify routing via .claude/rules/design-generation.md.'",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "quality-assessor|style-guard|ux-reviewer",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SubagentStart quality INFO 'scoring quality'; printf '{\"step\":\"Scoring Quality\",\"icon\":\"◎\"}' > /tmp/ookd-statusline-state.json; echo 'Quality agent active. Enforce .claude/rules/quality-scoring.md: 9 sub-scores, weighted composite >= 7.0. HARD STOP below threshold.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "SubagentStop": [
+      {
+        "matcher": "prompt-crafter.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SubagentStop prompt-crafter INFO 'prompt crafter done'; printf '{\"step\":\"Generating\",\"icon\":\"▶\"}' > /tmp/ookd-statusline-state.json; echo 'Prompt crafter finished. Verify per .claude/rules/design-generation.md: single prompt string, correct routing, no markdown.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Review ALL output against the project rules. Read and enforce: .claude/rules/bun-effect-patterns.md — verify (1) Bun-only: no Node.js APIs, no require(), no node:* imports, Bun.env not process.env (2) Effect-native: no raw Promises, no try/catch, no async/await outside Effect.tryPromise, no throw, no console.log outside Effect.sync (3) Max nesting depth 3. .claude/rules/quality-scoring.md — verify composite quality >= 7.0 using the 9 sub-scores and weights defined there. .claude/rules/design-generation.md — verify the correct prompt-crafter subagent was used per the routing table, and hero asset archetype matches the style. .claude/rules/api-integration.md — verify API calls use the correct scripts and patterns. Also cross-reference: .claude/skills/one-of-a-kind-design/references/STYLE-INDEX.md for taxonomy compliance, .claude/skills/one-of-a-kind-design/references/PROMPT-ARTIFACT-ALIGNMENT.md for alignment criteria.",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+
+    "StopFailure": [
+      {
+        "matcher": "rate_limit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts StopFailure rate_limit ERROR 'rate limited'; echo 'RATE LIMITED. Check fal.ai/E2B dashboards. Wait before retrying.'",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "authentication_failed",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts StopFailure authentication_failed ERROR 'auth failed'; echo 'AUTH FAILED. Run: bun run check-keys. Verify FAL_KEY, E2B_API_KEY, QUIVERAI_API_KEY.'",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "billing_error|server_error",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts StopFailure billing_error ERROR 'api error'; echo 'API ERROR. Check provider dashboards. Retry after verifying service status.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "ConfigChange": [
+      {
+        "matcher": "project_settings|skills",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts ConfigChange project_settings INFO 'validating'; echo 'Config changed. Running full validation...' && bun run validate 2>&1 && echo 'Validation PASSED.' || { echo 'VALIDATION FAILED after config change.' >&2; exit 2; }",
+            "timeout": 60,
+            "statusMessage": "Validating after config change..."
+          }
+        ]
+      },
+      {
+        "matcher": "local_settings",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts ConfigChange local_settings INFO 'local settings updated'; echo 'Local settings changed. Auto mode config may have been updated.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts CwdChanged '*' INFO 'checking structure'; if test -d .claude/skills/one-of-a-kind-design/scripts && test -f package.json && test -f .claude/skills/one-of-a-kind-design/SKILL.md; then echo '{\"watchPaths\":[\".env\",\"package.json\",\"biome.json\",\"tsconfig.json\",\"bun.lock\",\"CLAUDE.md\",\".claude/skills/one-of-a-kind-design/SKILL.md\"]}'; echo 'Project structure OK. File watchers set.' >&2; else echo 'WARNING: Expected project structure not found.' >&2; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+
+    "FileChanged": [
+      {
+        "matcher": "\\.env",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts FileChanged .env INFO 're-validating keys'; echo '.env changed. Re-validating API keys...' && bun run .claude/skills/one-of-a-kind-design/scripts/check-api-keys.ts 2>&1 || { echo 'API KEY VALIDATION FAILED.' >&2; exit 2; }",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "package\\.json",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts FileChanged package.json INFO 'installing+building'; echo 'package.json changed.' && bun install --frozen-lockfile 2>&1 && bun run build 2>&1 && echo 'Deps and build OK.' || { echo 'INSTALL OR BUILD FAILED after package.json change.' >&2; exit 2; }",
+            "timeout": 30,
+            "statusMessage": "Validating after package.json change..."
+          }
+        ]
+      },
+      {
+        "matcher": "biome\\.json|tsconfig\\.json",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts FileChanged config INFO 'build+lint'; echo 'Build config changed.' && bun run build 2>&1 && bun run lint 2>&1 && echo 'Build+lint OK.' || { echo 'BUILD OR LINT FAILED after config change.' >&2; exit 2; }",
+            "timeout": 30,
+            "statusMessage": "Validating after config file change..."
+          }
+        ]
+      },
+      {
+        "matcher": "bun\\.lock",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts FileChanged bun.lock INFO 'building'; echo 'Lockfile changed.' && bun run build 2>&1 && echo 'Build OK.' || { echo 'BUILD FAILED after lockfile change.' >&2; exit 2; }",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts PreCompact '*' INFO 'preserving context'; echo 'CONTEXT COMPACTING — Preserve: RULES in .claude/rules/: bun-effect-patterns.md (42+19 patterns), design-generation.md (7 archetypes, 15 crafters), quality-scoring.md (9 sub-scores, >=7.0), api-integration.md (fal.ai/QuiverAI/E2B) | WORKFLOW: enhance->resolve->select->craft->generate->validate->score->annotate->export'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts PostCompact '*' INFO 'context compacted'; echo 'Context compacted. Re-read: CLAUDE.md, .claude/skills/one-of-a-kind-design/SKILL.md, and .claude/rules/. Rules enforced via hooks.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+
+    "SessionEnd": [
+      {
+        "matcher": "clear|prompt_input_exit|other",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run .claude/skills/one-of-a-kind-design/scripts/hooks/hook-logger.ts SessionEnd exit INFO 'final enforcement'; bun run enforce 2>&1 | tail -3 || true",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

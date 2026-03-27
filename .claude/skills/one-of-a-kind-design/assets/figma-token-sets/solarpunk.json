@@ -1,0 +1,108 @@
+{
+  "$metadata": {
+    "tokenSetName": "solarpunk",
+    "generatedFrom": "visual-styles-taxonomy v0.1.0",
+    "styleName": "Solarpunk",
+    "category": "Emerging / Post-2020 Digital Styles"
+  },
+  "color": {
+    "primary": {
+      "value": "#2563EB",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#1E293B",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#F59E0B",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#FFFFFF",
+      "type": "color"
+    },
+    "on-surface": {
+      "value": "#111111",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#64748B",
+      "type": "color"
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": {
+        "value": "rounded humanist sans-serif with organic character",
+        "type": "fontFamilies"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "value": "rounded humanist sans-serif with organic character",
+        "type": "fontFamilies"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "4",
+      "type": "spacing"
+    },
+    "sm": {
+      "value": "8",
+      "type": "spacing"
+    },
+    "md": {
+      "value": "16",
+      "type": "spacing"
+    },
+    "lg": {
+      "value": "32",
+      "type": "spacing"
+    },
+    "xl": {
+      "value": "64",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "6px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "12px",
+      "type": "borderRadius"
+    },
+    "lg": {
+      "value": "18px",
+      "type": "borderRadius"
+    }
+  },
+  "shadow": {
+    "model": {
+      "value": "soft natural-light shadows with green tint",
+      "type": "other"
+    }
+  },
+  "dials": {
+    "designVariance": {
+      "value": "5",
+      "type": "other"
+    },
+    "motionIntensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "visualDensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "formality": {
+      "value": "5",
+      "type": "other"
+    }
+  }
+}

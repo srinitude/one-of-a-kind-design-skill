@@ -1,0 +1,108 @@
+{
+  "$metadata": {
+    "tokenSetName": "ukiyo-e",
+    "generatedFrom": "visual-styles-taxonomy v0.1.0",
+    "styleName": "Ukiyo-e",
+    "category": "Cultural & Regional Aesthetics"
+  },
+  "color": {
+    "primary": {
+      "value": "#2563EB",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#1E293B",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#F59E0B",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#FFFFFF",
+      "type": "color"
+    },
+    "on-surface": {
+      "value": "#111111",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#64748B",
+      "type": "color"
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": {
+        "value": "brush script or clean CJK serif",
+        "type": "fontFamilies"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "value": "clean sans for Latin text, CJK serif for Japanese",
+        "type": "fontFamilies"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "4",
+      "type": "spacing"
+    },
+    "sm": {
+      "value": "8",
+      "type": "spacing"
+    },
+    "md": {
+      "value": "16",
+      "type": "spacing"
+    },
+    "lg": {
+      "value": "32",
+      "type": "spacing"
+    },
+    "xl": {
+      "value": "64",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "0px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "0px",
+      "type": "borderRadius"
+    },
+    "lg": {
+      "value": "0px",
+      "type": "borderRadius"
+    }
+  },
+  "shadow": {
+    "model": {
+      "value": "none (flat color areas)",
+      "type": "other"
+    }
+  },
+  "dials": {
+    "designVariance": {
+      "value": "6",
+      "type": "other"
+    },
+    "motionIntensity": {
+      "value": "3",
+      "type": "other"
+    },
+    "visualDensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "formality": {
+      "value": "7",
+      "type": "other"
+    }
+  }
+}

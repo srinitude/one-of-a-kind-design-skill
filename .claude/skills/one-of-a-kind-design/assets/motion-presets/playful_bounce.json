@@ -1,0 +1,16 @@
+{
+  "css": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  "framer_motion": {
+    "type": "spring",
+    "stiffness": 200,
+    "damping": 15,
+    "mass": 0.8
+  },
+  "duration": "400ms-600ms",
+  "feel": "energetic, toy-like, joyful",
+  "use_for": [
+    "claymorphism squish",
+    "memphis/pop",
+    "gamified elements"
+  ]
+}

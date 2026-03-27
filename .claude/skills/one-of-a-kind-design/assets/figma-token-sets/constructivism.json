@@ -1,0 +1,108 @@
+{
+  "$metadata": {
+    "tokenSetName": "constructivism",
+    "generatedFrom": "visual-styles-taxonomy v0.1.0",
+    "styleName": "Constructivism",
+    "category": "Historical / Fine Art Movements"
+  },
+  "color": {
+    "primary": {
+      "value": "#CC0000",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#000000",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#CC8800",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#FFFFFF",
+      "type": "color"
+    },
+    "on-surface": {
+      "value": "#000000",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#666666",
+      "type": "color"
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": {
+        "value": "condensed geometric sans-serif at extreme scale contrast (80px+ headlines, 12px body)",
+        "type": "fontFamilies"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "value": "same family, regular weight",
+        "type": "fontFamilies"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "4",
+      "type": "spacing"
+    },
+    "sm": {
+      "value": "8",
+      "type": "spacing"
+    },
+    "md": {
+      "value": "16",
+      "type": "spacing"
+    },
+    "lg": {
+      "value": "32",
+      "type": "spacing"
+    },
+    "xl": {
+      "value": "64",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "0px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "0px",
+      "type": "borderRadius"
+    },
+    "lg": {
+      "value": "0px",
+      "type": "borderRadius"
+    }
+  },
+  "shadow": {
+    "model": {
+      "value": "none",
+      "type": "other"
+    }
+  },
+  "dials": {
+    "designVariance": {
+      "value": "9",
+      "type": "other"
+    },
+    "motionIntensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "visualDensity": {
+      "value": "8",
+      "type": "other"
+    },
+    "formality": {
+      "value": "8",
+      "type": "other"
+    }
+  }
+}

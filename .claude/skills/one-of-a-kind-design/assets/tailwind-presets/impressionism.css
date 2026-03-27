@@ -1,0 +1,32 @@
+/* Impressionism — Tailwind v4 @theme preset
+ * Category: Historical / Fine Art Movements
+ * Tags: organic, warm, textured, hand-drawn, muted
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #E8B4B8;
+  --color-secondary: #A8C4D8;
+  --color-accent: #F0D58C;
+  --color-surface: #FDF8F4;
+  --color-on-surface: #3D3835;
+  --color-muted: #D4C5BE;
+
+  --font-display: humanist serif or light-weight sans-serif;
+  --font-body: humanist serif or light-weight sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 2px 24px rgba(0, 0, 0, 0.08);
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

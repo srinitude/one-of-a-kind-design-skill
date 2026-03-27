@@ -1,0 +1,108 @@
+{
+  "$metadata": {
+    "tokenSetName": "material-design",
+    "generatedFrom": "visual-styles-taxonomy v0.1.0",
+    "styleName": "Material Design",
+    "category": "Modern Digital / UI-Native Styles"
+  },
+  "color": {
+    "primary": {
+      "value": "#2563EB",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#1E293B",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#F59E0B",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#FFFFFF",
+      "type": "color"
+    },
+    "on-surface": {
+      "value": "#111111",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#64748B",
+      "type": "color"
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": {
+        "value": "premium_sans_stack (not Roboto — that's the default we're avoiding)",
+        "type": "fontFamilies"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "value": "same stack with strict Material type scale ratios",
+        "type": "fontFamilies"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "4",
+      "type": "spacing"
+    },
+    "sm": {
+      "value": "8",
+      "type": "spacing"
+    },
+    "md": {
+      "value": "16",
+      "type": "spacing"
+    },
+    "lg": {
+      "value": "32",
+      "type": "spacing"
+    },
+    "xl": {
+      "value": "64",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "2px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "4px",
+      "type": "borderRadius"
+    },
+    "lg": {
+      "value": "6px",
+      "type": "borderRadius"
+    }
+  },
+  "shadow": {
+    "model": {
+      "value": "elevation-based layered shadows (dp system)",
+      "type": "other"
+    }
+  },
+  "dials": {
+    "designVariance": {
+      "value": "3",
+      "type": "other"
+    },
+    "motionIntensity": {
+      "value": "4",
+      "type": "other"
+    },
+    "visualDensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "formality": {
+      "value": "6",
+      "type": "other"
+    }
+  }
+}

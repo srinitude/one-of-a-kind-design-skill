@@ -1,0 +1,108 @@
+{
+  "$metadata": {
+    "tokenSetName": "art-nouveau",
+    "generatedFrom": "visual-styles-taxonomy v0.1.0",
+    "styleName": "Art Nouveau",
+    "category": "Historical / Fine Art Movements"
+  },
+  "color": {
+    "primary": {
+      "value": "#2563EB",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#1E293B",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#F59E0B",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#FFFFFF",
+      "type": "color"
+    },
+    "on-surface": {
+      "value": "#111111",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#64748B",
+      "type": "color"
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": {
+        "value": "decorative serif with swash alternates (enable OpenType ss01–ss03, swsh)",
+        "type": "fontFamilies"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "value": "humanist sans-serif for readability",
+        "type": "fontFamilies"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "4",
+      "type": "spacing"
+    },
+    "sm": {
+      "value": "8",
+      "type": "spacing"
+    },
+    "md": {
+      "value": "16",
+      "type": "spacing"
+    },
+    "lg": {
+      "value": "32",
+      "type": "spacing"
+    },
+    "xl": {
+      "value": "64",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "4px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "8px",
+      "type": "borderRadius"
+    },
+    "lg": {
+      "value": "12px",
+      "type": "borderRadius"
+    }
+  },
+  "shadow": {
+    "model": {
+      "value": "subtle inner shadows for embossed effect",
+      "type": "other"
+    }
+  },
+  "dials": {
+    "designVariance": {
+      "value": "6",
+      "type": "other"
+    },
+    "motionIntensity": {
+      "value": "4",
+      "type": "other"
+    },
+    "visualDensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "formality": {
+      "value": "6",
+      "type": "other"
+    }
+  }
+}

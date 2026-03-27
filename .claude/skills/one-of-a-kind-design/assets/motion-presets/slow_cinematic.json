@@ -1,0 +1,20 @@
+{
+  "css": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+  "framer_motion": {
+    "type": "tween",
+    "duration": 1,
+    "ease": [
+      0.25,
+      0.46,
+      0.45,
+      0.94
+    ]
+  },
+  "duration": "800ms-1200ms",
+  "feel": "dramatic, editorial, contemplative",
+  "use_for": [
+    "hero reveals",
+    "full-page transitions",
+    "photography-heavy layouts"
+  ]
+}

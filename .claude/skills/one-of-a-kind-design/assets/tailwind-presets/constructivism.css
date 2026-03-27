@@ -1,0 +1,32 @@
+/* Constructivism — Tailwind v4 @theme preset
+ * Category: Historical / Fine Art Movements
+ * Tags: geometric, high-contrast, angular, dense, serious
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #CC0000;
+  --color-secondary: #000000;
+  --color-accent: #CC8800;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #000000;
+  --color-muted: #666666;
+
+  --font-display: condensed geometric sans-serif, bold weights;
+  --font-body: condensed geometric sans-serif, bold weights;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-full: 9999px;
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

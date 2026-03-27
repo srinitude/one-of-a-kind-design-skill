@@ -1,0 +1,32 @@
+/* Art Deco — Tailwind v4 @theme preset
+ * Category: Historical / Fine Art Movements
+ * Tags: geometric, high-contrast, precise, opaque, symmetric
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #FFD700;
+  --color-secondary: #1A1A1A;
+  --color-accent: #8B0000;
+  --color-surface: #0D0D0D;
+  --color-on-surface: #F5F0E8;
+  --color-muted: #2A2420;
+
+  --font-display: geometric display serif or high-contrast sans-serif;
+  --font-body: geometric display serif or high-contrast sans-serif;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 1px 1px 0 0 rgba(201, 168, 76, 0.3);
+  --shadow-md: 2px 2px 0 0 rgba(201, 168, 76, 0.3);
+  --shadow-lg: 4px 4px 0 0 rgba(201, 168, 76, 0.3);
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

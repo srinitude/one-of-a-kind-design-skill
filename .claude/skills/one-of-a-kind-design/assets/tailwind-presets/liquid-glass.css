@@ -1,0 +1,32 @@
+/* Liquid Glass — Tailwind v4 @theme preset
+ * Category: Emerging / Post-2020 Digital Styles
+ * Tags: translucent, futuristic, clean, dimensional, restrained
+ * Generated from visual-styles-taxonomy v0.1.0
+ */
+
+@theme inline {
+  --color-primary: #2563EB;
+  --color-secondary: #1E293B;
+  --color-accent: #F59E0B;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #111111;
+  --color-muted: #64748B;
+
+  --font-display: SF Pro Display or equivalent system sans-serif at medium weight;
+  --font-body: SF Pro Display or equivalent system sans-serif at medium weight;
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 2px 2px 0 rgba(0, 0, 0, 0.15);
+  --shadow-md: 4px 4px 0 rgba(0, 0, 0, 0.15);
+  --shadow-lg: 8px 8px 0 rgba(0, 0, 0, 0.15);
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}

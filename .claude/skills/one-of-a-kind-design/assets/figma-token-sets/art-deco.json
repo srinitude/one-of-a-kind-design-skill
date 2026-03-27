@@ -1,0 +1,108 @@
+{
+  "$metadata": {
+    "tokenSetName": "art-deco",
+    "generatedFrom": "visual-styles-taxonomy v0.1.0",
+    "styleName": "Art Deco",
+    "category": "Historical / Fine Art Movements"
+  },
+  "color": {
+    "primary": {
+      "value": "#FFD700",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#1A1A1A",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#8B0000",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#0D0D0D",
+      "type": "color"
+    },
+    "on-surface": {
+      "value": "#F5F0E8",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#2A2420",
+      "type": "color"
+    }
+  },
+  "typography": {
+    "display": {
+      "fontFamily": {
+        "value": "geometric display serif or high-contrast sans with extreme weight contrast",
+        "type": "fontFamilies"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "value": "premium_sans_stack",
+        "type": "fontFamilies"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "4",
+      "type": "spacing"
+    },
+    "sm": {
+      "value": "8",
+      "type": "spacing"
+    },
+    "md": {
+      "value": "16",
+      "type": "spacing"
+    },
+    "lg": {
+      "value": "32",
+      "type": "spacing"
+    },
+    "xl": {
+      "value": "64",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "0px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "0px",
+      "type": "borderRadius"
+    },
+    "lg": {
+      "value": "0px",
+      "type": "borderRadius"
+    }
+  },
+  "shadow": {
+    "model": {
+      "value": "hard drop shadows or metallic bevel",
+      "type": "other"
+    }
+  },
+  "dials": {
+    "designVariance": {
+      "value": "5",
+      "type": "other"
+    },
+    "motionIntensity": {
+      "value": "4",
+      "type": "other"
+    },
+    "visualDensity": {
+      "value": "5",
+      "type": "other"
+    },
+    "formality": {
+      "value": "8",
+      "type": "other"
+    }
+  }
+}

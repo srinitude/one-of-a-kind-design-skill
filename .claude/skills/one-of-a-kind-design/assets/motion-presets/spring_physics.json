@@ -1,0 +1,15 @@
+{
+  "css": "cubic-bezier(0.16, 1, 0.3, 1)",
+  "framer_motion": {
+    "type": "spring",
+    "stiffness": 100,
+    "damping": 20
+  },
+  "duration": "400ms-600ms",
+  "feel": "premium, weighty, physical",
+  "use_for": [
+    "interactive elements",
+    "page transitions",
+    "modal reveals"
+  ]
+}

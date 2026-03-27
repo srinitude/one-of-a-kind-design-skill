@@ -1,0 +1,13 @@
+{
+  "css": "cubic-bezier(0.16, 1, 0.3, 1)",
+  "framer_motion": {
+    "type": "spring",
+    "stiffness": 100,
+    "damping": 20,
+    "delay": 0
+  },
+  "implementation": "IntersectionObserver",
+  "default_transform": "translateY(16px) + opacity: 0",
+  "stagger_formula": "animation-delay: calc(var(--index) * 80ms)",
+  "performance": "animate only transform and opacity"
+}

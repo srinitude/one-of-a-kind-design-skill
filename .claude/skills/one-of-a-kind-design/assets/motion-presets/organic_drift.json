@@ -1,0 +1,21 @@
+{
+  "css": "cubic-bezier(0.37, 0, 0.63, 1)",
+  "framer_motion": {
+    "type": "tween",
+    "duration": 5,
+    "ease": [
+      0.37,
+      0,
+      0.63,
+      1
+    ],
+    "repeat": null
+  },
+  "duration": "2000ms-20000ms",
+  "feel": "natural, meditative, atmospheric",
+  "use_for": [
+    "background gradients",
+    "parallax layers",
+    "wabi-sabi/impressionist"
+  ]
+}
