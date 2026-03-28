@@ -10,7 +10,7 @@ Give it a design brief ("luxury hotel landing page", "art-deco SVG logo", "cyber
 2. **Research UX best practices** for your artifact type and industry
 3. **Conceive a hero asset** using one of 7 archetypes (Panning Scene, Parallax Depth, 3D Showcase, SVG Vector, etc.)
 4. **Craft an optimized prompt** via a specialized subagent (never passes raw user words to APIs)
-5. **Generate via AI** using fal.ai (48 image + 45 video models) or QuiverAI (SVG)
+5. **Generate via AI** using 184 models across fal.ai (generation, pipeline, enhancement) and QuiverAI (SVG)
 6. **Validate alignment** between what was requested and what was produced (auto-regenerates if < 5.0/10)
 7. **Score quality** across 9 dimensions (anti-slop, aesthetics, style fidelity, distinctiveness, etc.) with a hard minimum of 7.0/10
 8. **Export** for 50+ external tools (Figma, Runway, Midjourney, ComfyUI, After Effects, etc.)
