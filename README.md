@@ -27,7 +27,7 @@ Give it a design brief ("luxury hotel landing page", "art-deco SVG logo", "cyber
 ## Install
 
 ```bash
-npx skills add srinitude/one-of-a-kind-design-skill
+bunx skills add srinitude/one-of-a-kind-design-skill
 ```
 
 Or clone manually:
