@@ -2,7 +2,11 @@
  * score-output-quality.ts — Composite quality score from all validators.
  * Weighted average of 9 sub-scores. Minimum: 7.0/10. HARD STOP if below.
  *
+ * L5 fix: Accepts codeStandardsGate: null for image-only workflows.
+ * When null, 0.08 weight redistributes proportionally across remaining sub-scores.
+ *
  * Run: bun run scripts/score-output-quality.ts --scores '{"anti_slop":8.5,...}'
+ *      bun run scripts/score-output-quality.ts --scores '{"antiSlopGate":9,"codeStandardsGate":null,...}' --workflow "image-only"
  */
 import { Effect, pipe } from "effect";
 
@@ -10,7 +14,7 @@ import { Effect, pipe } from "effect";
 
 interface SubScores {
   readonly antiSlopGate: number;
-  readonly codeStandardsGate: number;
+  readonly codeStandardsGate: number | null;
   readonly assetQualityAvg: number;
   readonly promptArtifactAlign: number;
   readonly aesthetic: number;
@@ -25,16 +29,17 @@ interface QualityReport {
   readonly passed: boolean;
   readonly minimum: number;
   readonly subScores: SubScores;
+  readonly workflow: "full" | "image-only";
   readonly weightedBreakdown: Record<
     string,
-    { score: number; weight: number; contribution: number }
+    { score: number | null; weight: number; contribution: number }
   >;
   readonly scoreCard: string;
 }
 
 // --- Weights ---
 
-export const WEIGHTS: Record<keyof SubScores, number> = {
+export const BASE_WEIGHTS: Record<string, number> = {
   antiSlopGate: 0.15,
   codeStandardsGate: 0.08,
   assetQualityAvg: 0.12,
@@ -46,19 +51,65 @@ export const WEIGHTS: Record<keyof SubScores, number> = {
   colorHarmony: 0.05,
 };
 
+/** @deprecated Use BASE_WEIGHTS instead */
+export const WEIGHTS = BASE_WEIGHTS as Record<keyof SubScores, number>;
+
 const MINIMUM_COMPOSITE = 7.0;
+
+// --- Weight redistribution for null sub-scores ---
+
+function computeEffectiveWeights(scores: SubScores): Record<string, number> {
+  const nullKeys: string[] = [];
+  const activeKeys: string[] = [];
+
+  for (const key of Object.keys(BASE_WEIGHTS)) {
+    const value = scores[key as keyof SubScores];
+    if (value === null) {
+      nullKeys.push(key);
+    } else {
+      activeKeys.push(key);
+    }
+  }
+
+  if (nullKeys.length === 0) return { ...BASE_WEIGHTS };
+
+  const nullWeight = nullKeys.reduce((sum, k) => sum + BASE_WEIGHTS[k], 0);
+  const activeTotal = activeKeys.reduce((sum, k) => sum + BASE_WEIGHTS[k], 0);
+
+  const effective: Record<string, number> = {};
+  for (const key of Object.keys(BASE_WEIGHTS)) {
+    if (nullKeys.includes(key)) {
+      effective[key] = 0;
+    } else {
+      effective[key] = BASE_WEIGHTS[key] + (BASE_WEIGHTS[key] / activeTotal) * nullWeight;
+    }
+  }
+
+  return effective;
+}
 
 // --- Scoring ---
 
 export function computeComposite(scores: SubScores): QualityReport {
-  const breakdown: Record<string, { score: number; weight: number; contribution: number }> = {};
+  const effectiveWeights = computeEffectiveWeights(scores);
+  const isImageOnly = scores.codeStandardsGate === null;
+  const breakdown: Record<string, { score: number | null; weight: number; contribution: number }> =
+    {};
   let composite = 0;
 
-  for (const [key, weight] of Object.entries(WEIGHTS)) {
+  for (const [key, weight] of Object.entries(effectiveWeights)) {
     const score = scores[key as keyof SubScores];
-    const contribution = score * weight;
-    composite += contribution;
-    breakdown[key] = { score, weight, contribution: Math.round(contribution * 100) / 100 };
+    if (score === null) {
+      breakdown[key] = { score: null, weight: 0, contribution: 0 };
+    } else {
+      const contribution = score * weight;
+      composite += contribution;
+      breakdown[key] = {
+        score,
+        weight: Math.round(weight * 1000) / 1000,
+        contribution: Math.round(contribution * 100) / 100,
+      };
+    }
   }
 
   composite = Math.round(composite * 100) / 100;
@@ -71,6 +122,7 @@ export function computeComposite(scores: SubScores): QualityReport {
     passed,
     minimum: MINIMUM_COMPOSITE,
     subScores: scores,
+    workflow: isImageOnly ? "image-only" : "full",
     weightedBreakdown: breakdown,
     scoreCard,
   };
@@ -78,7 +130,7 @@ export function computeComposite(scores: SubScores): QualityReport {
 
 function formatScoreCard(
   _scores: SubScores,
-  breakdown: Record<string, { score: number; weight: number; contribution: number }>,
+  breakdown: Record<string, { score: number | null; weight: number; contribution: number }>,
   composite: number,
   passed: boolean,
 ): string {
@@ -102,9 +154,15 @@ function formatScoreCard(
 
   for (const [key, entry] of Object.entries(breakdown)) {
     const label = labels[key] ?? key;
-    const bar = "█".repeat(Math.round(entry.score)) + "░".repeat(10 - Math.round(entry.score));
-    const pct = `${(entry.weight * 100).toFixed(0)}%`;
-    lines.push(`║ ${label.padEnd(18)} ${bar} ${entry.score.toFixed(1)}/10 (${pct.padStart(3)}) ║`);
+    if (entry.score === null) {
+      lines.push(`║ ${label.padEnd(18)} ░░░░░░░░░░  N/A  ( 0%) ║`);
+    } else {
+      const bar = "█".repeat(Math.round(entry.score)) + "░".repeat(10 - Math.round(entry.score));
+      const pct = `${(entry.weight * 100).toFixed(0)}%`;
+      lines.push(
+        `║ ${label.padEnd(18)} ${bar} ${entry.score.toFixed(1)}/10 (${pct.padStart(3)}) ║`,
+      );
+    }
   }
 
   lines.push("╠══════════════════════════════════════════╣");
@@ -146,19 +204,31 @@ const program = Effect.gen(function* () {
   }
 
   const rawScores = yield* Effect.try({
-    try: () => JSON.parse(args[scoresIdx + 1]) as Record<string, number>,
+    try: () => JSON.parse(args[scoresIdx + 1]) as Record<string, unknown>,
     catch: () => new Error("Invalid JSON for --scores argument"),
   });
+
+  const workflowIdx = args.indexOf("--workflow");
+  const isImageOnly =
+    (workflowIdx >= 0 && args[workflowIdx + 1] === "image-only") ||
+    rawScores.codeStandardsGate === null ||
+    rawScores.code_standards === null;
+
+  const numOrDefault = (val: unknown, fallback: number): number =>
+    typeof val === "number" ? val : fallback;
+
   const scores: SubScores = {
-    antiSlopGate: rawScores.antiSlopGate ?? rawScores.anti_slop ?? 5,
-    codeStandardsGate: rawScores.codeStandardsGate ?? rawScores.code_standards ?? 5,
-    assetQualityAvg: rawScores.assetQualityAvg ?? rawScores.asset_quality ?? 5,
-    promptArtifactAlign: rawScores.promptArtifactAlign ?? rawScores.prompt_align ?? 5,
-    aesthetic: rawScores.aesthetic ?? 5,
-    styleFidelity: rawScores.styleFidelity ?? rawScores.style_fidelity ?? 5,
-    distinctiveness: rawScores.distinctiveness ?? 5,
-    hierarchy: rawScores.hierarchy ?? 5,
-    colorHarmony: rawScores.colorHarmony ?? rawScores.color_harmony ?? 5,
+    antiSlopGate: numOrDefault(rawScores.antiSlopGate ?? rawScores.anti_slop, 5),
+    codeStandardsGate: isImageOnly
+      ? null
+      : numOrDefault(rawScores.codeStandardsGate ?? rawScores.code_standards, 5),
+    assetQualityAvg: numOrDefault(rawScores.assetQualityAvg ?? rawScores.asset_quality, 5),
+    promptArtifactAlign: numOrDefault(rawScores.promptArtifactAlign ?? rawScores.prompt_align, 5),
+    aesthetic: numOrDefault(rawScores.aesthetic, 5),
+    styleFidelity: numOrDefault(rawScores.styleFidelity ?? rawScores.style_fidelity, 5),
+    distinctiveness: numOrDefault(rawScores.distinctiveness, 5),
+    hierarchy: numOrDefault(rawScores.hierarchy, 5),
+    colorHarmony: numOrDefault(rawScores.colorHarmony ?? rawScores.color_harmony, 5),
   };
 
   const report = computeComposite(scores);

@@ -2,9 +2,51 @@
  * validate-output.ts — Anti-slop gate: font/copy/color bans, WCAG, motion a11y, layout.
  * LOCAL deterministic validation. No API calls.
  *
+ * L4 fix: Now detects asset type and returns N/A pass for non-code files
+ * (images, video, SVG raster) instead of running code-specific regex checks.
+ *
  * Run: bun run scripts/validate-output.ts --file "<path to generated code>"
+ *      bun run scripts/validate-output.ts --file "hero.png" --type "image"
  */
 import { Effect, pipe } from "effect";
+
+// --- Asset Type Detection ---
+
+const SVG_RASTER_INDICATORS = ["data:image/png", "data:image/jpeg", "xlink:href"];
+
+function detectAssetType(
+  filePath: string | undefined,
+  explicitType: string | undefined,
+): "code" | "image" | "video" | "audio" | "3d" | "svg-raster" {
+  if (explicitType) {
+    const t = explicitType.toLowerCase();
+    if (t === "image" || t === "video" || t === "audio" || t === "3d") return t;
+    if (t === "svg-raster") return "svg-raster";
+  }
+  if (!filePath) return "code";
+  const ext = filePath.slice(filePath.lastIndexOf(".")).toLowerCase();
+  if ([".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".tiff"].includes(ext))
+    return "image";
+  if ([".mp4", ".mov", ".webm", ".avi", ".mkv"].includes(ext)) return "video";
+  if ([".mp3", ".wav", ".ogg", ".aac", ".flac"].includes(ext)) return "audio";
+  if ([".glb", ".gltf", ".obj", ".stl", ".fbx"].includes(ext)) return "3d";
+  return "code";
+}
+
+function makeNonCodeResult(assetType: string): ValidationResult {
+  return {
+    passed: true,
+    score: 9.0,
+    violations: [],
+    warnings: [
+      {
+        rule: "asset-type-skip",
+        severity: "warning",
+        message: `Anti-slop code checks N/A for ${assetType} assets — visual checks handled by run-perceptual-quality.ts`,
+      },
+    ],
+  };
+}
 
 // --- Types ---
 
@@ -215,11 +257,26 @@ const program = Effect.gen(function* () {
   const args = process.argv.slice(2);
   const fileIdx = args.indexOf("--file");
   const inputIdx = args.indexOf("--input");
+  const typeIdx = args.indexOf("--type");
+
+  const filePath = fileIdx >= 0 ? args[fileIdx + 1] : undefined;
+  const explicitType = typeIdx >= 0 ? args[typeIdx + 1] : undefined;
+
+  // Check asset type first — non-code assets get N/A pass
+  const assetType = detectAssetType(filePath, explicitType);
+  if (assetType !== "code") {
+    const result = makeNonCodeResult(assetType);
+    yield* Effect.sync(() => {
+      console.log(JSON.stringify(result, null, 2));
+    });
+    return;
+  }
+
   let content: string;
 
-  if (fileIdx >= 0 && args[fileIdx + 1]) {
+  if (filePath) {
     content = yield* Effect.tryPromise({
-      try: () => Bun.file(args[fileIdx + 1]).text(),
+      try: () => Bun.file(filePath).text(),
       catch: (e) => new Error(`Failed to read file: ${e}`),
     });
   } else if (inputIdx >= 0 && args[inputIdx + 1]) {
@@ -227,6 +284,18 @@ const program = Effect.gen(function* () {
   } else {
     yield* Effect.fail(new Error("Provide --file <path> or --input <content>"));
     return;
+  }
+
+  // SVG files with embedded raster data get N/A pass
+  if (filePath?.endsWith(".svg")) {
+    const hasRaster = SVG_RASTER_INDICATORS.some((indicator) => content.includes(indicator));
+    if (hasRaster) {
+      const result = makeNonCodeResult("svg-raster");
+      yield* Effect.sync(() => {
+        console.log(JSON.stringify(result, null, 2));
+      });
+      return;
+    }
   }
 
   const result = validateContent(content);

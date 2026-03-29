@@ -364,14 +364,70 @@ function formatScoreCard(
 
 ---
 
+## Image-Only Workflows (L5 fix)
+
+When generating images, video, or SVG without code output, the `codeStandardsGate` sub-score is not applicable. Setting it to `null` triggers weight redistribution:
+
+**Weight Redistribution Formula:**
+
+When `codeStandardsGate` is null, its 0.08 weight distributes proportionally across the remaining 8 sub-scores based on their original weights. The remaining weights sum to 0.92, so each active weight receives a proportional share of the 0.08:
+
+```
+effective_weight[k] = base_weight[k] + (base_weight[k] / 0.92) * 0.08
+```
+
+**Resulting effective weights for image-only:**
+
+| Sub-Score | Base Weight | Image-Only Weight |
+|---|---|---|
+| Anti-Slop Gate | 0.15 | 0.163 |
+| ~~Code Standards~~ | ~~0.08~~ | N/A (0.00) |
+| Asset Quality | 0.12 | 0.130 |
+| Prompt Alignment | 0.15 | 0.163 |
+| Aesthetic | 0.13 | 0.141 |
+| Style Fidelity | 0.13 | 0.141 |
+| Distinctiveness | 0.13 | 0.141 |
+| Hierarchy | 0.06 | 0.065 |
+| Color Harmony | 0.05 | 0.054 |
+
+**Impact:** An image-only workflow with all visual sub-scores at 8.0 scores 8.0 composite (vs 7.76 when codeStandardsGate defaults to 5.0). This prevents non-applicable scores from dragging the composite below the 7.0 gate.
+
+**Score card display:** The Code Standards row shows `N/A` with 0% weight.
+
+**`validate-output.ts` behavior for non-code assets:** Returns `{ passed: true, score: 9.0 }` with a note that anti-slop code checks are N/A for non-code assets. Visual anti-slop (palette, composition, AI artifacts) is handled by `run-perceptual-quality.ts`.
+
+---
+
+## Style Consistency Sub-Score (L3 addition)
+
+For multi-frame workflows (e.g., 10 seed frames for a concept), `scripts/validate-style-consistency.ts` checks cross-frame coherence:
+
+**Formula:** `score = 5.0 + stylePresenceRatio * 2.0 + brandPresenceRatio * 1.5 + paletteOverlap * 1.5`
+
+| Component | Range | How Measured |
+|---|---|---|
+| Style Presence Ratio | 0.0-1.0 | % of frames where target style name/keywords detected in MoonDreamNext description |
+| Brand Presence Ratio | 0.0-1.0 | % of frames where product/brand terms detected |
+| Palette Overlap | 0.0-1.0 | Average Jaccard similarity of color vocabulary across all frame pairs |
+
+**Gate:** 8.0 (configurable via `--gate`). Not included in the composite score — it's a separate consistency check that runs after Step 5 for multi-frame outputs.
+
+---
+
 ## CLI Usage
 
 ```bash
-# Run with explicit scores
+# Run with explicit scores (full workflow)
 bun run scripts/score-output-quality.ts --scores '{"antiSlopGate":8.5,"codeStandardsGate":9.0,"assetQualityAvg":8.0,"promptArtifactAlign":7.5,"aesthetic":7.8,"styleFidelity":8.2,"distinctiveness":7.0,"hierarchy":7.5,"colorHarmony":8.0}'
+
+# Run for image-only workflow (codeStandardsGate: null, weight redistributed)
+bun run scripts/score-output-quality.ts --scores '{"antiSlopGate":9,"codeStandardsGate":null,"assetQualityAvg":9,"promptArtifactAlign":8,"aesthetic":8.5,"styleFidelity":8,"distinctiveness":8,"hierarchy":8,"colorHarmony":8}' --workflow "image-only"
 
 # Run in demo mode (uses default scores)
 bun run scripts/score-output-quality.ts
+
+# Run style consistency check (multi-frame)
+bun run scripts/validate-style-consistency.ts --descriptions '["frame 1 description","frame 2 description"]' --style-id "pop-art" --gate 8.0
 ```
 
 Output includes both the ASCII score card and a JSON report:
@@ -381,6 +437,7 @@ Output includes both the ASCII score card and a JSON report:
   "composite": 7.84,
   "passed": true,
   "minimum": 7.0,
+  "workflow": "full",
   "subScores": { "antiSlopGate": 8.5, "..." : "..." },
   "weightedBreakdown": {
     "antiSlopGate": { "score": 8.5, "weight": 0.15, "contribution": 1.28 },

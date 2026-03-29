@@ -7,64 +7,66 @@ Complete registry of all image generation and video generation models available 
 
 ## Image Generation Models (48 models)
 
-| Model | Provider | Tier | Strengths | fal.ai Endpoint |
-|-------|----------|------|-----------|-----------------|
-| Flux Dev | Black Forest Labs | standard | Rapid prototyping, mood-boards, style fusion | `fal-ai/flux/dev` |
-| Flux Pro 1.1 | Black Forest Labs | pro | Professional-grade generation, premium quality | `fal-ai/flux-pro/v1.1` |
-| Flux 1.1 Ultra | Black Forest Labs | pro | Ultra-high resolution, wide aspect ratios | `fal-ai/flux-pro/v1.1-ultra` |
-| Flux Fast | Black Forest Labs | fast | Ultra-low-cost rapid iteration | `fal-ai/flux/fast` |
-| Flux 2 | Black Forest Labs | standard | Fast customizable generation with acceleration | `fal-ai/flux-2` |
-| Flux 2 Pro | Black Forest Labs | pro | Highest-performing BFL model | `fal-ai/flux-pro/v1.1-ultra` |
-| Flux 2 Max | Black Forest Labs | premium | Exceptional realism, precision, consistency | `fal-ai/flux-2-max` |
-| Flux 2 Flex | Black Forest Labs | pro | Highly consistent outputs across generations | `fal-ai/flux-2-flex` |
-| Flux 2 Dev LoRA | Black Forest Labs | standard | Custom LoRA fine-tuning, style adaptation | `fal-ai/flux-2-dev-lora` |
-| Flux Dev LoRA | Black Forest Labs | standard | Multiple LoRA input, style customization | `fal-ai/flux/dev/lora` |
-| Flux Kontext Max | Black Forest Labs | pro | Out-painting, style swaps, text edits, character continuity | `fal-ai/flux-kontext/max` |
-| Flux Redux | Black Forest Labs | editing | Slight variation of input, loose compositional guidance | `fal-ai/flux/schnell/redux` |
-| Flux Canny | Black Forest Labs | editing | Precise composition control via edge detection | `fal-ai/flux-canny` |
-| Flux Depth | Black Forest Labs | editing | 3D spatial consistency and accurate perspectives | `fal-ai/flux-depth/dev` |
-| Nano Banana (Gemini 2.5 Flash Image) | Google | standard | Fast photo edits, multi-image blends, social-ready | `fal-ai/nano-banana-2` |
-| Nano Banana Pro | Google | premium | Premium 4K generation, professional multi-image composition | `fal-ai/nano-banana-pro` |
-| Imagen 4 | Google DeepMind | pro | High-quality generation with latest Google image AI | `fal-ai/imagen4/preview` |
-| Imagen 3 | Google DeepMind | standard | High-quality image editing, strong photorealism | `fal-ai/imagen3` |
-| Imagen 3 Fast | Google DeepMind | fast | Quick photorealistic generation at lower cost | `fal-ai/imagen3/fast` |
-| Gemini 2.0 Flash | Google | editing | Quick image edits with multimodal reasoning | `fal-ai/gemini-2.0-flash` |
-| GPT Image 1 | OpenAI | pro | Style/reference imitation, transparent backgrounds | `fal-ai/gpt-image-1` |
-| GPT Image 1.5 | OpenAI | premium | High-fidelity, strong prompt adherence, precise control | `fal-ai/gpt-image-1.5` |
-| DALL-E 3 | OpenAI | standard | Strong prompt following, conceptual illustration | `fal-ai/dall-e-3` |
-| Seedream 3.0 | ByteDance | standard | Cinematic visuals, aesthetic range, precise text | `fal-ai/seedream/3.0` |
-| Seedream 4.0 | ByteDance | pro | 4K photoreal marketing, educational diagrams | `fal-ai/seedream/4.0` |
-| Seedream 4.5 | ByteDance | pro | Photoreal images, multi-image composition, 4K | `fal-ai/seedream/4.5` |
-| Seedream 5.0 Lite | ByteDance (Jimeng) | standard | Real-time search, intelligent reasoning, infographics | `fal-ai/seedream/5.0-lite` |
-| Stable Diffusion 3.5 | Stability AI | standard | Large output variety, general-purpose, rapid iteration | `fal-ai/stable-diffusion-v35-large` |
-| Recraft V3 | Recraft | pro | Leading design model, highly consistent, baked styles | `fal-ai/recraft-v3` |
-| Ideogram V3 | Ideogram | pro | Text-in-image rendering, stylized presets | `fal-ai/ideogram/v3` |
-| Ideogram V3 Character | Ideogram | pro | Character consistency with reference images | `fal-ai/ideogram/v3/character` |
-| Luma Photon | Luma Labs | standard | Diverse, good prompt adherence, fast iteration | `fal-ai/luma/photon` |
-| Reve | Reve AI | pro | Precise, high aesthetics, multiple image references | `fal-ai/reve` |
-| Wan 2.2 (Image) | Alibaba | standard | High realism, coherent, cost-effective | `fal-ai/wan/v2.2/image` |
-| Z-Image Turbo | Alibaba | fast | Super-fast, cost-effective, rapid prototyping | `fal-ai/z-image/turbo` |
-| Qwen Image Edit | Alibaba | editing | Advanced in-painting, text editing within images | `fal-ai/qwen-image-2/edit` |
-| Qwen Image Edit Plus | Alibaba | editing | Superior text editing and image composition | `fal-ai/qwen-image-2/pro/edit` |
-| Qwen Image Edit Angles | Alibaba | editing | Multi-angle editing, perspective adjustments | `fal-ai/qwen-image-2/angles/edit` |
-| Kling O1 (Image) | Kuaishou | editing | Precise image edits | `fal-ai/kling-video/o1/image` |
-| Higgsfield Image | Higgsfield | pro | Diverse style options, high detail | `fal-ai/higgsfield/image` |
-| Higgsfield Soul 1.0 | Higgsfield | premium | Ultra-realistic, fashion-grade portraits | `fal-ai/higgsfield/soul-1.0` |
-| Minimax Image 01 | MiniMax | fast | Extremely low cost, fast iteration | `fal-ai/minimax/image-01` |
-| Bria | Bria AI | standard | Commercially safe, trained on licensed data | `bria/generate` |
-| Mystic | Mystic | pro | Multi-resolution (1K/2K/4K), style and control images | `fal-ai/mystic` |
-| Nvidia Sana | NVIDIA | fast | Ultra-low cost, rapid generation | `fal-ai/nvidia-sana` |
-| Nvidia Consistory | NVIDIA | pro | Subject token consistency across scenes | `fal-ai/nvidia-consistory` |
-| Runway References | Runway | editing | Stylistic/character continuity for storyboards | `fal-ai/runway/references` |
-| Midjourney | Midjourney | pro | Artistic stylization, strong aesthetic defaults | `fal-ai/midjourney` |
+| Model | Provider | Tier | Status | Last Verified | Strengths | fal.ai Endpoint |
+|-------|----------|------|--------|---------------|-----------|-----------------|
+| Flux Dev | Black Forest Labs | standard | ALIVE | 2026-03-29 | Rapid prototyping, mood-boards, style fusion | `fal-ai/flux/dev` |
+| Flux Pro 1.1 | Black Forest Labs | pro | ALIVE | 2026-03-29 | Professional-grade generation, premium quality | `fal-ai/flux-pro/v1.1` |
+| Flux 1.1 Ultra | Black Forest Labs | pro | ALIVE | 2026-03-29 | Ultra-high resolution, wide aspect ratios | `fal-ai/flux-pro/v1.1-ultra` |
+| Flux Fast | Black Forest Labs | fast | ALIVE | 2026-03-29 | Ultra-low-cost rapid iteration | `fal-ai/flux/fast` |
+| Flux 2 | Black Forest Labs | standard | ALIVE | 2026-03-29 | Fast customizable generation with acceleration | `fal-ai/flux-2` |
+| Flux 2 Pro | Black Forest Labs | pro | ALIVE | 2026-03-29 | Highest-performing BFL model | `fal-ai/flux-pro/v1.1-ultra` |
+| Flux 2 Max | Black Forest Labs | premium | ALIVE | 2026-03-29 | Exceptional realism, precision, consistency | `fal-ai/flux-2-max` |
+| Flux 2 Flex | Black Forest Labs | pro | ALIVE | 2026-03-29 | Highly consistent outputs across generations | `fal-ai/flux-2-flex` |
+| Flux 2 Dev LoRA | Black Forest Labs | standard | ALIVE | 2026-03-29 | Custom LoRA fine-tuning, style adaptation | `fal-ai/flux-2-dev-lora` |
+| Flux Dev LoRA | Black Forest Labs | standard | ALIVE | 2026-03-29 | Multiple LoRA input, style customization | `fal-ai/flux/dev/lora` |
+| Flux Kontext Max | Black Forest Labs | pro | **404** | 2026-03-29 | Out-painting, style swaps, text edits, character continuity | `fal-ai/flux-kontext/max` |
+| Flux Redux | Black Forest Labs | editing | ALIVE | 2026-03-29 | Slight variation of input, loose compositional guidance | `fal-ai/flux/schnell/redux` |
+| Flux Canny | Black Forest Labs | editing | **404** | 2026-03-29 | Precise composition control via edge detection | `fal-ai/flux-canny` |
+| Flux Depth | Black Forest Labs | editing | **404** | 2026-03-29 | 3D spatial consistency and accurate perspectives | `fal-ai/flux-depth/dev` |
+| Nano Banana (Gemini 2.5 Flash Image) | Google | standard | ALIVE | 2026-03-29 | Fast photo edits, multi-image blends, social-ready | `fal-ai/nano-banana-2` |
+| Nano Banana Pro | Google | premium | ALIVE | 2026-03-29 | Premium 4K generation, professional multi-image composition | `fal-ai/nano-banana-pro` |
+| Imagen 4 | Google DeepMind | pro | ALIVE | 2026-03-29 | High-quality generation with latest Google image AI | `fal-ai/imagen4/preview` |
+| Imagen 3 | Google DeepMind | standard | ALIVE | 2026-03-29 | High-quality image editing, strong photorealism | `fal-ai/imagen3` |
+| Imagen 3 Fast | Google DeepMind | fast | ALIVE | 2026-03-29 | Quick photorealistic generation at lower cost | `fal-ai/imagen3/fast` |
+| Gemini 2.0 Flash | Google | editing | ALIVE | 2026-03-29 | Quick image edits with multimodal reasoning | `fal-ai/gemini-2.0-flash` |
+| GPT Image 1 | OpenAI | pro | **404** | 2026-03-29 | Style/reference imitation, transparent backgrounds | `fal-ai/gpt-image-1` |
+| GPT Image 1.5 | OpenAI | premium | ALIVE | 2026-03-29 | High-fidelity, strong prompt adherence, precise control | `fal-ai/gpt-image-1.5` |
+| DALL-E 3 | OpenAI | standard | ALIVE | 2026-03-29 | Strong prompt following, conceptual illustration | `fal-ai/dall-e-3` |
+| Seedream 3.0 | ByteDance | standard | ALIVE | 2026-03-29 | Cinematic visuals, aesthetic range, precise text | `fal-ai/seedream/3.0` |
+| Seedream 4.0 | ByteDance | pro | **404** | 2026-03-29 | 4K photoreal marketing, educational diagrams | `fal-ai/seedream/4.0` |
+| Seedream 4.5 | ByteDance | pro | **404** | 2026-03-29 | Photoreal images, multi-image composition, 4K | `fal-ai/seedream/4.5` |
+| Seedream 5.0 Lite | ByteDance (Jimeng) | standard | ALIVE | 2026-03-29 | Real-time search, intelligent reasoning, infographics | `fal-ai/seedream/5.0-lite` |
+| Stable Diffusion 3.5 | Stability AI | standard | ALIVE | 2026-03-29 | Large output variety, general-purpose, rapid iteration | `fal-ai/stable-diffusion-v35-large` |
+| Recraft V3 | Recraft | pro | ALIVE | 2026-03-29 | Leading design model, highly consistent, baked styles | `fal-ai/recraft-v3` |
+| Ideogram V3 | Ideogram | pro | ALIVE | 2026-03-29 | Text-in-image rendering, stylized presets | `fal-ai/ideogram/v3` |
+| Ideogram V3 Character | Ideogram | pro | ALIVE | 2026-03-29 | Character consistency with reference images | `fal-ai/ideogram/v3/character` |
+| Luma Photon | Luma Labs | standard | **404** | 2026-03-29 | Diverse, good prompt adherence, fast iteration | `fal-ai/luma/photon` |
+| Reve | Reve AI | pro | **404** | 2026-03-29 | Precise, high aesthetics, multiple image references | `fal-ai/reve` |
+| Wan 2.2 (Image) | Alibaba | standard | ALIVE | 2026-03-29 | High realism, coherent, cost-effective | `fal-ai/wan/v2.2/image` |
+| Z-Image Turbo | Alibaba | fast | ALIVE | 2026-03-29 | Super-fast, cost-effective, rapid prototyping | `fal-ai/z-image/turbo` |
+| Qwen Image Edit | Alibaba | editing | ALIVE | 2026-03-29 | Advanced in-painting, text editing within images | `fal-ai/qwen-image-2/edit` |
+| Qwen Image Edit Plus | Alibaba | editing | ALIVE | 2026-03-29 | Superior text editing and image composition | `fal-ai/qwen-image-2/pro/edit` |
+| Qwen Image Edit Angles | Alibaba | editing | ALIVE | 2026-03-29 | Multi-angle editing, perspective adjustments | `fal-ai/qwen-image-2/angles/edit` |
+| Kling O1 (Image) | Kuaishou | editing | ALIVE | 2026-03-29 | Precise image edits | `fal-ai/kling-video/o1/image` |
+| Higgsfield Image | Higgsfield | pro | ALIVE | 2026-03-29 | Diverse style options, high detail | `fal-ai/higgsfield/image` |
+| Higgsfield Soul 1.0 | Higgsfield | premium | ALIVE | 2026-03-29 | Ultra-realistic, fashion-grade portraits | `fal-ai/higgsfield/soul-1.0` |
+| Minimax Image 01 | MiniMax | fast | ALIVE | 2026-03-29 | Extremely low cost, fast iteration | `fal-ai/minimax/image-01` |
+| Bria | Bria AI | standard | ALIVE | 2026-03-29 | Commercially safe, trained on licensed data | `bria/generate` |
+| Mystic | Mystic | pro | **404** | 2026-03-29 | Multi-resolution (1K/2K/4K), style and control images | `fal-ai/mystic` |
+| Nvidia Sana | NVIDIA | fast | ALIVE | 2026-03-29 | Ultra-low cost, rapid generation | `fal-ai/nvidia-sana` |
+| Nvidia Consistory | NVIDIA | pro | **404** | 2026-03-29 | Subject token consistency across scenes | `fal-ai/nvidia-consistory` |
+| Runway References | Runway | editing | **404** | 2026-03-29 | Stylistic/character continuity for storyboards | `fal-ai/runway/references` |
+| Midjourney | Midjourney | pro | **404** | 2026-03-29 | Artistic stylization, strong aesthetic defaults | `fal-ai/midjourney` |
+
+> **13 confirmed WORKING with image reference support:** `ideogram/v3`, `gpt-image-1.5`, `imagen4/preview`, `nano-banana-2`, `nano-banana-pro`, `flux/schnell/redux`, `flux-pro/v1.1`, `flux-2-flex`, `recraft-v3`, `qwen-image-2/edit`, `qwen-image-2/pro/edit`, `nano-banana-2/edit`
 
 ### Additional Image Endpoints (generation variants)
 
-| Model | fal.ai Endpoint |
-|-------|-----------------|
-| Qwen-Image-2.0 (Text-to-Image) | `fal-ai/qwen-image-2/text-to-image` |
-| Qwen-Image-2.0 Pro (Text-to-Image) | `fal-ai/qwen-image-2/pro/text-to-image` |
-| Flux Kontext Pro | `fal-ai/flux-kontext/pro` |
+| Model | Status | Last Verified | fal.ai Endpoint |
+|-------|--------|---------------|-----------------|
+| Qwen-Image-2.0 (Text-to-Image) | ALIVE | 2026-03-29 | `fal-ai/qwen-image-2/text-to-image` |
+| Qwen-Image-2.0 Pro (Text-to-Image) | ALIVE | 2026-03-29 | `fal-ai/qwen-image-2/pro/text-to-image` |
+| Flux Kontext Pro | **404** | 2026-03-29 | `fal-ai/flux-kontext/pro` |
 
 ---
 

@@ -174,6 +174,14 @@ Run all validators, then `scripts/score-output-quality.ts`:
 
 **MINIMUM: 7.0/10.** Display score card. HARD STOP if below.
 
+**Step 5g: Style Consistency (multi-frame workflows)**
+
+For workflows producing multiple frames/images in a set, run `scripts/validate-style-consistency.ts` to verify cross-frame coherence:
+- Style presence ratio: % of frames where target style detected
+- Brand presence ratio: % of frames where product/brand detected
+- Palette overlap: Jaccard similarity of color vocabulary across frame pairs
+- Gate: 8.0 (configurable)
+
 ### Steps 6-10: Annotation → Refinement → Optimization
 
 6. **Screenshot annotation** — `scripts/run-screenshot-annotation.ts` → present findings
@@ -237,6 +245,79 @@ Full reference: `references/ANTI-SLOP.md`. Top 10:
 Requires three API keys: `FAL_KEY` (fal.ai), `E2B_API_KEY` (E2B sandboxes), `QUIVERAI_API_KEY` (QuiverAI SVG).
 
 All fal.ai scripts use `@fal-ai/client` subscribe pattern. QuiverAI uses `@quiverai/sdk`. E2B uses `@e2b/code-interpreter`. Patterns: `references/FAL-API-PATTERNS.md`, `references/QUIVER-API-PATTERNS.md`, `references/E2B-PATTERNS.md`.
+
+## Prerequisites
+
+### Required Dependencies
+
+```bash
+bun add effect @effect/platform @fal-ai/client @quiverai/sdk @e2b/code-interpreter yaml archiver
+bun add -d typescript @biomejs/biome @types/bun @types/archiver
+```
+
+All scripts import `effect` and `yaml` — these must be in `package.json`. Without them, any script will fail with "Cannot find package".
+
+### Agent Dependencies
+
+The 19 subagent files in `.claude/agents/` are required for the pipeline to function. They are NOT bundled inside the skill directory — they live at the repo level.
+
+**Source:** `github.com/srinitude/one-of-a-kind-design-skill/.claude/agents/`
+
+**Verify agents are present (expect 19 files):**
+
+```bash
+ls .claude/agents/prompt-crafter-*.md .claude/agents/quality-assessor.md .claude/agents/style-guard.md .claude/agents/ux-reviewer.md .claude/agents/export-guide-writer.md | wc -l
+```
+
+If missing, clone the full repo — the `.claude/agents/` directory must be at the repo root, not inside the skill directory. When using `bunx` to install from skills.sh, agents may not be copied. In that case, manually copy from the source repo:
+
+```bash
+# From the source repo root
+cp -r .claude/agents/ /path/to/your/project/.claude/agents/
+```
+
+### Script Paths
+
+All scripts are at `.claude/skills/one-of-a-kind-design/scripts/`, NOT at `scripts/` (root). The root `scripts/` directory is unrelated.
+
+```bash
+# Correct
+bun run .claude/skills/one-of-a-kind-design/scripts/resolve-style.ts
+
+# Wrong — will fail
+bun run scripts/resolve-style.ts
+```
+
+The `package.json` scripts use full paths. Use `bun run <script-name>` for the registered commands.
+
+### Image-Only Workflows
+
+For image/video/SVG generation without code output:
+- Steps 0-3: Execute normally (enhance, style resolve, hero asset, craft+generate+verify)
+- Step 4: Skip (no code artifact to generate)
+- Step 5: Quality evaluation with `--workflow "image-only"` — `codeStandardsGate` is null, weight redistributes to visual sub-scores
+- Steps 6-10: Execute normally (annotation, refinement, optimization, convention-breaking, cross-pollination)
+- `validate-output.ts` returns N/A pass for non-code asset types (.png, .jpg, .mp4, etc.)
+
+### Workflow Step Ordering (MANDATORY)
+
+Steps 0 through 10 MUST be executed sequentially in order. No step may be skipped. Each step depends on outputs from prior steps:
+
+| Step | Depends On | Produces |
+|------|-----------|----------|
+| 0. Enhance Message | User input | 7 dimensions, specificity score |
+| 0c. Web Search | Step 0 output_type + industry | UX findings |
+| 1. Resolve Style | Step 0 dimensions | Full style config |
+| 2. Conceive Hero | Step 1 style config | Archetype + model selection |
+| 3. Craft + Generate | Steps 1-2 | Verified hero asset |
+| 4. One-Shot Gen | Steps 0c, 1, 3 | Complete artifact |
+| 5. Quality Eval | Step 4 output | Score card (gate: 7.0) |
+| 5g. Style Consistency | Step 3 descriptions | Consistency score (multi-frame only) |
+| 6. Annotate | Step 4/5 output | Annotation findings |
+| 7. Refine | Step 6 findings | Refined artifact |
+| 8. Optimize | Step 7 output | Optimized assets |
+| 9. Convention-Break | Steps 1, 7 | Style-pushed variant |
+| 10. Cross-Pollinate | Steps 1, 7 | Style fusion |
 
 ## Troubleshooting
 
