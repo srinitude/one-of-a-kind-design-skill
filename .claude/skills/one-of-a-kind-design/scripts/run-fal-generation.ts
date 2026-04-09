@@ -8,6 +8,12 @@
 import { fal } from "@fal-ai/client";
 import { Console, Duration, Effect, pipe, Schedule } from "effect";
 
+function buildDeterministicId(endpoint: string, prompt: string): string {
+  const hasher = new Bun.CryptoHasher("sha256");
+  hasher.update(`${endpoint}:${prompt}`);
+  return hasher.digest("hex").slice(0, 32);
+}
+
 // --- Types ---
 
 interface FalGenerationInput {
@@ -43,7 +49,7 @@ export function runFalGeneration(
 
         const start = Date.now();
         const result = await fal.subscribe(input.endpoint, {
-          input: { prompt: input.prompt, ...input.params },
+          input: { prompt: input.prompt, seed: 42, ...input.params },
           logs: true,
           onQueueUpdate: (_update) => {
             // Queue status logged by fal client internally
@@ -75,7 +81,8 @@ export function runFalGeneration(
           url,
           content_type: contentType,
           seed: (data.seed as number) ?? null,
-          prompt_id: (result.requestId as string) ?? crypto.randomUUID(),
+          prompt_id:
+            (result.requestId as string) ?? buildDeterministicId(input.endpoint, input.prompt),
           timing,
         } satisfies FalGenerationResult;
       },
@@ -115,7 +122,7 @@ function inferContentType(url: string): string {
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const getArg = (flag: string): string | undefined => {
     const idx = args.indexOf(flag);
     return idx >= 0 ? args[idx + 1] : undefined;
@@ -152,7 +159,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`fal.ai generation failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

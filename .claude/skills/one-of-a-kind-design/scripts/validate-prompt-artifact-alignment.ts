@@ -556,7 +556,7 @@ function buildRationale(criterion: CriterionDef, score: number): string {
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const getArg = (flag: string): string | undefined => {
     const idx = args.indexOf(flag);
     return idx >= 0 ? args[idx + 1] : undefined;
@@ -593,7 +593,7 @@ const program = Effect.gen(function* () {
 
   yield* Effect.sync(() => {
     console.log(JSON.stringify(result, null, 2));
-    if (!result.pass) process.exit(1);
+    if (!result.pass) process.exitCode = 1;
   });
 });
 
@@ -603,7 +603,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Alignment validation failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

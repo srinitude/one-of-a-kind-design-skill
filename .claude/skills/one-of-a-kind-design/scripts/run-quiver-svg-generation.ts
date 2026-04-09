@@ -8,6 +8,12 @@
 import { QuiverAI } from "@quiverai/sdk";
 import { Console, Effect, pipe } from "effect";
 
+function buildDeterministicId(key: string): string {
+  const hasher = new Bun.CryptoHasher("sha256");
+  hasher.update(key);
+  return hasher.digest("hex").slice(0, 32);
+}
+
 // --- Types ---
 
 interface SvgGenerationInput {
@@ -52,7 +58,7 @@ export function generateSvg(input: SvgGenerationInput): Effect.Effect<SvgGenerat
 
       return {
         svg_content: svgContent,
-        prompt_id: (data.id as string | undefined) ?? crypto.randomUUID(),
+        prompt_id: (data.id as string | undefined) ?? buildDeterministicId(input.prompt),
         timing,
       } satisfies SvgGenerationResult;
     },
@@ -63,7 +69,7 @@ export function generateSvg(input: SvgGenerationInput): Effect.Effect<SvgGenerat
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const getArg = (flag: string): string | undefined => {
     const idx = args.indexOf(flag);
     return idx >= 0 ? args[idx + 1] : undefined;
@@ -113,7 +119,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`QuiverAI SVG generation failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

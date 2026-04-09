@@ -350,7 +350,7 @@ function updateTool(toolId: string, yamlPath: string): Effect.Effect<Registratio
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
 
   if (args.includes("--list")) {
     const result = yield* listTools();

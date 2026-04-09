@@ -222,7 +222,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Model availability check failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_MODELS, ROUTE_MAP } from "./generate-api-prompt";
+import {
+  buildCrafterContext,
+  buildPromptId,
+  DEFAULT_MODELS,
+  ROUTE_MAP,
+} from "./generate-api-prompt";
 
 const EXPECTED_STAGES = [
   "image-gen",
@@ -50,5 +55,39 @@ describe("DEFAULT_MODELS", () => {
       expect(DEFAULT_MODELS[stage].length).toBeGreaterThan(0);
     }
     expect(Object.keys(DEFAULT_MODELS).length).toBe(15);
+  });
+});
+
+describe("buildPromptId", () => {
+  test("same inputs produce same promptId (deterministic)", () => {
+    const id1 = buildPromptId("image-gen", "art-deco", "luxury hotel hero");
+    const id2 = buildPromptId("image-gen", "art-deco", "luxury hotel hero");
+    expect(id1).toBe(id2);
+  });
+
+  test("different inputs produce different promptIds", () => {
+    const id1 = buildPromptId("image-gen", "art-deco", "luxury hotel hero");
+    const id2 = buildPromptId("video-gen", "art-deco", "luxury hotel hero");
+    const id3 = buildPromptId("image-gen", "cinematic", "luxury hotel hero");
+    expect(id1).not.toBe(id2);
+    expect(id1).not.toBe(id3);
+  });
+
+  test("promptId is a 16-character hex string", () => {
+    const id = buildPromptId("image-gen", "art-deco", "test");
+    expect(id).toMatch(/^[a-f0-9]{16}$/);
+  });
+});
+
+describe("buildCrafterContext", () => {
+  test("includes stage and style info", () => {
+    const ctx = buildCrafterContext(
+      "image-gen",
+      { id: "art-deco", name: "Art Deco" },
+      "hero image",
+    );
+    expect(ctx).toContain("Pipeline stage: image-gen");
+    expect(ctx).toContain("Style: art-deco (Art Deco)");
+    expect(ctx).toContain("User intent: hero image");
   });
 });

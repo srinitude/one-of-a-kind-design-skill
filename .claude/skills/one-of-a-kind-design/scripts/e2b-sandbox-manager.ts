@@ -96,29 +96,26 @@ export const E2bSandboxLive = (config: E2bSandboxConfig) =>
       }),
 
     withSandbox: <A>(fn: (sandbox: Sandbox) => Effect.Effect<A, Error>) =>
-      Effect.gen(function* () {
-        const sandbox = yield* Effect.tryPromise({
+      Effect.acquireUseRelease(
+        Effect.tryPromise({
           try: () =>
             Sandbox.create({
               apiKey: config.apiKey,
               timeoutMs: config.timeoutMs,
             }),
           catch: (e) => new Error(`E2B sandbox creation failed: ${e}`),
-        });
-        const result = yield* pipe(
-          fn(sandbox),
-          Effect.ensuring(
-            pipe(
-              Effect.tryPromise({
-                try: () => sandbox.kill(),
-                catch: (e) => new Error(`E2B sandbox destroy failed: ${e}`),
-              }),
-              Effect.catchAll(() => Effect.void),
-            ),
+        }),
+        (sandbox) => fn(sandbox),
+        (sandbox) =>
+          pipe(
+            Effect.tryPromise({
+              try: () => sandbox.kill(),
+              catch: (e) => new Error(`E2B sandbox destroy failed: ${e}`),
+            }),
+            Effect.catchAll(() => Effect.void),
+            Effect.asVoid,
           ),
-        );
-        return result;
-      }),
+      ),
   });
 
 // --- Default config from env ---

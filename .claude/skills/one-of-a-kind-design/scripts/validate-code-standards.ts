@@ -170,7 +170,7 @@ export function validateCodeStandards(content: string): CodeStandardsResult {
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const inputIdx = args.indexOf("--input");
 
   if (inputIdx < 0 || !args[inputIdx + 1]) {
@@ -188,7 +188,7 @@ const program = Effect.gen(function* () {
 
   yield* Effect.sync(() => {
     console.log(JSON.stringify(result, null, 2));
-    if (!result.passed) process.exit(1);
+    if (!result.passed) process.exitCode = 1;
   });
 });
 
@@ -198,7 +198,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Code standards check failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

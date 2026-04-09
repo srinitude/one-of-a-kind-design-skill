@@ -258,9 +258,6 @@ export function enforceRules(content: string, filePath: string): FileReport {
     if (trimmed.includes("import.meta.main")) continue;
     if (trimmed.startsWith("import ") || trimmed.startsWith("export ")) continue;
 
-    // Skip process.argv (CLI arg parsing exemption)
-    if (trimmed.includes("process.argv")) continue;
-
     const exemptions = isExemptContext(line, i, lines);
 
     // Rule 1: Bun-only

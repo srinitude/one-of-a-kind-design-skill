@@ -116,14 +116,16 @@ export function buildCrafterContext(stage: string, style: StyleData, userIntent:
   return parts.join("\n");
 }
 
-function generatePromptId(): string {
-  return `prompt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+export function buildPromptId(stage: string, styleId: string, intent: string): string {
+  const hasher = new Bun.CryptoHasher("sha256");
+  hasher.update(`${stage}:${styleId}:${intent}`);
+  return hasher.digest("hex").slice(0, 16);
 }
 
 // --- Main ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const getArg = (flag: string): string | undefined => {
     const idx = args.indexOf(flag);
     return idx >= 0 ? args[idx + 1] : undefined;
@@ -154,7 +156,7 @@ const program = Effect.gen(function* () {
     : { id: "editorial-minimalism" };
   const crafterContext = buildCrafterContext(stage, style, userIntent);
   const model = DEFAULT_MODELS[stage] ?? "fal-ai/flux-pro/v1.1-ultra";
-  const promptId = generatePromptId();
+  const promptId = buildPromptId(stage, style.id, userIntent);
 
   // In production, this invokes the subagent via Claude Code agent system.
   // For CLI usage, we output the crafter context that would be sent.
@@ -186,7 +188,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Prompt generation failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

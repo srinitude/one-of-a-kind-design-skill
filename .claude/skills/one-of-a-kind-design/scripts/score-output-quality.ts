@@ -178,7 +178,7 @@ function formatScoreCard(
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const scoresIdx = args.indexOf("--scores");
 
   if (scoresIdx < 0 || !args[scoresIdx + 1]) {
@@ -236,7 +236,7 @@ const program = Effect.gen(function* () {
   yield* Effect.sync(() => {
     console.log(report.scoreCard);
     console.log(`\n${JSON.stringify(report, null, 2)}`);
-    if (!report.passed) process.exit(1);
+    if (!report.passed) process.exitCode = 1;
   });
 });
 
@@ -246,7 +246,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Quality scoring failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

@@ -228,7 +228,7 @@ export function buildEnhancement(dims: ExtractedDimensions): string {
 // --- Main ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const messageIdx = args.indexOf("--message");
   const message = messageIdx >= 0 && args[messageIdx + 1] ? args[messageIdx + 1] : args.join(" ");
 
@@ -262,7 +262,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Enhancement failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,

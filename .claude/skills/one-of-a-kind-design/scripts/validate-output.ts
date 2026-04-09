@@ -254,7 +254,7 @@ export function validateContent(content: string): ValidationResult {
 // --- CLI Entry ---
 
 const program = Effect.gen(function* () {
-  const args = process.argv.slice(2);
+  const args = Bun.argv.slice(2);
   const fileIdx = args.indexOf("--file");
   const inputIdx = args.indexOf("--input");
   const typeIdx = args.indexOf("--type");
@@ -302,7 +302,7 @@ const program = Effect.gen(function* () {
 
   yield* Effect.sync(() => {
     console.log(JSON.stringify(result, null, 2));
-    if (!result.passed) process.exit(1);
+    if (!result.passed) process.exitCode = 1;
   });
 });
 
@@ -312,7 +312,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`Validation failed: ${error}`);
-        process.exit(1);
+        process.exitCode = 1;
       }),
     ),
     Effect.runPromise,
