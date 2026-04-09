@@ -90,4 +90,109 @@ describe("buildCrafterContext", () => {
     expect(ctx).toContain("Style: art-deco (Art Deco)");
     expect(ctx).toContain("User intent: hero image");
   });
+
+  test("includes dial modifiers promptPrefix when present", () => {
+    const ctx = buildCrafterContext(
+      "image-gen",
+      {
+        id: "art-deco",
+        dialModifiers: {
+          promptPrefix: "radical, cross-pollinate",
+          promptSuffix: "break all rules",
+          negativeBoost: ["no safe choices"],
+          compositionOverride: "asymmetric grid",
+          colorShift: "warmer",
+        },
+      },
+      "hero",
+    );
+    expect(ctx).toContain("Creative direction: radical, cross-pollinate");
+    expect(ctx).toContain("Composition: asymmetric grid");
+    expect(ctx).toContain("Color temperature: shift warmer");
+    expect(ctx).toContain("Creative suffix: break all rules");
+  });
+
+  test("includes convention break when applied", () => {
+    const ctx = buildCrafterContext(
+      "image-gen",
+      {
+        id: "art-deco",
+        conventionBreak: {
+          applied: true,
+          dogma: "always use grids",
+          breakText: "organic free-form layout",
+        },
+      },
+      "hero",
+    );
+    expect(ctx).toContain('Convention break: AVOID "always use grids"');
+    expect(ctx).toContain('INSTEAD "organic free-form layout"');
+  });
+
+  test("includes unexpected audience fit note", () => {
+    const ctx = buildCrafterContext(
+      "image-gen",
+      {
+        id: "art-deco",
+        audienceFit: {
+          fitType: "unexpected",
+          audienceNote: "Unexpected but valid pairing",
+        },
+      },
+      "hero",
+    );
+    expect(ctx).toContain("Unexpected pairing note: Unexpected but valid pairing");
+  });
+
+  test("does not include audience note for strong fit", () => {
+    const ctx = buildCrafterContext(
+      "image-gen",
+      {
+        id: "art-deco",
+        audienceFit: {
+          fitType: "strong",
+          audienceNote: "Strong fit",
+        },
+      },
+      "hero",
+    );
+    expect(ctx).not.toContain("Unexpected pairing note");
+  });
+
+  test("variance 2 vs variance 9 produce different contexts", () => {
+    const lowCtx = buildCrafterContext(
+      "image-gen",
+      {
+        id: "art-deco",
+        dialModifiers: {
+          promptPrefix: "conservative, faithful to style canon",
+          promptSuffix: "",
+          negativeBoost: ["no experimental", "no unexpected"],
+        },
+      },
+      "hero",
+    );
+    const highCtx = buildCrafterContext(
+      "image-gen",
+      {
+        id: "art-deco",
+        dialModifiers: {
+          promptPrefix: "radical, cross-pollinate, unexpected pairings",
+          promptSuffix: "organic free-form; asymmetric tension",
+          compositionOverride: "style-atypical arrangement",
+          colorShift: "warmer",
+        },
+        conventionBreak: {
+          applied: true,
+          dogma: "always use grids",
+          breakText: "organic free-form layout",
+        },
+      },
+      "hero",
+    );
+    expect(lowCtx).not.toBe(highCtx);
+    expect(lowCtx).toContain("conservative");
+    expect(highCtx).toContain("radical");
+    expect(highCtx).toContain("Convention break");
+  });
 });

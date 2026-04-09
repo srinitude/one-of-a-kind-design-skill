@@ -1,9 +1,9 @@
 /**
  * score-output-quality.ts — Composite quality score from all validators.
- * Weighted average of 9 sub-scores. Minimum: 7.0/10. HARD STOP if below.
+ * Weighted average of 10 sub-scores. Minimum: 7.0/10. HARD STOP if below.
  *
  * L5 fix: Accepts codeStandardsGate: null for image-only workflows.
- * When null, 0.08 weight redistributes proportionally across remaining sub-scores.
+ * When null, weight redistributes proportionally across remaining sub-scores.
  *
  * Run: bun run scripts/score-output-quality.ts --scores '{"anti_slop":8.5,...}'
  *      bun run scripts/score-output-quality.ts --scores '{"antiSlopGate":9,"codeStandardsGate":null,...}' --workflow "image-only"
@@ -22,6 +22,7 @@ interface SubScores {
   readonly distinctiveness: number;
   readonly hierarchy: number;
   readonly colorHarmony: number;
+  readonly conventionBreakAdherence: number | null;
 }
 
 interface QualityReport {
@@ -41,7 +42,7 @@ interface QualityReport {
 
 export const BASE_WEIGHTS: Record<string, number> = {
   antiSlopGate: 0.15,
-  codeStandardsGate: 0.08,
+  codeStandardsGate: 0.03,
   assetQualityAvg: 0.12,
   promptArtifactAlign: 0.15,
   aesthetic: 0.13,
@@ -49,6 +50,7 @@ export const BASE_WEIGHTS: Record<string, number> = {
   distinctiveness: 0.13,
   hierarchy: 0.06,
   colorHarmony: 0.05,
+  conventionBreakAdherence: 0.05,
 };
 
 /** @deprecated Use BASE_WEIGHTS instead */
@@ -115,7 +117,7 @@ export function computeComposite(scores: SubScores): QualityReport {
   composite = Math.round(composite * 100) / 100;
   const passed = composite >= MINIMUM_COMPOSITE;
 
-  const scoreCard = formatScoreCard(scores, breakdown, composite, passed);
+  const scoreCard = formatScoreCard(breakdown, composite, passed);
 
   return {
     composite,
@@ -129,7 +131,6 @@ export function computeComposite(scores: SubScores): QualityReport {
 }
 
 function formatScoreCard(
-  _scores: SubScores,
   breakdown: Record<string, { score: number | null; weight: number; contribution: number }>,
   composite: number,
   passed: boolean,
@@ -150,6 +151,7 @@ function formatScoreCard(
     distinctiveness: "Distinctiveness",
     hierarchy: "Hierarchy",
     colorHarmony: "Color Harmony",
+    conventionBreakAdherence: "Conv. Break",
   };
 
   for (const [key, entry] of Object.entries(breakdown)) {
@@ -193,6 +195,7 @@ const program = Effect.gen(function* () {
       distinctiveness: 7.0,
       hierarchy: 7.5,
       colorHarmony: 8.0,
+      conventionBreakAdherence: null,
     };
 
     const report = computeComposite(demoScores);
@@ -217,6 +220,9 @@ const program = Effect.gen(function* () {
   const numOrDefault = (val: unknown, fallback: number): number =>
     typeof val === "number" ? val : fallback;
 
+  const nullOrNum = (val: unknown): number | null =>
+    val === null || val === undefined ? null : numOrDefault(val, 5);
+
   const scores: SubScores = {
     antiSlopGate: numOrDefault(rawScores.antiSlopGate ?? rawScores.anti_slop, 5),
     codeStandardsGate: isImageOnly
@@ -229,6 +235,9 @@ const program = Effect.gen(function* () {
     distinctiveness: numOrDefault(rawScores.distinctiveness, 5),
     hierarchy: numOrDefault(rawScores.hierarchy, 5),
     colorHarmony: numOrDefault(rawScores.colorHarmony ?? rawScores.color_harmony, 5),
+    conventionBreakAdherence: nullOrNum(
+      rawScores.conventionBreakAdherence ?? rawScores.convention_break,
+    ),
   };
 
   const report = computeComposite(scores);

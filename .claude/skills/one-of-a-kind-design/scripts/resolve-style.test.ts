@@ -37,6 +37,48 @@ describe("resolveStyle", () => {
     expect(resolved.dials.design_variance).toBe(9);
     expect(resolved.dials.motion_intensity).toBe(2);
   });
+
+  test("includes dialModifiers in resolved style", async () => {
+    const taxonomy = await loadTestTaxonomy();
+    const resolved = await Effect.runPromise(resolveStyle(taxonomy, { styleId: "art-deco" }));
+    expect(resolved.dialModifiers).toBeDefined();
+    expect(resolved.dialModifiers.motionScale).toBeGreaterThan(0);
+    expect(typeof resolved.dialModifiers.densityClass).toBe("string");
+    expect(typeof resolved.dialModifiers.typographyTier).toBe("string");
+  });
+
+  test("includes conventionBreak in resolved style", async () => {
+    const taxonomy = await loadTestTaxonomy();
+    const resolved = await Effect.runPromise(resolveStyle(taxonomy, { styleId: "art-deco" }));
+    expect(resolved.conventionBreak).toBeDefined();
+    expect(typeof resolved.conventionBreak.applied).toBe("boolean");
+    expect(typeof resolved.conventionBreak.reason).toBe("string");
+  });
+
+  test("includes audienceFit in resolved style", async () => {
+    const taxonomy = await loadTestTaxonomy();
+    const resolved = await Effect.runPromise(resolveStyle(taxonomy, { styleId: "art-deco" }));
+    expect(resolved.audienceFit).toBeDefined();
+    expect(["strong", "unexpected", "neutral"]).toContain(resolved.audienceFit.fitType);
+    expect(resolved.audienceFit.fitScore).toBeGreaterThanOrEqual(0);
+  });
+
+  test("dial overrides affect dialModifiers", async () => {
+    const taxonomy = await loadTestTaxonomy();
+    const low = await Effect.runPromise(
+      resolveStyle(taxonomy, {
+        styleId: "art-deco",
+        dialOverrides: { design_variance: 1, motion_intensity: 1 },
+      }),
+    );
+    const high = await Effect.runPromise(
+      resolveStyle(taxonomy, {
+        styleId: "art-deco",
+        dialOverrides: { design_variance: 10, motion_intensity: 10 },
+      }),
+    );
+    expect(low.dialModifiers.motionScale).toBeLessThan(high.dialModifiers.motionScale);
+  });
 });
 
 describe("inferStyleFromContext", () => {

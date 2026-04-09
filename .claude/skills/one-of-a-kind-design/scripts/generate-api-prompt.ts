@@ -68,6 +68,25 @@ export const DEFAULT_MODELS: Record<string, string> = {
 
 // --- Prompt Construction ---
 
+interface DialModifiersData {
+  readonly promptPrefix?: string;
+  readonly promptSuffix?: string;
+  readonly negativeBoost?: string[];
+  readonly compositionOverride?: string | null;
+  readonly colorShift?: "warmer" | "cooler" | "muted" | "saturated" | null;
+}
+
+interface ConventionBreakData {
+  readonly applied?: boolean;
+  readonly dogma?: string;
+  readonly breakText?: string;
+}
+
+interface AudienceFitData {
+  readonly fitType?: "strong" | "unexpected" | "neutral";
+  readonly audienceNote?: string;
+}
+
 interface StyleData {
   readonly id: string;
   readonly name?: string;
@@ -81,22 +100,55 @@ interface StyleData {
   readonly dials?: Record<string, number>;
   readonly designSystemParameters?: Record<string, string>;
   readonly antiSlopOverrides?: string[];
+  readonly dialModifiers?: DialModifiersData;
+  readonly conventionBreak?: ConventionBreakData;
+  readonly audienceFit?: AudienceFitData;
 }
 
 export function buildCrafterContext(stage: string, style: StyleData, userIntent: string): string {
-  const parts: string[] = [
+  const parts: string[] = [];
+
+  if (style.dialModifiers?.promptPrefix) {
+    parts.push(`Creative direction: ${style.dialModifiers.promptPrefix}`);
+  }
+
+  parts.push(
     `Pipeline stage: ${stage}`,
     `Style: ${style.id} (${style.name ?? style.id})`,
     `Tags: ${style.tags?.join(", ") ?? "none"}`,
     `User intent: ${userIntent}`,
-  ];
+  );
 
   if (style.generativeAi?.positivePrompt) {
     parts.push(`Style positive tokens: ${style.generativeAi.positivePrompt}`);
   }
-  if (style.generativeAi?.negativePrompt) {
-    parts.push(`Style negative tokens: ${style.generativeAi.negativePrompt}`);
+
+  if (style.conventionBreak?.applied) {
+    parts.push(
+      `Convention break: AVOID "${style.conventionBreak.dogma}" — INSTEAD "${style.conventionBreak.breakText}"`,
+    );
   }
+
+  if (style.audienceFit?.fitType === "unexpected") {
+    parts.push(`Unexpected pairing note: ${style.audienceFit.audienceNote}`);
+  }
+
+  if (style.dialModifiers?.compositionOverride) {
+    parts.push(`Composition: ${style.dialModifiers.compositionOverride}`);
+  }
+
+  if (style.generativeAi?.negativePrompt) {
+    const extraNeg = style.dialModifiers?.negativeBoost ?? [];
+    const allNeg = [style.generativeAi.negativePrompt, ...extraNeg].join(", ");
+    parts.push(`Style negative tokens: ${allNeg}`);
+  } else if (style.dialModifiers?.negativeBoost?.length) {
+    parts.push(`Negative boost: ${style.dialModifiers.negativeBoost.join(", ")}`);
+  }
+
+  if (style.dialModifiers?.colorShift) {
+    parts.push(`Color temperature: shift ${style.dialModifiers.colorShift}`);
+  }
+
   if (style.motionSignature) {
     parts.push(`Motion signature: ${style.motionSignature}`);
   }
@@ -111,6 +163,10 @@ export function buildCrafterContext(stage: string, style: StyleData, userIntent:
   }
   if (style.antiSlopOverrides?.length) {
     parts.push(`Anti-slop overrides: ${style.antiSlopOverrides.join("; ")}`);
+  }
+
+  if (style.dialModifiers?.promptSuffix) {
+    parts.push(`Creative suffix: ${style.dialModifiers.promptSuffix}`);
   }
 
   return parts.join("\n");

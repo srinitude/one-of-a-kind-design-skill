@@ -7,6 +7,12 @@
  */
 import { Console, Effect, pipe } from "effect";
 import { parse as parseYaml } from "yaml";
+import type { DialModifiers } from "./apply-dials";
+import { applyDials } from "./apply-dials";
+import type { AudienceFitResult } from "./resolve-audience-fit";
+import { resolveAudienceFit } from "./resolve-audience-fit";
+import type { ConventionBreakSelection } from "./resolve-convention-break";
+import { resolveConventionBreak } from "./resolve-convention-break";
 
 // --- Types ---
 
@@ -30,6 +36,9 @@ interface ResolvedStyle {
   };
   readonly conventionBreaks: Array<{ dogma: string; break: string }>;
   readonly audienceMarketFit: { strong: string[]; unexpected: string[] };
+  readonly dialModifiers: DialModifiers;
+  readonly conventionBreak: ConventionBreakSelection;
+  readonly audienceFit: AudienceFitResult;
 }
 
 interface StyleResolutionInput {
@@ -179,6 +188,10 @@ export const resolveStyle = (
     unexpected: [],
   }) as { strong: string[]; unexpected: string[] };
 
+  const dialModifiers = applyDials(dials, conventionBreaks);
+  const conventionBreak = resolveConventionBreak(dials.design_variance ?? 5, conventionBreaks);
+  const audienceFit = resolveAudienceFit(input.audience ?? "", marketFit);
+
   return Effect.succeed({
     id: styleId,
     name: style.name as string,
@@ -199,6 +212,9 @@ export const resolveStyle = (
     },
     conventionBreaks,
     audienceMarketFit: marketFit,
+    dialModifiers,
+    conventionBreak,
+    audienceFit,
   });
 };
 
