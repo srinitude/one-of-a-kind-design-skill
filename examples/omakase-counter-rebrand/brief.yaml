@@ -1,0 +1,24 @@
+project: omakase-counter-rebrand
+output_type: website
+client: Sushi Kioku (12-seat omakase, Brooklyn)
+industry: food
+audience: NYC food culture devotees, 30-50, $200+ prix fixe comfortable
+mood: [warm, minimal, intimate]
+style: wabi-sabi
+convention_breaking:
+  - No food photography
+  - No visible menu prices
+  - No reservation widget above fold
+quality_emphasis:
+  distinctiveness: 9
+  hierarchy: 8
+  color_harmony: 8
+dials:
+  design_variance: 7
+  motion_intensity: 3
+  visual_density: 3
+  audience_formality: 8
+hero:
+  archetype: typographic-statement
+  description: "Vertical Japanese calligraphy meets hand-textured washi paper"
+prompt_seed: 42

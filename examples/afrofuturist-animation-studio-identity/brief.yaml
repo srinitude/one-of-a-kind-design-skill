@@ -1,0 +1,27 @@
+project: afrofuturist-animation-studio-identity
+output_type: svg
+client: Adinkra Motion (Lagos-based animation studio)
+industry: media
+audience: Parents of children 4-12, African diaspora, culturally engaged
+mood: [bold, geometric, sophisticated-for-children]
+style: afrofuturism
+convention_breaking:
+  - Children's brand identity uses angular geometry, not rounded friendly shapes
+  - Treats children as sophisticated visual thinkers
+quality_emphasis:
+  asset_quality: 9
+  aesthetic: 9
+  distinctiveness: 8
+dials:
+  design_variance: 8
+  motion_intensity: 5
+  visual_density: 5
+  audience_formality: 4
+hero:
+  archetype: svg-vector-graphic
+  description: "Nsibidi-inspired geometric logo mark via QuiverAI Arrow"
+prompt_seed: 42
+deliverables:
+  - Logo mark
+  - 5 character silhouettes
+  - Geometric pattern library

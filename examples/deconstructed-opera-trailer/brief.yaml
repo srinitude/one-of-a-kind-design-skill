@@ -1,0 +1,26 @@
+project: deconstructed-opera-trailer
+output_type: video
+client: Fracture Opera (contemporary opera company)
+industry: performing-arts
+audience: Art patrons 25-40 who think opera is dead
+mood: [fractured, layered, uncomfortable-beauty]
+style: deconstructivism
+convention_breaking:
+  - Opera trailer that looks nothing like opera marketing
+  - No velvet curtains, no sopranos in costume
+  - Abstract visual metaphor for psychological fracture
+quality_emphasis:
+  prompt_artifact_alignment: 9
+  distinctiveness: 9
+  aesthetic: 8
+dials:
+  design_variance: 9
+  motion_intensity: 7
+  visual_density: 7
+  audience_formality: 6
+hero:
+  archetype: panning-scene
+  description: "Fractured camera choreography through shattered mirror fragments"
+prompt_seed: 42
+duration_seconds: 15
+camera_choreography: "[Slow push] through shattered mirror fragments -> [Whip pan] to silk falling -> [Static hold] on single butterfly wing, 3 seconds"

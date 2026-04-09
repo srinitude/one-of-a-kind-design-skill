@@ -1,0 +1,26 @@
+project: brutalist-zine-streetwear-drop
+output_type: image
+client: KURO (Tokyo streetwear label)
+industry: fashion
+audience: Streetwear collectors, 18-30, hypebeast-adjacent, Tokyo/NYC/London
+mood: [raw, confrontational, illegible-on-purpose]
+style: brutalist-web
+secondary_style: risograph
+convention_breaking:
+  - Luxury product photography that is intentionally lo-fi
+  - Typography barely readable
+  - No product grid, asymmetric collage layout
+quality_emphasis:
+  style_fidelity: 9
+  distinctiveness: 9
+  aesthetic: 7
+dials:
+  design_variance: 9
+  motion_intensity: 2
+  visual_density: 8
+  audience_formality: 2
+hero:
+  archetype: photographic-drama
+  description: "Product shots with deliberate degradation and risograph color separation"
+prompt_seed: 42
+frame_count: 6

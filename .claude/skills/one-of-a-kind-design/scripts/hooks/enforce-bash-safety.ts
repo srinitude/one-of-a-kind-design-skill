@@ -1,7 +1,7 @@
 /**
  * enforce-bash-safety.ts — PreToolUse hook for Bash commands.
  * Comprehensive safety gate: runtime enforcement + destructive commands +
- * dangerous git operations + code injection patterns.
+ * dangerous git operations + code injection + escalation patterns.
  * Replaces enforce-bun-only-bash.ts with full deny-list coverage.
  */
 import { Effect, pipe } from "effect";
@@ -86,11 +86,62 @@ const INJECTION_PATTERNS: readonly SafetyPattern[] = [
   { regex: /\beval\s+["'`$]/, name: "eval", reason: "Dynamic code evaluation blocked." },
 ];
 
+// Category E: Escalation patterns (Mythos safety hardening)
+const ESCALATION_PATTERNS: readonly SafetyPattern[] = [
+  {
+    regex: /\/proc\/\d+\//,
+    name: "/proc/pid access",
+    reason: "Process filesystem inspection blocked.",
+  },
+  {
+    regex: /\/proc\/self\//,
+    name: "/proc/self access",
+    reason: "Self-process inspection blocked.",
+  },
+  { regex: /\bgdb\b/, name: "gdb", reason: "Memory debugger blocked." },
+  { regex: /\bdd\b.*\/proc/, name: "dd /proc", reason: "Process memory read blocked." },
+  { regex: /\bstrace\b/, name: "strace", reason: "System call tracing blocked." },
+  { regex: /\bptrace\b/, name: "ptrace", reason: "Process tracing blocked." },
+  { regex: /\bltrace\b/, name: "ltrace", reason: "Library call tracing blocked." },
+  {
+    regex: /\b--no-verify\b/,
+    name: "git --no-verify",
+    reason: "Hook bypass blocked. Fix the hook instead.",
+  },
+  {
+    regex: /\b--dangerously-skip\b/,
+    name: "--dangerously-skip",
+    reason: "Safety skip flags blocked.",
+  },
+  {
+    regex: /FAL_KEY=/,
+    name: "FAL_KEY exposure",
+    reason: "Credential passed as argument. Use Bun.env instead.",
+  },
+  {
+    regex: /E2B_API_KEY=/,
+    name: "E2B_API_KEY exposure",
+    reason: "Credential passed as argument. Use Bun.env instead.",
+  },
+  {
+    regex: /QUIVERAI_API_KEY=/,
+    name: "QUIVERAI_API_KEY exposure",
+    reason: "Credential passed as argument. Use Bun.env instead.",
+  },
+  {
+    regex: /\b--privileged\b/,
+    name: "docker --privileged",
+    reason: "Privileged container mode blocked.",
+  },
+  { regex: /\b--cap-add\b/, name: "docker --cap-add", reason: "Capability escalation blocked." },
+];
+
 const ALL_PATTERNS: readonly SafetyPattern[] = [
   ...RUNTIME_PATTERNS,
   ...DESTRUCTIVE_PATTERNS,
   ...GIT_DANGER_PATTERNS,
   ...INJECTION_PATTERNS,
+  ...ESCALATION_PATTERNS,
 ];
 
 const denyOutput = (pattern: SafetyPattern) => ({

@@ -8,6 +8,7 @@ description: >-
   "build a site", "landing page", "app screen", "generate image", "make video",
   "create SVG", "export to Figma", "export to Runway", or any creative task.
   Not for backend, databases, or non-visual work.
+  Reference examples for 6 project types in references/examples/.
 hooks:
   SessionStart:
     - matcher: "startup"
@@ -331,12 +332,82 @@ Steps 0 through 10 MUST be executed sequentially in order. No step may be skippe
 | Style conflict detected | Check `references/CONFLICT-MAP.md` for hard vs soft. Soft conflicts have compromise patterns |
 | Export .zip missing files | Verify tool's accepts declaration in registry or custom-tools/ |
 
+## Performance Notes
+- Take your time with style resolution. Read the full taxonomy entry before resolving.
+- Do NOT skip validation steps even when confident. Every generation gets alignment-checked.
+- Quality > speed. A 7.0 composite reached in 3 attempts beats an 8.0 achieved by luck.
+- When blocked by a hook or safety check, STOP. Do not work around it. The block is correct.
+- If a fal.ai call fails, try a different model before retrying the same endpoint.
+- Never fabricate alignment scores or quality sub-scores. Report actual measured values.
+- If composite < 7.0 after 3 attempts, report this to the user honestly rather than continuing.
+- Fix one quality dimension at a time — do not attempt to fix all sub-scores simultaneously.
+- After 2 failed regenerations at the same tier, escalate exactly one tier. Never skip tiers.
+- Maximum 15 fal.ai calls per pipeline run. If reached, stop and report remaining work.
+
 ## Examples
 
-**Luxury hotel website**: Enhancement → specificity 5 → resolve cinematic → hero: Panning Scene → `prompt-crafter-video-camera` → "[Push in] Slow dolly through sunlit lobby" → Kling v3 → alignment 8.6 PASS → upscale → one-shot React → composite 8.1.
+### Omakase Counter Rebrand
+User says: "I need a website for a 12-seat omakase restaurant in Brooklyn. No photos of food — the site should feel like sitting at the counter."
+Actions:
+1. Enhancement extracts: output=website, industry=food, mood=[warm, minimal, intimate], specificity=5/7
+2. Style resolution: wabi-sabi (food + intimate → wabi-sabi via AUDIENCE-ROUTES)
+3. Hero asset: Typographic Statement → prompt-crafter-image-gen → Flux 1.1 Ultra
+4. One-shot generation with wabi-sabi Tailwind preset + organic_drift motion
+5. Quality evaluation: composite 8.5/10 (PASS)
+Result: Full website with hand-textured typography, no food photography, seasonal palette system
+See: references/examples/omakase-counter-rebrand.md
 
-**Art-deco SVG logo**: Enhancement → specificity 6 → resolve art-deco → hero: SVG Vector → `prompt-crafter-svg-gen` → "geometric cocktail glass, gold #C9A84C on #1A1A1A, symmetrical" → QuiverAI Arrow → alignment 9.0 PASS → composite 8.4.
+### Arctic Research Dashboard
+User says: "Climate nonprofit needs an internal dashboard for Arctic ice shelf data. Beautiful enough for donor screenshots."
+Actions:
+1. Enhancement extracts: output=web-app, industry=science, mood=[urgent, beautiful], specificity=5/7
+2. Style resolution: swiss-international + generative-art (science + authority → swiss)
+3. Hero asset: Generative Canvas → prompt-crafter-image-gen → Flux Pro
+4. One-shot generation with swiss-international preset + particle system viz
+5. Quality evaluation: composite 8.3/10 (PASS)
+Result: Data dashboard with glacial-to-volcanic color coding, aurora-inspired gradients
+See: references/examples/arctic-research-dashboard.md
 
-**Vague "make something cool"**: Enhancement → specificity 0 → AskUserQuestion → website, bold, tech → resolve neubrutalism → hero: Parallax Depth Stack → `prompt-crafter-image-gen` → Flux 2 Pro → alignment 8.7 PASS → composite 7.8.
+### Brutalist Zine Streetwear Drop
+User says: "Tokyo streetwear label dropping a capsule. Need a digital zine — raw, confrontational, illegible on purpose."
+Actions:
+1. Enhancement extracts: output=image, industry=fashion, mood=[raw, confrontational], specificity=6/7
+2. Style resolution: brutalist-web + risograph (fashion + raw → brutalist-web)
+3. Hero asset: Photographic Drama → prompt-crafter-image-gen → Flux Pro (6 frames)
+4. Multi-frame generation with style consistency validation across all 6 zine spreads
+5. Quality evaluation: composite 8.2/10 (PASS), style consistency 8.5 (PASS)
+Result: 6-spread digital zine with risograph color separation and deliberate degradation
+See: references/examples/brutalist-zine-streetwear-drop.md
 
-**Failed alignment self-correction**: bauhaus poster → attempt 1 alignment 5.5 → misalignment: "gradients, organic curves" → re-craft stronger: "strict Bauhaus, exactly three shapes, zero gradients" → attempt 2 alignment 8.8 PASS.
+### Afrofuturist Animation Studio Identity
+User says: "Lagos animation studio needs vector identity — logo, character silhouettes, pattern library. Must work at 16px to 4K."
+Actions:
+1. Enhancement extracts: output=svg, industry=media, mood=[bold, geometric], specificity=6/7
+2. Style resolution: afrofuturism (media + African diaspora → afrofuturism)
+3. Hero asset: SVG Vector Graphic → prompt-crafter-svg-gen → QuiverAI Arrow
+4. E2B sandbox for SVGO optimization + multi-size export validation
+5. Quality evaluation: composite 8.6/10 (PASS)
+Result: Nsibidi-inspired geometric logo, 5 silhouettes, pattern library as SVG sprite sheet
+See: references/examples/afrofuturist-animation-studio-identity.md
+
+### Deconstructed Opera Trailer
+User says: "Contemporary opera company needs a 15-second trailer. Fractured, layered, uncomfortable beauty."
+Actions:
+1. Enhancement extracts: output=video, industry=performing-arts, mood=[fractured, layered], specificity=6/7
+2. Style resolution: deconstructivism (performing-arts + fractured → deconstructivism)
+3. Hero asset: Panning Scene → prompt-crafter-video-camera → Kling v2 Master
+4. Camera choreography: [Slow push] → [Whip pan] → [Static hold] + video restyle
+5. Quality evaluation: composite 8.4/10 (PASS)
+Result: 15s trailer with fractured camera movements mirroring Butterfly's psychological arc
+See: references/examples/deconstructed-opera-trailer.md
+
+### Somatic Therapist Practice App
+User says: "Somatic therapist needs app screens for booking and intake. Clients are trauma survivors — interface must feel safe."
+Actions:
+1. Enhancement extracts: output=mobile-app, industry=healthcare, mood=[safe, warm], specificity=5/7
+2. Style resolution: scandinavian-minimalism + wabi-sabi (healthcare + safe → scandi-minimal)
+3. Hero asset: Parallax Depth Stack → prompt-crafter-image-gen → Flux Pro
+4. One-shot generation with warm neutrals, generous touch targets, no sharp corners
+5. Quality evaluation: composite 8.3/10 (PASS)
+Result: Trauma-informed mobile screens with warm neutrals, body-aware design
+See: references/examples/somatic-therapist-practice-app.md

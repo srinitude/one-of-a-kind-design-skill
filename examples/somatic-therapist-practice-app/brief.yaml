@@ -1,0 +1,28 @@
+project: somatic-therapist-practice-app
+output_type: mobile-app
+client: Dr. Maren Voss (somatic therapist in private practice)
+industry: healthcare
+audience: Trauma survivors seeking somatic therapy, 25-55, therapy-experienced
+mood: [safe, warm, boundaried]
+style: scandinavian-minimalism
+secondary_style: wabi-sabi
+convention_breaking:
+  - Healthcare app rejects standard blue-and-white clinical palette
+  - Uses warm neutrals and intentional imperfection for humanity
+quality_emphasis:
+  hierarchy: 9
+  color_harmony: 9
+  aesthetic: 8
+dials:
+  design_variance: 4
+  motion_intensity: 2
+  visual_density: 2
+  audience_formality: 5
+hero:
+  archetype: parallax-depth-stack
+  description: "Layered organic textures suggesting safety and containment"
+prompt_seed: 42
+screens:
+  - Booking calendar
+  - Intake form
+  - Session confirmation

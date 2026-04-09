@@ -1,0 +1,24 @@
+project: arctic-research-dashboard
+output_type: web-app
+client: Polar Watch Collective (climate nonprofit)
+industry: science
+audience: Climate researchers + donor board, data-literate, 28-60
+mood: [urgent, beautiful, authoritative]
+style: swiss-international
+secondary_style: generative-art
+convention_breaking:
+  - Data dashboard prioritizes emotional impact over information density
+  - Severity-based color coding uses glacial blues to volcanic reds
+quality_emphasis:
+  color_harmony: 9
+  hierarchy: 9
+  aesthetic: 8
+dials:
+  design_variance: 5
+  motion_intensity: 4
+  visual_density: 6
+  audience_formality: 7
+hero:
+  archetype: generative-canvas
+  description: "Algorithmic particle visualization of ice shelf fragmentation data"
+prompt_seed: 42
