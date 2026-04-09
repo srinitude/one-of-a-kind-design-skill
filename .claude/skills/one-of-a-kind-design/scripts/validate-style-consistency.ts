@@ -1,6 +1,6 @@
 /**
  * validate-style-consistency.ts — Cross-frame style consistency scoring.
- * Takes MoonDreamNext descriptions for all frames in a set and measures coherence.
+ * Takes LLaVA 13B descriptions for all frames in a set and measures coherence.
  *
  * L3 fix: Pipeline validated each frame independently but never checked whether
  * all frames in a concept look like they belong together.

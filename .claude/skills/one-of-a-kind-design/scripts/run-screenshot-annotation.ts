@@ -1,6 +1,6 @@
 /**
  * run-screenshot-annotation.ts — Screenshot draw-over with UX annotations.
- * Uses fal.ai GPT Image 1 for draw-over and MoonDreamNext for gaze detection analysis.
+ * Uses fal.ai GPT Image 1 for draw-over and LLaVA 13B for gaze detection analysis.
  *
  * Run: bun run scripts/run-screenshot-annotation.ts --screenshot "..." --annotation-prompt "..."
  */
@@ -103,7 +103,7 @@ export function analyzeScreenshot(
           `One finding per line. Be specific about location (top-left, hero section, etc.)`,
         ].join("\n");
 
-        const result = await fal.subscribe("fal-ai/moondream-next", {
+        const result = await fal.subscribe("fal-ai/llavav15-13b", {
           input: { image_url: screenshotUrl, prompt: analysisPrompt },
         });
 
@@ -111,7 +111,7 @@ export function analyzeScreenshot(
         const output = (data.output as string) ?? (data.text as string) ?? "";
         return parseFindings(output);
       },
-      catch: (e) => new Error(`MoonDreamNext analysis failed: ${e}`),
+      catch: (e) => new Error(`LLaVA 13B analysis failed: ${e}`),
     }),
     Effect.retry({ schedule: retryPolicy, while: (err) => err.message.includes("429") }),
   );

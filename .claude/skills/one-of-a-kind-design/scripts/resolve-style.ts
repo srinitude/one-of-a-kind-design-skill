@@ -249,6 +249,9 @@ export function inferStyleFromContext(
     luxury: "cinematic",
     creative: "editorial-minimalism",
     real_estate: "cinematic",
+    nonprofit: "editorial-minimalism",
+    death_care: "wabi-sabi",
+    meditation: "scandinavian-minimalism",
   };
 
   return moodMap[mood] ?? industryMap[industry] ?? "editorial-minimalism";

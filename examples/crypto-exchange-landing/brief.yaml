@@ -1,0 +1,8 @@
+user_prompt: "I need a landing page for a cryptocurrency exchange that targets institutional investors"
+output_type: website
+resolved_style: swiss-international
+model: "Flux 1.1 Ultra"
+endpoint: "fal-ai/flux-pro/v1.1-ultra"
+distilled_prompt: "Swiss / International Typographic Style, I need a landing page for a cryptocurrency exchange that targets institutional investors, Swiss design, International Typographic Style, Helvetica, grid layout, asymmetri, strict multi-column grid, left-aligned, , high detail, professional quality"
+composite_score: 7.56
+timing_ms: 20574

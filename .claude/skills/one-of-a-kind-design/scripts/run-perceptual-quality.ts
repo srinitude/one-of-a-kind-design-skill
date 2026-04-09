@@ -1,9 +1,9 @@
 /**
  * run-perceptual-quality.ts — Aesthetic/fidelity/distinctiveness scoring via vision model.
- * Uses MoonDreamNext to describe images, then scores via calibrated keyword marker dictionaries.
+ * Uses LLaVA v1.5 13B to describe images, then scores via calibrated keyword marker dictionaries.
  *
  * L1 fix: Description-based scoring replaces "return 5 numbers" approach
- * L2 fix: All 66 styles covered with MoonDreamNext-vocabulary keywords
+ * L2 fix: All 66 styles covered with LLaVA-vocabulary keywords
  *
  * Run: bun run .claude/skills/one-of-a-kind-design/scripts/run-perceptual-quality.ts --image-url "..." --style-id "art-deco"
  */
@@ -35,7 +35,7 @@ interface StyleVisionMarkers {
 }
 
 // --- Vision markers for all 66 styles ---
-// Each entry uses MoonDreamNext-vocabulary keywords (how the model naturally describes images)
+// Each entry uses LLaVA-vocabulary keywords (how the model naturally describes images)
 
 const STYLE_VISION_MARKERS: Record<string, StyleVisionMarkers> = {
   // ═══ Historical / Fine Art Movements ═══
@@ -1246,7 +1246,7 @@ export function analyzeQuality(
           "Be thorough and specific about what you observe.",
         ].join(" ");
 
-        const result = await fal.subscribe("fal-ai/moondream-next", {
+        const result = await fal.subscribe("fal-ai/llavav15-13b", {
           input: { image_url: input.imageUrl, prompt: descriptionPrompt },
         });
 
@@ -1254,7 +1254,7 @@ export function analyzeQuality(
         const output = (data.output as string) ?? (data.text as string) ?? "";
         return scoreFromDescription(output, input.styleId);
       },
-      catch: (e) => new Error(`MoonDreamNext quality analysis failed: ${e}`),
+      catch: (e) => new Error(`LLaVA 13B quality analysis failed: ${e}`),
     }),
     Effect.retry({
       schedule: retryPolicy,

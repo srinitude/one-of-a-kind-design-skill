@@ -149,8 +149,8 @@ export const PIPELINE_MODELS: Record<string, PipelineModel[]> = {
   ],
   "ocr-vision": [
     {
-      name: "MoonDreamNext",
-      endpoint: "fal-ai/moondream-next",
+      name: "LLaVA 13B",
+      endpoint: "fal-ai/llavav15-13b",
       inputType: "image",
       strengths: "vision-language, captioning",
     },

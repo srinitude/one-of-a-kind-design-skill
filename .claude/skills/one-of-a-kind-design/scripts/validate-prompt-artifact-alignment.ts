@@ -1,6 +1,6 @@
 /**
  * validate-prompt-artifact-alignment.ts — Closed-loop prompt vs artifact comparison.
- * Uses MoonDreamNext vision model to describe artifacts, then scores alignment
+ * Uses LLaVA v1.5 13B vision model to describe artifacts, then scores alignment
  * against the crafted prompt using per-job-type criteria.
  *
  * Run: bun run scripts/validate-prompt-artifact-alignment.ts --prompt "..." --artifact-url "..." --job-type "image-gen"
@@ -249,45 +249,18 @@ const retryPolicy = pipe(
   Schedule.intersect(Schedule.recurs(2)),
 );
 
-export function describeArtifactViaVision(
-  artifactUrl: string,
-  jobType: JobType,
-): Effect.Effect<string, Error> {
-  return pipe(
-    Effect.tryPromise({
-      try: async () => {
-        fal.config({ credentials: Bun.env.FAL_KEY });
-
-        const promptForDescription = buildDescriptionPrompt(jobType);
-        const result = await fal.subscribe("fal-ai/moondream-next", {
-          input: {
-            image_url: artifactUrl,
-            prompt: promptForDescription,
-          },
-        });
-
-        const data = result.data as Record<string, unknown>;
-        return (
-          (data.output as string) ?? (data.text as string) ?? (data.description as string) ?? ""
-        );
-      },
-      catch: (e) => new Error(`MoonDreamNext description failed: ${e}`),
-    }),
-    Effect.retry({ schedule: retryPolicy, while: (err) => err.message.includes("429") }),
-  );
-}
-
 function buildDescriptionPrompt(jobType: JobType): string {
-  const base = "Describe this image in detail, including:";
+  const base = "Analyze this image for design quality. Describe in 2-3 sentences:";
   const specifics: Record<string, string> = {
     "image-gen":
-      "subjects, objects, scene layout, colors, style, lighting, mood, and any text visible",
-    "image-edit": "what appears edited or modified, the overall composition, and any visible seams",
+      "visual style, dominant colors (estimate hex values), composition layout, subjects, lighting, and overall aesthetic quality",
+    "image-edit":
+      "what appears edited, the overall composition, and any visible seams or artifacts",
     "style-transfer":
-      "the artistic style applied, color palette, textures, and how the original content is preserved",
+      "the artistic style applied, color palette, textures, and how well the original content is preserved",
     controlnet:
-      "the structural composition, how elements are arranged, and the relationship between structure and content",
-    "video-gen": "the scene, subjects, any motion implied, style, and overall composition",
+      "structural composition, element arrangement, and the relationship between structure and content",
+    "video-gen": "the scene, subjects, motion quality, style, and overall composition",
     "video-camera": "camera angle, perspective, depth of field, and spatial arrangement",
     "video-restyle":
       "the artistic style, color treatment, and how it differs from a standard photograph",
@@ -302,7 +275,31 @@ function buildDescriptionPrompt(jobType: JobType): string {
     "svg-vectorize":
       "edge quality, path accuracy, color regions, and how well it represents the original",
   };
-  return `${base} ${specifics[jobType] ?? "all visual details"}.`;
+  return `${base} ${specifics[jobType] ?? "visual style, dominant colors (estimate hex values), composition layout, and overall aesthetic quality"}.`;
+}
+
+export function describeArtifactViaVision(
+  artifactUrl: string,
+  jobType: JobType,
+): Effect.Effect<string, Error> {
+  return pipe(
+    Effect.tryPromise({
+      try: async () => {
+        fal.config({ credentials: Bun.env.FAL_KEY });
+
+        const prompt = buildDescriptionPrompt(jobType);
+        const result = await fal.subscribe("fal-ai/llavav15-13b", {
+          input: { image_url: artifactUrl, prompt },
+          timeout: 25000,
+        });
+
+        const data = result.data as Record<string, unknown>;
+        return (data.output as string) ?? "";
+      },
+      catch: (e) => new Error(`LLaVA 13B description failed: ${e}`),
+    }),
+    Effect.retry({ schedule: retryPolicy, while: (err) => err.message.includes("429") }),
+  );
 }
 
 // --- SVG DOM Parsing ---

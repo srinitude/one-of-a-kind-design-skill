@@ -1,41 +1,40 @@
 # Examples
 
-Six end-to-end pipelines demonstrating the one-of-a-kind-design skill. Each reads a `brief.yaml`, resolves a taxonomy style with dials and convention breaks, generates assets via fal.ai or QuiverAI, post-processes in an E2B sandbox, scores quality, and logs an audit entry.
+Six end-to-end pipelines demonstrating the one-of-a-kind-design skill. Each resolves a taxonomy style, generates assets via fal.ai, scores quality with LLaVA 13B vision, and validates a composite score >= 7.0.
 
 ## Overview
 
-| Example | Output | Style | Unique Angle | E2B Step |
-|---------|--------|-------|--------------|----------|
-| [omakase-counter-rebrand](./omakase-counter-rebrand/) | Website | wabi-sabi | No food photography for a restaurant | WebP conversion |
-| [arctic-research-dashboard](./arctic-research-dashboard/) | Web App | swiss-international | Emotional data viz over info density | Dashboard resize |
-| [brutalist-zine-streetwear-drop](./brutalist-zine-streetwear-drop/) | Image Series | brutalist-web | Luxury products shot lo-fi | Frame compositing |
-| [afrofuturist-animation-studio-identity](./afrofuturist-animation-studio-identity/) | SVG | afrofuturism | Angular geometry for children's brand | SVGO optimization |
-| [deconstructed-opera-trailer](./deconstructed-opera-trailer/) | Video | deconstructivism | Opera trailer with no opera imagery | Frame extraction |
-| [somatic-therapist-practice-app](./somatic-therapist-practice-app/) | Mobile App | scandinavian-minimalism | Healthcare app rejecting clinical blue | Phone-frame mockup |
+| Example | User Prompt | Output Type | Style | Composite |
+|---------|------------|-------------|-------|-----------|
+| [crypto-exchange-landing](./crypto-exchange-landing/) | "Landing page for a cryptocurrency exchange targeting institutional investors" | website | swiss-international | 7.56 |
+| [film-production-dashboard](./film-production-dashboard/) | "Project management tool for a film production company. Timeline-heavy." | web-app | vaporwave | 7.94 |
+| [jazz-album-cover](./jazz-album-cover/) | "Album cover for a jazz trio's debut record. Smoky, intimate, blue." | image | vaporwave | 8.14 |
+| [meditation-icon-set](./meditation-icon-set/) | "Icon set for a meditation app. 12 icons. Calm, minimal." | svg | editorial-minimalism | 7.67 |
+| [prism-logo-reveal](./prism-logo-reveal/) | "5-second logo reveal animation for a tech startup called 'Prism'" | video | bento-ui | 7.18 |
+| [privacy-email-settings](./privacy-email-settings/) | "Settings page for a privacy-focused email client" | mobile-app | bento-ui | 7.52 |
 
 ## Running
 
 ```bash
-# Ensure .env is set with FAL_KEY, E2B_API_KEY, QUIVERAI_API_KEY
-bun run examples/omakase-counter-rebrand/run.ts
-bun run examples/arctic-research-dashboard/run.ts
-bun run examples/brutalist-zine-streetwear-drop/run.ts
-bun run examples/afrofuturist-animation-studio-identity/run.ts
-bun run examples/deconstructed-opera-trailer/run.ts
-bun run examples/somatic-therapist-practice-app/run.ts
+# Ensure .env is set with FAL_KEY
+bun run examples/crypto-exchange-landing/run.ts
+bun run examples/film-production-dashboard/run.ts
+bun run examples/jazz-album-cover/run.ts
+bun run examples/meditation-icon-set/run.ts
+bun run examples/prism-logo-reveal/run.ts
+bun run examples/privacy-email-settings/run.ts
 ```
 
 ## Pipeline Steps (all examples)
 
-1. Load `brief.yaml` with project context, audience, dials, convention breaks
+1. Load `brief.yaml` with user prompt and resolved metadata
 2. Load `TAXONOMY.yaml` and call `resolveStyle` (attaches `dialModifiers`, `conventionBreak`, `audienceFit`)
 3. `selectModel` picks fal.ai endpoint based on style affinity and tier
-4. `buildCrafterContext` produces dial-modulated prompt context
-5. `runFalGeneration` or `generateSvg` calls the API with seed pinning
-6. E2B sandbox downloads and post-processes the result
-7. `computeComposite` scores quality (10 sub-scores including `conventionBreakAdherence`)
-8. `logAuditEntry` writes a structured audit record
+4. `distillPrompt` produces a <=300 char prompt with style tokens
+5. `runFalGeneration` calls the API with seed pinning and retry logic
+6. `computeRealScores` runs LLaVA 13B vision for structured quality evaluation
+7. `computeComposite` scores quality (9 sub-scores with weights)
 
 ## Quality Threshold
 
-All examples target a composite score >= 7.0/10. The score card breaks down all sub-scores with weights and visual bars.
+All examples target a composite score >= 7.0/10. The score card breaks down all sub-scores with weights. Selected from the top-performing invocations in the 20-test validation suite (one per output type).

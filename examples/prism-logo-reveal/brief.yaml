@@ -1,0 +1,8 @@
+user_prompt: "5-second logo reveal animation for a tech startup called 'Prism'"
+output_type: video
+resolved_style: bento-ui
+model: "WAN T2V"
+endpoint: "fal-ai/wan-t2v"
+distilled_prompt: "Bento UI, 5-second logo reveal animation for a tech startup called 'Prism', bento grid UI layout, modular card grid, varied cell sizes, Apple-style feature , asymmetric CSS Grid with 2:1 and 1:1 cel, high detail, professional quality"
+composite_score: 7.18
+timing_ms: 94650

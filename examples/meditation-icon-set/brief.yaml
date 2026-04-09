@@ -1,0 +1,8 @@
+user_prompt: "Icon set for a meditation app. 12 icons. Calm, minimal."
+output_type: svg
+resolved_style: editorial-minimalism
+model: "Flux Pro 1.1"
+endpoint: "fal-ai/flux-pro/v1.1"
+distilled_prompt: "Editorial Minimalism, Icon set for a meditation app. 12 icons. Calm, minimal., editorial UI design, Notion-like interface, warm monochrome, serif headings, hai, palette: #F7F6F3 #111111 #EAEAEA, asymmetric bento grid with hairline 1px , high detail, professional quality"
+composite_score: 7.67
+timing_ms: 9212
