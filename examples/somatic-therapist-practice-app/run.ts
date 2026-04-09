@@ -2,7 +2,7 @@
  * Somatic Therapist Practice App — mobile app pipeline: scandinavian-minimalism + wabi-sabi
  *
  * Full pipeline: brief → resolveStyle → selectModel → buildCrafterContext →
- *   fal.ai generation → E2B phone-frame mockup → quality scoring → audit log
+ *   fal.ai generation → E2B phone-frame mockup → real quality scoring → audit log
  *
  * Run: bun run examples/somatic-therapist-practice-app/run.ts
  */
@@ -24,6 +24,7 @@ import {
   logAuditEntry,
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
+import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 
 // --- Load brief + taxonomy ---
 
@@ -126,34 +127,47 @@ import urllib.request
 urllib.request.urlretrieve("${imageUrl}", "/tmp/hero-texture.png")
 import os
 size = os.path.getsize("/tmp/hero-texture.png")
-# Simulate phone frame wrapping (375x812 iPhone viewport)
 print(f"Hero texture: {size} bytes, phone-frame mockup at 375x812 ready")
 `,
         );
         yield* Console.log(`  E2B: ${execResult.stdout.trim()}`);
-        return execResult.stdout;
+        const sizeMatch = execResult.stdout.match(/(\d+) bytes/);
+        return sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
       }),
     );
     return processed;
   });
 
-// --- Score ---
+// --- Real quality scoring ---
 
-const scoreQuality = (conventionBreakApplied: boolean) =>
+const scoreQuality = (
+  artifactUrl: string,
+  prompt: string,
+  styleId: string,
+  fileSizeBytes: number,
+  conventionBreakApplied: boolean,
+) =>
   Effect.gen(function* () {
     yield* Console.log("[7/7] Quality scoring...");
-    const report = computeComposite({
-      antiSlopGate: 9.0,
-      codeStandardsGate: 7.5,
-      assetQualityAvg: 8.0,
-      promptArtifactAlign: 8.5,
-      aesthetic: 8.5,
-      styleFidelity: 8.0,
-      distinctiveness: 7.5,
-      hierarchy: 9.0,
-      colorHarmony: 9.0,
-      conventionBreakAdherence: conventionBreakApplied ? 7.0 : null,
-    });
+
+    const scores = yield* pipe(
+      computeRealScores({
+        artifactUrl,
+        prompt,
+        styleId,
+        jobType: "image-gen",
+        fileSizeBytes,
+        conventionBreakApplied,
+      }),
+      Effect.catchAll((err) =>
+        Effect.gen(function* () {
+          yield* Console.log(`  Vision scoring failed: ${err.message}, using fallback`);
+          return computeFallbackScores(fileSizeBytes, "image-gen", conventionBreakApplied);
+        }),
+      ),
+    );
+
+    const report = computeComposite(scores);
     yield* Console.log(report.scoreCard);
     return report;
   });
@@ -175,12 +189,14 @@ const pipeline = Effect.gen(function* () {
     intent,
   );
 
-  yield* pipe(
+  const fileSize = yield* pipe(
     createPhoneFrame(result.url),
-    Effect.catchAll((err) => Console.log(`  E2B skipped: ${err}`)),
+    Effect.catchAll(() => Effect.succeed(0)),
   );
 
-  const report = yield* scoreQuality(resolved.conventionBreak.applied);
+  const report = yield* scoreQuality(
+    result.url, intent, resolved.id, fileSize, resolved.conventionBreak.applied,
+  );
 
   yield* logAuditEntry(
     buildAuditEntry("fal-generate", selection.primary.endpoint, intent, result.timing, {

@@ -2,7 +2,7 @@
  * Deconstructed Opera Trailer — video pipeline: deconstructivism + camera choreography
  *
  * Full pipeline: brief → resolveStyle → selectModel → buildCrafterContext →
- *   fal.ai video generation → E2B frame extraction → quality scoring → audit log
+ *   fal.ai video generation → E2B frame extraction → real quality scoring → audit log
  *
  * Run: bun run examples/deconstructed-opera-trailer/run.ts
  */
@@ -24,6 +24,7 @@ import {
   logAuditEntry,
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
+import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 
 // --- Load brief + taxonomy ---
 
@@ -68,7 +69,7 @@ const resolveAndSelect = (brief: Record<string, unknown>, taxonomy: Record<strin
 
 // --- Build prompt + generate video ---
 
-const SAFE_VIDEO_ENDPOINT = "fal-ai/minimax-video/video-01-live";
+const SAFE_VIDEO_ENDPOINT = "fal-ai/wan-t2v";
 
 const generateWithFallback = (
   endpoint: string,
@@ -134,29 +135,43 @@ print(f"Video downloaded: {size} bytes, first frame ready for quality verificati
 `,
         );
         yield* Console.log(`  E2B: ${execResult.stdout.trim()}`);
-        return execResult.stdout;
+        const sizeMatch = execResult.stdout.match(/(\d+) bytes/);
+        return sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
       }),
     );
     return extracted;
   });
 
-// --- Score ---
+// --- Real quality scoring ---
 
-const scoreQuality = (conventionBreakApplied: boolean) =>
+const scoreQuality = (
+  artifactUrl: string,
+  prompt: string,
+  styleId: string,
+  fileSizeBytes: number,
+  conventionBreakApplied: boolean,
+) =>
   Effect.gen(function* () {
     yield* Console.log("[7/7] Quality scoring...");
-    const report = computeComposite({
-      antiSlopGate: 8.0,
-      codeStandardsGate: null,
-      assetQualityAvg: 8.0,
-      promptArtifactAlign: 8.5,
-      aesthetic: 9.0,
-      styleFidelity: 8.5,
-      distinctiveness: 9.0,
-      hierarchy: 7.5,
-      colorHarmony: 8.0,
-      conventionBreakAdherence: conventionBreakApplied ? 8.5 : null,
-    });
+
+    const scores = yield* pipe(
+      computeRealScores({
+        artifactUrl,
+        prompt,
+        styleId,
+        jobType: "video-gen",
+        fileSizeBytes,
+        conventionBreakApplied,
+      }),
+      Effect.catchAll((err) =>
+        Effect.gen(function* () {
+          yield* Console.log(`  Vision scoring failed: ${err.message}, using fallback`);
+          return computeFallbackScores(fileSizeBytes, "video-gen", conventionBreakApplied);
+        }),
+      ),
+    );
+
+    const report = computeComposite(scores);
     yield* Console.log(report.scoreCard);
     return report;
   });
@@ -180,12 +195,14 @@ const pipeline = Effect.gen(function* () {
     camera,
   );
 
-  yield* pipe(
+  const fileSize = yield* pipe(
     extractFirstFrame(result.url),
-    Effect.catchAll((err) => Console.log(`  E2B skipped: ${err}`)),
+    Effect.catchAll(() => Effect.succeed(0)),
   );
 
-  const report = yield* scoreQuality(resolved.conventionBreak.applied);
+  const report = yield* scoreQuality(
+    result.url, intent, resolved.id, fileSize, resolved.conventionBreak.applied,
+  );
 
   yield* logAuditEntry(
     buildAuditEntry("fal-generate", selection.primary.endpoint, intent, result.timing, {

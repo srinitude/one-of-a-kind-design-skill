@@ -1,12 +1,13 @@
 /**
  * run-quiver-svg-generation.ts — Executes QuiverAI text-to-SVG generation.
  * Produces vector graphics from natural language descriptions.
+ * Falls back to fal.ai image generation if QuiverAI is unreachable.
  *
  * Run: bun run scripts/run-quiver-svg-generation.ts --prompt "..." --instructions "..." --temperature 0.8
  */
 
 import { QuiverAI } from "@quiverai/sdk";
-import { Console, Effect, pipe } from "effect";
+import { Console, Duration, Effect, pipe } from "effect";
 
 function buildDeterministicId(key: string): string {
   const hasher = new Bun.CryptoHasher("sha256");
@@ -26,44 +27,115 @@ interface SvgGenerationResult {
   readonly svg_content: string;
   readonly prompt_id: string;
   readonly timing: number;
+  readonly source: "quiverai" | "fal-fallback";
 }
 
-// --- Generation ---
+// --- QuiverAI generation with timeout ---
+
+const quiverGenerate = (input: SvgGenerationInput): Effect.Effect<SvgGenerationResult, Error> =>
+  pipe(
+    Effect.tryPromise({
+      try: async () => {
+        const client = new QuiverAI({ bearerAuth: Bun.env.QUIVERAI_API_KEY });
+        const start = Date.now();
+        const result = await client.createSVGs.generateSVG({
+          model: "arrow-preview",
+          prompt: input.prompt,
+          instructions: input.instructions,
+          n: 1,
+          temperature: input.temperature,
+        });
+        const timing = Date.now() - start;
+        const data = result as Record<string, unknown>;
+        const svgs = (data.svgs ?? data.results ?? data.data) as
+          | Array<{ svg?: string; content?: string }>
+          | undefined;
+        const svgContent =
+          svgs?.[0]?.svg ??
+          svgs?.[0]?.content ??
+          (data.svg as string | undefined) ??
+          (data.content as string | undefined) ??
+          "";
+
+        return {
+          svg_content: svgContent,
+          prompt_id: (data.id as string | undefined) ?? buildDeterministicId(input.prompt),
+          timing,
+          source: "quiverai" as const,
+        };
+      },
+      catch: (e) => new Error(`QuiverAI SVG generation failed: ${e}`),
+    }),
+    Effect.flatMap((result) =>
+      result.svg_content.length < 10
+        ? Effect.fail(new Error("QuiverAI returned empty SVG content"))
+        : Effect.succeed(result),
+    ),
+    Effect.timeout(Duration.seconds(30)),
+    Effect.catchTag("TimeoutException", () =>
+      Effect.fail(new Error("QuiverAI timed out after 30s")),
+    ),
+  );
+
+// --- fal.ai fallback: generate image, wrap in SVG ---
+
+const falFallback = (input: SvgGenerationInput): Effect.Effect<SvgGenerationResult, Error> =>
+  pipe(
+    Effect.tryPromise({
+      try: async () => {
+        const { fal } = await import("@fal-ai/client");
+        fal.config({ credentials: Bun.env.FAL_KEY });
+
+        const start = Date.now();
+        const result = await fal.subscribe("fal-ai/flux-pro/v1.1", {
+          input: {
+            prompt: `${input.prompt}. ${input.instructions}. Clean vector-style graphic, flat colors, no gradients, suitable for SVG conversion`,
+            image_size: "square",
+            seed: 42,
+          },
+        });
+        const timing = Date.now() - start;
+        const data = result.data as Record<string, unknown>;
+        const images = data.images as Array<{ url: string }> | undefined;
+        const imageUrl = images?.[0]?.url ?? "";
+
+        const svgContent = imageUrl
+          ? [
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">',
+              `  <image href="${imageUrl}" width="1024" height="1024"/>`,
+              `  <!-- fal.ai fallback: QuiverAI was unreachable. Raster wrapped in SVG. -->`,
+              "</svg>",
+            ].join("\n")
+          : "";
+
+        return {
+          svg_content: svgContent,
+          prompt_id: buildDeterministicId(input.prompt),
+          timing,
+          source: "fal-fallback" as const,
+        };
+      },
+      catch: (e) => new Error(`fal.ai SVG fallback failed: ${e}`),
+    }),
+    Effect.flatMap((result) =>
+      result.svg_content.length < 10
+        ? Effect.fail(new Error("fal.ai fallback returned no image"))
+        : Effect.succeed(result),
+    ),
+  );
+
+// --- Public API: try QuiverAI, fall back to fal.ai ---
 
 export function generateSvg(input: SvgGenerationInput): Effect.Effect<SvgGenerationResult, Error> {
-  return Effect.tryPromise({
-    try: async () => {
-      const client = new QuiverAI({ bearerAuth: Bun.env.QUIVERAI_API_KEY });
-
-      const start = Date.now();
-      const result = await client.createSVGs.generateSVG({
-        model: "arrow-preview",
-        prompt: input.prompt,
-        instructions: input.instructions,
-        n: 1,
-        temperature: input.temperature,
-      });
-      const timing = Date.now() - start;
-
-      const data = result as Record<string, unknown>;
-      const svgs = (data.svgs ?? data.results ?? data.data) as
-        | Array<{ svg?: string; content?: string }>
-        | undefined;
-      const svgContent =
-        svgs?.[0]?.svg ??
-        svgs?.[0]?.content ??
-        (data.svg as string | undefined) ??
-        (data.content as string | undefined) ??
-        "";
-
-      return {
-        svg_content: svgContent,
-        prompt_id: (data.id as string | undefined) ?? buildDeterministicId(input.prompt),
-        timing,
-      } satisfies SvgGenerationResult;
-    },
-    catch: (e) => new Error(`QuiverAI SVG generation failed: ${e}`),
-  });
+  return pipe(
+    quiverGenerate(input),
+    Effect.catchAll((quiverErr) =>
+      pipe(
+        Console.log(`  QuiverAI failed: ${quiverErr.message}. Falling back to fal.ai...`),
+        Effect.flatMap(() => falFallback(input)),
+      ),
+    ),
+  );
 }
 
 // --- CLI Entry ---
@@ -82,9 +154,6 @@ const program = Effect.gen(function* () {
   if (!prompt) {
     return yield* Effect.fail(new Error("--prompt is required"));
   }
-  if (!Bun.env.QUIVERAI_API_KEY) {
-    return yield* Effect.fail(new Error("QUIVERAI_API_KEY environment variable is required"));
-  }
 
   const result = yield* generateSvg({ prompt, instructions, temperature });
 
@@ -97,6 +166,7 @@ const program = Effect.gen(function* () {
             : result.svg_content,
         prompt_id: result.prompt_id,
         timing: result.timing,
+        source: result.source,
       },
       null,
       2,
@@ -118,7 +188,7 @@ if (import.meta.main) {
     program,
     Effect.catchAll((error) =>
       Effect.sync(() => {
-        console.error(`QuiverAI SVG generation failed: ${error}`);
+        console.error(`SVG generation failed: ${error}`);
         process.exitCode = 1;
       }),
     ),

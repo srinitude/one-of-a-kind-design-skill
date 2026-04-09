@@ -2,7 +2,8 @@
  * Afrofuturist Animation Studio Identity — SVG pipeline via QuiverAI Arrow
  *
  * Full pipeline: brief → resolveStyle → buildCrafterContext →
- *   QuiverAI SVG generation → E2B SVGO optimization → quality scoring → audit log
+ *   QuiverAI SVG generation (fal.ai fallback) → E2B SVGO optimization →
+ *   real quality scoring → audit log
  *
  * Run: bun run examples/afrofuturist-animation-studio-identity/run.ts
  */
@@ -23,6 +24,7 @@ import {
   logAuditEntry,
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
+import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 
 // --- Load brief + taxonomy ---
 
@@ -82,7 +84,12 @@ const generateLogo = (
       temperature: 0.7,
     });
     yield* Console.log(`  SVG length: ${result.svg_content.length} chars`);
+    yield* Console.log(`  Source: ${result.source}`);
     yield* Console.log(`  Timing: ${result.timing}ms`);
+
+    if (result.svg_content.length < 10) {
+      return yield* Effect.fail(new Error("SVG generation failed: empty content"));
+    }
     return { result, promptId };
   });
 
@@ -100,7 +107,6 @@ const optimizeSvg = (svgContent: string) =>
           `
 svg = """${escapedSvg.slice(0, 2000)}"""
 original_size = len(svg)
-# Basic SVG cleanup: remove comments and excess whitespace
 import re
 cleaned = re.sub(r'<!--.*?-->', '', svg, flags=re.DOTALL)
 cleaned = re.sub(r'\\s+', ' ', cleaned).strip()
@@ -116,23 +122,37 @@ print(f"SVG optimized: {original_size} -> {optimized_size} bytes ({savings:.1f}%
     return optimized;
   });
 
-// --- Score ---
+// --- Real quality scoring ---
 
-const scoreQuality = (conventionBreakApplied: boolean) =>
+const scoreQuality = (
+  artifactUrl: string,
+  prompt: string,
+  styleId: string,
+  svgContent: string,
+  conventionBreakApplied: boolean,
+) =>
   Effect.gen(function* () {
     yield* Console.log("[6/7] Quality scoring...");
-    const report = computeComposite({
-      antiSlopGate: 8.5,
-      codeStandardsGate: null,
-      assetQualityAvg: 9.0,
-      promptArtifactAlign: 8.0,
-      aesthetic: 9.0,
-      styleFidelity: 8.5,
-      distinctiveness: 8.5,
-      hierarchy: 7.5,
-      colorHarmony: 8.0,
-      conventionBreakAdherence: conventionBreakApplied ? 8.0 : null,
-    });
+
+    const scores = yield* pipe(
+      computeRealScores({
+        artifactUrl,
+        prompt,
+        styleId,
+        jobType: "svg-gen",
+        fileSizeBytes: svgContent.length,
+        conventionBreakApplied,
+        svgContent,
+      }),
+      Effect.catchAll((err) =>
+        Effect.gen(function* () {
+          yield* Console.log(`  Vision scoring failed: ${err.message}, using fallback`);
+          return computeFallbackScores(svgContent.length, "svg-gen", conventionBreakApplied);
+        }),
+      ),
+    );
+
+    const report = computeComposite(scores);
     yield* Console.log(report.scoreCard);
     return report;
   });
@@ -157,10 +177,18 @@ const pipeline = Effect.gen(function* () {
     Effect.catchAll((err) => Console.log(`  E2B skipped: ${err}`)),
   );
 
-  const report = yield* scoreQuality(resolved.conventionBreak.applied);
+  // For fal-fallback SVGs, extract the image URL for vision scoring
+  const artifactUrl = result.source === "fal-fallback"
+    ? (result.svg_content.match(/href="([^"]+)"/)?.[1] ?? "")
+    : "";
+
+  const report = yield* scoreQuality(
+    artifactUrl, intent, resolved.id, result.svg_content, resolved.conventionBreak.applied,
+  );
 
   yield* logAuditEntry(
     buildAuditEntry("fal-generate", "quiverai/arrow-preview", intent, result.timing, {
+      source: result.source,
       quality: report.composite,
     }),
   );
@@ -176,7 +204,7 @@ if (import.meta.main) {
     Effect.catchAll((error) =>
       Effect.sync(() => {
         console.error(`SVG pipeline failed: ${error}`);
-        console.error("Note: Ensure QUIVERAI_API_KEY is set in .env");
+        console.error("Note: Ensure QUIVERAI_API_KEY and FAL_KEY are set in .env");
         process.exitCode = 1;
       }),
     ),

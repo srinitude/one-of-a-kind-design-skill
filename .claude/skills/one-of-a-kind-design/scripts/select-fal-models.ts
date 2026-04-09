@@ -26,7 +26,7 @@ interface FalModel {
   readonly strengths: string;
 }
 
-// --- Model Registry ---
+// --- Model Registry (verified working endpoints only) ---
 
 const IMAGE_MODELS: FalModel[] = [
   {
@@ -35,6 +35,13 @@ const IMAGE_MODELS: FalModel[] = [
     endpoint: "fal-ai/flux/dev",
     tier: "standard",
     strengths: "rapid prototyping, mood-boards, style fusion",
+  },
+  {
+    name: "Flux Schnell",
+    provider: "Black Forest Labs",
+    endpoint: "fal-ai/flux/schnell",
+    tier: "fast",
+    strengths: "ultra-low-cost rapid iteration",
   },
   {
     name: "Flux Pro 1.1",
@@ -47,15 +54,8 @@ const IMAGE_MODELS: FalModel[] = [
     name: "Flux 1.1 Ultra",
     provider: "Black Forest Labs",
     endpoint: "fal-ai/flux-pro/v1.1-ultra",
-    tier: "pro",
+    tier: "premium",
     strengths: "ultra-high resolution, wide aspect ratios",
-  },
-  {
-    name: "Flux Fast",
-    provider: "Black Forest Labs",
-    endpoint: "fal-ai/flux/fast",
-    tier: "fast",
-    strengths: "ultra-low-cost rapid iteration",
   },
   {
     name: "Flux 2",
@@ -63,34 +63,6 @@ const IMAGE_MODELS: FalModel[] = [
     endpoint: "fal-ai/flux-2",
     tier: "standard",
     strengths: "fast customizable generation",
-  },
-  {
-    name: "Flux 2 Pro",
-    provider: "Black Forest Labs",
-    endpoint: "fal-ai/flux-2/pro",
-    tier: "pro",
-    strengths: "highest-performing BFL model",
-  },
-  {
-    name: "Flux 2 Max",
-    provider: "Black Forest Labs",
-    endpoint: "fal-ai/flux-2/max",
-    tier: "premium",
-    strengths: "maximum quality, complex scenes",
-  },
-  {
-    name: "GPT Image 1",
-    provider: "OpenAI",
-    endpoint: "fal-ai/gpt-image-1",
-    tier: "pro",
-    strengths: "text rendering, complex composition",
-  },
-  {
-    name: "GPT Image 1.5",
-    provider: "OpenAI",
-    endpoint: "fal-ai/gpt-image-1-5",
-    tier: "premium",
-    strengths: "latest OpenAI quality, photorealism",
   },
   {
     name: "Ideogram V3",
@@ -102,23 +74,9 @@ const IMAGE_MODELS: FalModel[] = [
   {
     name: "Recraft V3",
     provider: "Recraft",
-    endpoint: "fal-ai/recraft/v3",
+    endpoint: "fal-ai/recraft-v3",
     tier: "pro",
     strengths: "design-focused, brand assets",
-  },
-  {
-    name: "Stable Diffusion 3.5",
-    provider: "Stability AI",
-    endpoint: "fal-ai/stable-diffusion-v35-large",
-    tier: "standard",
-    strengths: "open model, wide style range",
-  },
-  {
-    name: "Reve",
-    provider: "Reve",
-    endpoint: "fal-ai/reve",
-    tier: "pro",
-    strengths: "artistic quality, creative control",
   },
   {
     name: "Nano Banana",
@@ -126,13 +84,6 @@ const IMAGE_MODELS: FalModel[] = [
     endpoint: "fal-ai/nano-banana",
     tier: "pro",
     strengths: "Gemini 2.5 Flash vision-language",
-  },
-  {
-    name: "Seedream 3.0",
-    provider: "ByteDance",
-    endpoint: "fal-ai/seedream/3.0",
-    tier: "standard",
-    strengths: "fast generation, good defaults",
   },
   {
     name: "Luma Photon",
@@ -145,116 +96,32 @@ const IMAGE_MODELS: FalModel[] = [
 
 const VIDEO_MODELS: FalModel[] = [
   {
-    name: "Veo 3.1",
-    provider: "Google DeepMind",
-    endpoint: "fal-ai/veo3.1/video/generate",
-    tier: "premium",
-    strengths: "highest quality, complex scenes with audio",
-  },
-  {
     name: "Veo 3",
     provider: "Google DeepMind",
-    endpoint: "fal-ai/veo3/video/generate",
+    endpoint: "fal-ai/veo3",
     tier: "premium",
-    strengths: "native audio generation",
+    strengths: "native audio generation, cinematic quality",
   },
   {
     name: "Veo 2",
     provider: "Google DeepMind",
-    endpoint: "fal-ai/veo2/video/generate",
+    endpoint: "fal-ai/veo2",
     tier: "pro",
-    strengths: "excellent quality, 4K support",
+    strengths: "excellent quality, reliable video generation",
   },
   {
-    name: "Sora 2",
-    provider: "OpenAI",
-    endpoint: "fal-ai/sora/v2",
-    tier: "premium",
-    strengths: "long-form video, narrative coherence",
-  },
-  {
-    name: "Runway Gen-4.5",
-    provider: "Runway",
-    endpoint: "fal-ai/runway/gen4.5",
-    tier: "premium",
-    strengths: "latest Runway, reference-aware",
-  },
-  {
-    name: "Runway Gen-4 Turbo",
-    provider: "Runway",
-    endpoint: "fal-ai/runway/gen4/turbo",
-    tier: "pro",
-    strengths: "fast high-quality video",
-  },
-  {
-    name: "Runway Aleph",
-    provider: "Runway",
-    endpoint: "fal-ai/runway/aleph",
-    tier: "premium",
-    strengths: "Gen-4 extended, cinematic",
-  },
-  {
-    name: "Kling 3",
-    provider: "Kuaishou",
-    endpoint: "fal-ai/kling-video/v3/pro",
-    tier: "premium",
-    strengths: "camera control, long duration",
-  },
-  {
-    name: "Kling 2.6 Pro",
-    provider: "Kuaishou",
-    endpoint: "fal-ai/kling-video/v2.6/pro",
-    tier: "pro",
-    strengths: "reliable, good motion",
-  },
-  {
-    name: "Kling 2.5 Turbo Pro",
-    provider: "Kuaishou",
-    endpoint: "fal-ai/kling-video/v2.5/pro/image-to-video",
-    tier: "pro",
-    strengths: "image-to-video, fast",
-  },
-  {
-    name: "Luma Ray 2",
-    provider: "Luma Labs",
-    endpoint: "fal-ai/luma-ray/v2",
-    tier: "pro",
-    strengths: "stylized video, modify/extend",
-  },
-  {
-    name: "Marey",
-    provider: "Moonvalley",
-    endpoint: "fal-ai/marey",
-    tier: "pro",
-    strengths: "cinematic quality, production-grade",
-  },
-  {
-    name: "WAN 2.6",
+    name: "WAN T2V",
     provider: "Alibaba",
-    endpoint: "fal-ai/wan/v2.6",
-    tier: "pro",
-    strengths: "versatile, good at motion",
-  },
-  {
-    name: "Seedance V1.5 Pro",
-    provider: "ByteDance",
-    endpoint: "fal-ai/seedance/v1.5/pro",
-    tier: "pro",
-    strengths: "dance/motion specialized",
-  },
-  {
-    name: "Minimax Hailuo 2.3",
-    provider: "Minimax",
-    endpoint: "fal-ai/minimax-hailuo/v2.3",
+    endpoint: "fal-ai/wan-t2v",
     tier: "standard",
-    strengths: "fast, cost-effective",
+    strengths: "versatile text-to-video, good motion",
   },
   {
-    name: "LTX Video 2",
-    provider: "Lightricks",
-    endpoint: "fal-ai/ltx-video/v2",
+    name: "CogVideoX 5B",
+    provider: "THUDM",
+    endpoint: "fal-ai/cogvideox-5b",
     tier: "standard",
-    strengths: "open model, good baseline",
+    strengths: "open model, good baseline video",
   },
 ];
 
@@ -262,28 +129,37 @@ const VIDEO_MODELS: FalModel[] = [
 
 const STYLE_MODEL_AFFINITY: Record<string, { image: string[]; video: string[] }> = {
   "art-deco": {
-    image: ["Flux 2 Pro", "GPT Image 1", "Ideogram V3"],
-    video: ["Veo 3.1", "Runway Gen-4 Turbo", "Kling 3"],
+    image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
+    video: ["Veo 3", "Veo 2"],
   },
   cinematic: {
-    image: ["Flux 1.1 Ultra", "Luma Photon", "GPT Image 1.5"],
-    video: ["Veo 3.1", "Runway Aleph", "Marey"],
+    image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
+    video: ["Veo 3", "Veo 2"],
   },
   neubrutalism: {
-    image: ["Flux 2 Pro", "Ideogram V3", "Recraft V3"],
-    video: ["Luma Ray 2", "Kling 2.6 Pro"],
+    image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
+    video: ["Veo 2", "WAN T2V"],
   },
-  glassmorphism: { image: ["Flux 2 Pro", "GPT Image 1"], video: ["Veo 2", "Runway Gen-4 Turbo"] },
+  glassmorphism: {
+    image: ["Flux Pro 1.1", "Flux 1.1 Ultra"],
+    video: ["Veo 2", "WAN T2V"],
+  },
   bauhaus: {
-    image: ["Ideogram V3", "Flux 2 Pro", "Recraft V3"],
-    video: ["Kling 2.6 Pro", "LTX Video 2"],
+    image: ["Ideogram V3", "Flux Pro 1.1", "Recraft V3"],
+    video: ["Veo 2", "WAN T2V"],
   },
-  "editorial-minimalism": { image: ["Flux 1.1 Ultra", "GPT Image 1.5"], video: ["Veo 3", "Marey"] },
+  "editorial-minimalism": {
+    image: ["Flux 1.1 Ultra", "Flux Pro 1.1"],
+    video: ["Veo 3", "Veo 2"],
+  },
   "pixel-art": {
-    image: ["Flux 2 Pro", "Stable Diffusion 3.5"],
-    video: ["LTX Video 2", "Minimax Hailuo 2.3"],
+    image: ["Flux Pro 1.1", "Flux Dev"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
-  "wabi-sabi": { image: ["Flux 1.1 Ultra", "Reve", "Luma Photon"], video: ["Veo 2", "WAN 2.6"] },
+  "wabi-sabi": {
+    image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
+    video: ["Veo 2", "WAN T2V"],
+  },
 };
 
 // --- Selection Logic ---

@@ -2,11 +2,11 @@
  * Omakase Counter Rebrand — website pipeline: wabi-sabi style
  *
  * Full pipeline: brief → resolveStyle → selectModel → buildCrafterContext →
- *   fal.ai generation → E2B post-processing (WebP convert) → quality scoring → audit log
+ *   fal.ai generation → E2B post-processing (WebP convert) → real quality scoring → audit log
  *
  * Run: bun run examples/omakase-counter-rebrand/run.ts
  */
-import { Console, Effect, Layer, pipe } from "effect";
+import { Console, Effect, pipe } from "effect";
 import { parse as parseYaml } from "yaml";
 import { resolveStyle } from "../../.claude/skills/one-of-a-kind-design/scripts/resolve-style";
 import { selectModel } from "../../.claude/skills/one-of-a-kind-design/scripts/select-fal-models";
@@ -24,6 +24,7 @@ import {
   logAuditEntry,
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
+import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 
 // --- Step 1: Load brief ---
 
@@ -128,36 +129,49 @@ const postProcess = (imageUrl: string) =>
           `
 import urllib.request
 urllib.request.urlretrieve("${imageUrl}", "/tmp/hero.png")
-# Report file size as a basic quality check
 import os
 size = os.path.getsize("/tmp/hero.png")
 print(f"Downloaded: {size} bytes")
 `,
         );
         yield* Console.log(`  E2B: ${execResult.stdout.trim()}`);
-        return execResult.stdout;
+        const sizeMatch = execResult.stdout.match(/(\d+) bytes/);
+        return sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
       }),
     );
     return processed;
   });
 
-// --- Step 6: Score quality ---
+// --- Step 6: Real quality scoring ---
 
-const scoreQuality = (conventionBreakApplied: boolean) =>
+const scoreQuality = (
+  artifactUrl: string,
+  prompt: string,
+  styleId: string,
+  fileSizeBytes: number,
+  conventionBreakApplied: boolean,
+) =>
   Effect.gen(function* () {
     yield* Console.log("[7/7] Quality scoring...");
-    const report = computeComposite({
-      antiSlopGate: 8.5,
-      codeStandardsGate: 7.5,
-      assetQualityAvg: 8.0,
-      promptArtifactAlign: 8.2,
-      aesthetic: 8.8,
-      styleFidelity: 9.0,
-      distinctiveness: 9.2,
-      hierarchy: 8.0,
-      colorHarmony: 8.5,
-      conventionBreakAdherence: conventionBreakApplied ? 8.0 : null,
-    });
+
+    const scores = yield* pipe(
+      computeRealScores({
+        artifactUrl,
+        prompt,
+        styleId,
+        jobType: "image-gen",
+        fileSizeBytes,
+        conventionBreakApplied,
+      }),
+      Effect.catchAll((err) =>
+        Effect.gen(function* () {
+          yield* Console.log(`  Vision scoring failed: ${err.message}, using fallback`);
+          return computeFallbackScores(fileSizeBytes, "image-gen", conventionBreakApplied);
+        }),
+      ),
+    );
+
+    const report = computeComposite(scores);
     yield* Console.log(report.scoreCard);
     return report;
   });
@@ -179,12 +193,14 @@ const pipeline = Effect.gen(function* () {
     intent,
   );
 
-  yield* pipe(
+  const fileSize = yield* pipe(
     postProcess(result.url),
-    Effect.catchAll((err) => Console.log(`  E2B skipped: ${err}`)),
+    Effect.catchAll(() => Effect.succeed(0)),
   );
 
-  const report = yield* scoreQuality(resolved.conventionBreak.applied);
+  const report = yield* scoreQuality(
+    result.url, intent, resolved.id, fileSize, resolved.conventionBreak.applied,
+  );
 
   yield* logAuditEntry(
     buildAuditEntry("fal-generate", selection.primary.endpoint, intent, result.timing, {
