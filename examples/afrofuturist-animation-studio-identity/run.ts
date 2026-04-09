@@ -25,6 +25,7 @@ import {
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
+import { distillPrompt } from "../lib/distill-prompt";
 
 // --- Load brief + taxonomy ---
 
@@ -76,9 +77,10 @@ const generateLogo = (
     const context = buildCrafterContext("svg-gen", resolved, intent);
     yield* Console.log(`[3/7] Crafter context: ${context.length} chars`);
 
-    yield* Console.log("[4/7] Calling QuiverAI Arrow for logo SVG...");
+    const prompt = distillPrompt(resolved, intent);
+    yield* Console.log(`[4/7] Calling QuiverAI Arrow for logo SVG (${prompt.length} chars)...`);
     const result = yield* generateSvg({
-      prompt: intent,
+      prompt,
       instructions:
         "Angular geometric mark suitable for 16px favicon through 4K title card. Clean vector paths, no gradients. Bold primary shapes.",
       temperature: 0.7,
@@ -177,7 +179,7 @@ const pipeline = Effect.gen(function* () {
     Effect.catchAll((err) => Console.log(`  E2B skipped: ${err}`)),
   );
 
-  // For fal-fallback SVGs, extract the image URL for vision scoring
+  // For raster fallback SVGs, extract the image URL for vision scoring
   const artifactUrl = result.source === "fal-fallback"
     ? (result.svg_content.match(/href="([^"]+)"/)?.[1] ?? "")
     : "";

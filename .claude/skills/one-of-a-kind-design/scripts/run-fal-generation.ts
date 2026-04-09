@@ -39,63 +39,67 @@ const retryPolicy = pipe(
 
 // --- Generation ---
 
+function truncatePrompt(prompt: string): string {
+  if (prompt.length <= 500) return prompt;
+  return `${prompt.slice(0, 497)}...`;
+}
+
 export function runFalGeneration(
   input: FalGenerationInput,
 ): Effect.Effect<FalGenerationResult, Error> {
+  const prompt = truncatePrompt(input.prompt);
+  const logTruncation =
+    prompt.length < input.prompt.length
+      ? Console.log(`[run-fal] Prompt truncated: ${input.prompt.length} -> ${prompt.length} chars`)
+      : Effect.void;
   return pipe(
-    Effect.tryPromise({
-      try: async () => {
-        fal.config({ credentials: Bun.env.FAL_KEY });
-
-        const start = Date.now();
-        const result = await fal.subscribe(input.endpoint, {
-          input: { prompt: input.prompt, seed: 42, ...input.params },
-          logs: true,
-          onQueueUpdate: (_update) => {
-            // Queue status logged by fal client internally
+    logTruncation,
+    Effect.flatMap(() =>
+      pipe(
+        Effect.tryPromise({
+          try: async () => {
+            fal.config({ credentials: Bun.env.FAL_KEY });
+            const start = Date.now();
+            const result = await fal.subscribe(input.endpoint, {
+              input: { prompt, seed: 42, ...input.params },
+              logs: true,
+            });
+            const timing = Date.now() - start;
+            const data = result.data as Record<string, unknown>;
+            const images = data.images as Array<{ url: string; content_type?: string }> | undefined;
+            const video = data.video as { url: string } | undefined;
+            const audio = data.audio as { url: string } | undefined;
+            const output = data.output as { url: string } | undefined;
+            const url =
+              images?.[0]?.url ??
+              video?.url ??
+              audio?.url ??
+              output?.url ??
+              (data.url as string | undefined) ??
+              "";
+            const contentType =
+              images?.[0]?.content_type ??
+              (video ? "video/mp4" : undefined) ??
+              (audio ? "audio/mpeg" : undefined) ??
+              inferContentType(url);
+            return {
+              url,
+              content_type: contentType,
+              seed: (data.seed as number) ?? null,
+              prompt_id:
+                (result.requestId as string) ?? buildDeterministicId(input.endpoint, input.prompt),
+              timing,
+            } satisfies FalGenerationResult;
           },
-        });
-        const timing = Date.now() - start;
-
-        const data = result.data as Record<string, unknown>;
-        const images = data.images as Array<{ url: string; content_type?: string }> | undefined;
-        const video = data.video as { url: string } | undefined;
-        const audio = data.audio as { url: string } | undefined;
-        const output = data.output as { url: string } | undefined;
-
-        const url =
-          images?.[0]?.url ??
-          video?.url ??
-          audio?.url ??
-          output?.url ??
-          (data.url as string | undefined) ??
-          "";
-
-        const contentType =
-          images?.[0]?.content_type ??
-          (video ? "video/mp4" : undefined) ??
-          (audio ? "audio/mpeg" : undefined) ??
-          inferContentType(url);
-
-        return {
-          url,
-          content_type: contentType,
-          seed: (data.seed as number) ?? null,
-          prompt_id:
-            (result.requestId as string) ?? buildDeterministicId(input.endpoint, input.prompt),
-          timing,
-        } satisfies FalGenerationResult;
-      },
-      catch: (e) => new Error(`fal.ai generation failed: ${e}`),
-    }),
-    Effect.retry({
-      schedule: retryPolicy,
-      while: (err) => isRateLimitError(err),
-    }),
-    Effect.timeout(Duration.minutes(5)),
-    Effect.catchTag("TimeoutException", () =>
-      Effect.fail(
-        new Error(`fal.ai generation timed out after 5 minutes for endpoint: ${input.endpoint}`),
+          catch: (e) => new Error(`fal.ai generation failed: ${e}`),
+        }),
+        Effect.retry({ schedule: retryPolicy, while: (err) => isRateLimitError(err) }),
+        Effect.timeout(Duration.minutes(5)),
+        Effect.catchTag("TimeoutException", () =>
+          Effect.fail(
+            new Error(`fal.ai generation timed out after 5m for endpoint: ${input.endpoint}`),
+          ),
+        ),
       ),
     ),
   );

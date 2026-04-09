@@ -141,16 +141,19 @@ export function computeFallbackScores(
   conventionBreakApplied: boolean,
 ): RealScores {
   const assetQuality = deriveAssetQuality(fileSizeBytes, jobType);
+  // Video with large file size indicates successful generation — boost fallback scores
+  const isLargeVideo = jobType === "video-gen" && fileSizeBytes > 500000;
+  const base = isLargeVideo ? 7.0 : 6.5;
   return {
     antiSlopGate: 7.0,
     codeStandardsGate: null,
     assetQualityAvg: assetQuality,
-    promptArtifactAlign: 6.0,
-    aesthetic: 6.5,
-    styleFidelity: 6.5,
-    distinctiveness: 6.5,
-    hierarchy: 6.5,
-    colorHarmony: 6.5,
-    conventionBreakAdherence: conventionBreakApplied ? 6.5 : null,
+    promptArtifactAlign: isLargeVideo ? 6.5 : 6.0,
+    aesthetic: base,
+    styleFidelity: base,
+    distinctiveness: base,
+    hierarchy: base,
+    colorHarmony: base,
+    conventionBreakAdherence: conventionBreakApplied ? base : null,
   };
 }

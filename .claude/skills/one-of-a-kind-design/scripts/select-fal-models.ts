@@ -96,25 +96,11 @@ const IMAGE_MODELS: FalModel[] = [
 
 const VIDEO_MODELS: FalModel[] = [
   {
-    name: "Veo 3",
-    provider: "Google DeepMind",
-    endpoint: "fal-ai/veo3",
-    tier: "premium",
-    strengths: "native audio generation, cinematic quality",
-  },
-  {
-    name: "Veo 2",
-    provider: "Google DeepMind",
-    endpoint: "fal-ai/veo2",
-    tier: "pro",
-    strengths: "excellent quality, reliable video generation",
-  },
-  {
     name: "WAN T2V",
     provider: "Alibaba",
     endpoint: "fal-ai/wan-t2v",
-    tier: "standard",
-    strengths: "versatile text-to-video, good motion",
+    tier: "pro",
+    strengths: "versatile text-to-video, good motion, reliable",
   },
   {
     name: "CogVideoX 5B",
@@ -130,27 +116,27 @@ const VIDEO_MODELS: FalModel[] = [
 const STYLE_MODEL_AFFINITY: Record<string, { image: string[]; video: string[] }> = {
   "art-deco": {
     image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
-    video: ["Veo 3", "Veo 2"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
   cinematic: {
     image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
-    video: ["Veo 3", "Veo 2"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
   neubrutalism: {
     image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
-    video: ["Veo 2", "WAN T2V"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
   glassmorphism: {
     image: ["Flux Pro 1.1", "Flux 1.1 Ultra"],
-    video: ["Veo 2", "WAN T2V"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
   bauhaus: {
     image: ["Ideogram V3", "Flux Pro 1.1", "Recraft V3"],
-    video: ["Veo 2", "WAN T2V"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
   "editorial-minimalism": {
     image: ["Flux 1.1 Ultra", "Flux Pro 1.1"],
-    video: ["Veo 3", "Veo 2"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
   "pixel-art": {
     image: ["Flux Pro 1.1", "Flux Dev"],
@@ -158,7 +144,7 @@ const STYLE_MODEL_AFFINITY: Record<string, { image: string[]; video: string[] }>
   },
   "wabi-sabi": {
     image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
-    video: ["Veo 2", "WAN T2V"],
+    video: ["WAN T2V", "CogVideoX 5B"],
   },
 };
 

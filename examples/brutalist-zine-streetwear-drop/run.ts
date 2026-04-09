@@ -25,6 +25,7 @@ import {
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
+import { distillPrompt } from "../lib/distill-prompt";
 
 // --- Load brief + taxonomy ---
 
@@ -107,8 +108,9 @@ const generateFrame = (
     const promptId = buildPromptId("image-gen", resolved.id, intent);
     yield* Console.log(`  [Frame ${index + 1}/2] ID: ${promptId.slice(0, 12)}...`);
 
+    const prompt = distillPrompt(resolved, intent);
     const result = yield* generateWithFallback(
-      endpoint, fallback, intent, { image_size: "portrait_4_3", seed },
+      endpoint, fallback, prompt, { image_size: "portrait_4_3", seed },
     );
     yield* Console.log(`    URL: ${result.url}`);
     return result;

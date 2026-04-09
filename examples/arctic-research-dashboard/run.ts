@@ -25,6 +25,7 @@ import {
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
+import { distillPrompt } from "../lib/distill-prompt";
 
 // --- Load brief + taxonomy ---
 
@@ -104,8 +105,10 @@ const buildAndGenerate = (
     yield* Console.log(`[4/7] Crafter context: ${context.length} chars`);
 
     yield* Console.log("[5/7] Calling fal.ai for generative canvas hero...");
+    const prompt = distillPrompt(resolved, intent);
+    yield* Console.log(`  Distilled prompt (${prompt.length} chars): ${prompt.slice(0, 80)}...`);
     const result = yield* generateWithFallback(
-      endpoint, fallback, intent, { image_size: "landscape_16_9", seed: 42 },
+      endpoint, fallback, prompt, { image_size: "landscape_16_9", seed: 42 },
     );
     yield* Console.log(`  URL: ${result.url}`);
     yield* Console.log(`  Seed: ${result.seed} | Timing: ${result.timing}ms`);

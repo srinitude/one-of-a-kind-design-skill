@@ -1,7 +1,7 @@
 /**
  * run-quiver-svg-generation.ts — Executes QuiverAI text-to-SVG generation.
  * Produces vector graphics from natural language descriptions.
- * Falls back to fal.ai image generation if QuiverAI is unreachable.
+ * Falls back to fal.ai Recraft V3 (real SVG) then fal.ai Flux (raster) if QuiverAI is unreachable.
  *
  * Run: bun run scripts/run-quiver-svg-generation.ts --prompt "..." --instructions "..." --temperature 0.8
  */
@@ -27,7 +27,7 @@ interface SvgGenerationResult {
   readonly svg_content: string;
   readonly prompt_id: string;
   readonly timing: number;
-  readonly source: "quiverai" | "fal-fallback";
+  readonly source: "quiverai" | "recraft-svg" | "fal-fallback";
 }
 
 // --- QuiverAI generation with timeout ---
@@ -46,20 +46,15 @@ const quiverGenerate = (input: SvgGenerationInput): Effect.Effect<SvgGenerationR
           temperature: input.temperature,
         });
         const timing = Date.now() - start;
-        const data = result as Record<string, unknown>;
-        const svgs = (data.svgs ?? data.results ?? data.data) as
-          | Array<{ svg?: string; content?: string }>
-          | undefined;
-        const svgContent =
-          svgs?.[0]?.svg ??
-          svgs?.[0]?.content ??
-          (data.svg as string | undefined) ??
-          (data.content as string | undefined) ??
-          "";
+        // SDK returns { headers, result } where result is SvgResponse
+        const res = result.result as Record<string, unknown>;
+        const data = (res.data ?? []) as Array<{ svg?: string; content?: string }>;
+        const svgContent = data[0]?.svg ?? data[0]?.content ?? "";
+        const responseId = (res.id as string | undefined) ?? "";
 
         return {
           svg_content: svgContent,
-          prompt_id: (data.id as string | undefined) ?? buildDeterministicId(input.prompt),
+          prompt_id: responseId || buildDeterministicId(input.prompt),
           timing,
           source: "quiverai" as const,
         };
@@ -71,13 +66,67 @@ const quiverGenerate = (input: SvgGenerationInput): Effect.Effect<SvgGenerationR
         ? Effect.fail(new Error("QuiverAI returned empty SVG content"))
         : Effect.succeed(result),
     ),
-    Effect.timeout(Duration.seconds(30)),
+    Effect.timeout(Duration.seconds(60)),
     Effect.catchTag("TimeoutException", () =>
-      Effect.fail(new Error("QuiverAI timed out after 30s")),
+      Effect.fail(new Error("QuiverAI timed out after 60s")),
     ),
   );
 
-// --- fal.ai fallback: generate image, wrap in SVG ---
+// --- Recraft V3 fallback: generates real SVG via fal.ai ---
+
+const callRecraft = (input: SvgGenerationInput) =>
+  Effect.tryPromise({
+    try: async () => {
+      const { fal } = await import("@fal-ai/client");
+      fal.config({ credentials: Bun.env.FAL_KEY });
+      const start = Date.now();
+      const result = await fal.subscribe("fal-ai/recraft-v3", {
+        input: {
+          prompt: `${input.prompt}. ${input.instructions}`,
+          style: "vector_illustration",
+          image_size: "square",
+        },
+      });
+      const timing = Date.now() - start;
+      const data = result.data as Record<string, unknown>;
+      const images = data.images as Array<{ url: string; content_type?: string }> | undefined;
+      return { url: images?.[0]?.url ?? "", contentType: images?.[0]?.content_type ?? "", timing };
+    },
+    catch: (e) => new Error(`Recraft V3 SVG fallback failed: ${e}`),
+  });
+
+const fetchSvgContent = (svgUrl: string) =>
+  Effect.tryPromise({
+    try: async () => (await globalThis.fetch(svgUrl)).text(),
+    catch: (e) => new Error(`Failed to fetch SVG content: ${e}`),
+  });
+
+const recraftSvgFallback = (input: SvgGenerationInput): Effect.Effect<SvgGenerationResult, Error> =>
+  pipe(
+    callRecraft(input),
+    Effect.flatMap(({ url, contentType, timing }) => {
+      const isSvg = contentType === "image/svg+xml" || url.endsWith(".svg");
+      if (!url || !isSvg) {
+        return Effect.fail(new Error("Recraft V3 did not return valid SVG"));
+      }
+      return pipe(
+        fetchSvgContent(url),
+        Effect.map((svgContent) => ({
+          svg_content: svgContent,
+          prompt_id: buildDeterministicId(input.prompt),
+          timing,
+          source: "recraft-svg" as const,
+        })),
+      );
+    }),
+    Effect.flatMap((result) =>
+      result.svg_content.length < 10
+        ? Effect.fail(new Error("Recraft V3 returned empty SVG"))
+        : Effect.succeed(result),
+    ),
+  );
+
+// --- fal.ai raster fallback: generate image, wrap in SVG ---
 
 const falFallback = (input: SvgGenerationInput): Effect.Effect<SvgGenerationResult, Error> =>
   pipe(
@@ -124,14 +173,22 @@ const falFallback = (input: SvgGenerationInput): Effect.Effect<SvgGenerationResu
     ),
   );
 
-// --- Public API: try QuiverAI, fall back to fal.ai ---
+// --- Public API: try QuiverAI -> Recraft V3 SVG -> fal.ai raster ---
 
 export function generateSvg(input: SvgGenerationInput): Effect.Effect<SvgGenerationResult, Error> {
   return pipe(
     quiverGenerate(input),
     Effect.catchAll((quiverErr) =>
       pipe(
-        Console.log(`  QuiverAI failed: ${quiverErr.message}. Falling back to fal.ai...`),
+        Console.log(`  QuiverAI failed: ${quiverErr.message}. Trying Recraft V3 SVG...`),
+        Effect.flatMap(() => recraftSvgFallback(input)),
+      ),
+    ),
+    Effect.catchAll((recraftErr) =>
+      pipe(
+        Console.log(
+          `  Recraft SVG failed: ${recraftErr.message}. Falling back to fal.ai raster...`,
+        ),
         Effect.flatMap(() => falFallback(input)),
       ),
     ),

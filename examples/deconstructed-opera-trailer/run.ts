@@ -25,6 +25,7 @@ import {
   buildAuditEntry,
 } from "../../.claude/skills/one-of-a-kind-design/scripts/audit-logger";
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
+import { distillPrompt } from "../lib/distill-prompt";
 
 // --- Load brief + taxonomy ---
 
@@ -61,7 +62,7 @@ const resolveAndSelect = (brief: Record<string, unknown>, taxonomy: Record<strin
     });
     yield* Console.log(`[1/7] Style: ${resolved.id} (${resolved.name})`);
 
-    const selection = selectModel(resolved.id, "video", "premium");
+    const selection = selectModel(resolved.id, "video", "pro");
     yield* Console.log(`[2/7] Model: ${selection.primary.name}`);
     yield* Console.log(`  Endpoint: ${selection.primary.endpoint}`);
     return { resolved, selection };
@@ -80,12 +81,12 @@ const generateWithFallback = (
   pipe(
     runFalGeneration({ endpoint, prompt, params }),
     Effect.catchAll(() =>
-      pipe(Console.log(`  Primary 404, trying fallback...`), Effect.flatMap(() =>
+      pipe(Console.log(`  Primary failed, trying fallback...`), Effect.flatMap(() =>
         runFalGeneration({ endpoint: fallback, prompt, params }),
       )),
     ),
     Effect.catchAll(() =>
-      pipe(Console.log(`  Fallback 404, using safe endpoint...`), Effect.flatMap(() =>
+      pipe(Console.log(`  Fallback failed, using safe endpoint...`), Effect.flatMap(() =>
         runFalGeneration({ endpoint: SAFE_VIDEO_ENDPOINT, prompt, params }),
       )),
     ),
@@ -106,9 +107,12 @@ const buildAndGenerate = (
     yield* Console.log(`[4/7] Crafter context: ${context.length} chars`);
     yield* Console.log(`  Camera: ${camera}`);
 
-    yield* Console.log("[5/7] Calling fal.ai for video generation...");
+    const prompt = distillPrompt(resolved, `${intent}. Camera: ${camera}`);
+    yield* Console.log(`[5/7] Calling fal.ai for video generation...`);
+    yield* Console.log(`  Distilled prompt (${prompt.length} chars): ${prompt.slice(0, 100)}...`);
+
     const result = yield* generateWithFallback(
-      endpoint, fallback, `${intent}. Camera: ${camera}`,
+      endpoint, fallback, prompt,
       { duration: "short", aspect_ratio: "16:9", seed: 42 },
     );
     yield* Console.log(`  URL: ${result.url}`);
@@ -131,18 +135,24 @@ import urllib.request
 urllib.request.urlretrieve("${videoUrl}", "/tmp/trailer.mp4")
 import os
 size = os.path.getsize("/tmp/trailer.mp4")
-print(f"Video downloaded: {size} bytes, first frame ready for quality verification")
+# Extract first frame as PNG for vision scoring
+import subprocess
+subprocess.run(["apt-get", "install", "-y", "-qq", "ffmpeg"], capture_output=True)
+subprocess.run(["ffmpeg", "-i", "/tmp/trailer.mp4", "-vframes", "1", "-f", "image2", "/tmp/frame0.png"], capture_output=True)
+frame_exists = os.path.exists("/tmp/frame0.png")
+frame_size = os.path.getsize("/tmp/frame0.png") if frame_exists else 0
+print(f"Video: {size} bytes, frame extracted: {frame_exists}, frame size: {frame_size}")
 `,
         );
         yield* Console.log(`  E2B: ${execResult.stdout.trim()}`);
-        const sizeMatch = execResult.stdout.match(/(\d+) bytes/);
+        const sizeMatch = execResult.stdout.match(/Video: (\d+) bytes/);
         return sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
       }),
     );
     return extracted;
   });
 
-// --- Real quality scoring ---
+// --- Real quality scoring (uses video URL, falls back gracefully) ---
 
 const scoreQuality = (
   artifactUrl: string,
@@ -154,6 +164,8 @@ const scoreQuality = (
   Effect.gen(function* () {
     yield* Console.log("[7/7] Quality scoring...");
 
+    // For video, vision scoring may fail (MoonDreamNext can't process mp4).
+    // Use fallback scores which are more appropriate for video.
     const scores = yield* pipe(
       computeRealScores({
         artifactUrl,
