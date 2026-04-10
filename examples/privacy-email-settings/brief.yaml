@@ -1,8 +1,0 @@
-user_prompt: "Settings page for a privacy-focused email client"
-output_type: mobile-app
-resolved_style: bento-ui
-model: "Flux 1.1 Ultra"
-endpoint: "fal-ai/flux-pro/v1.1-ultra"
-distilled_prompt: "Bento UI, Settings page for a privacy-focused email client, bento grid UI layout, modular card grid, varied cell sizes, Apple-style feature , asymmetric CSS Grid with 2:1 and 1:1 cel, high detail, professional quality"
-composite_score: 7.52
-timing_ms: 19939

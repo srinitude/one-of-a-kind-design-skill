@@ -1,8 +1,0 @@
-user_prompt: "Project management tool for a film production company. Timeline-heavy."
-output_type: web-app
-resolved_style: vaporwave
-model: "Flux 1.1 Ultra"
-endpoint: "fal-ai/flux-pro/v1.1-ultra"
-distilled_prompt: "Vaporwave, Project management tool for a film production company. Timeline-heavy., vaporwave aesthetic, pink purple teal gradient, Greek statue, retro computer, pa, retro desktop/window UI metaphor over gr, high detail, professional quality"
-composite_score: 7.94
-timing_ms: 17209

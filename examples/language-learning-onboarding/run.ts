@@ -1,8 +1,8 @@
 /**
- * privacy-email-settings — Mobile-app example: Bento UI style.
+ * language-learning-onboarding — Mobile-app example: Material Design style.
  * Reproduces the exact invocation from the 20-test validation suite.
  *
- * Run: bun run examples/privacy-email-settings/run.ts
+ * Run: bun run examples/language-learning-onboarding/run.ts
  */
 import { Console, Effect, pipe } from "effect";
 import { parse as parseYaml } from "yaml";
@@ -13,10 +13,10 @@ import { computeComposite } from "../../.claude/skills/one-of-a-kind-design/scri
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 import { distillPrompt, distillNegative } from "../lib/distill-prompt";
 
-const USER_PROMPT = "Settings page for a privacy-focused email client";
+const USER_PROMPT = "Onboarding screens for a language learning app targeting adults";
 
 const program = Effect.gen(function* () {
-  yield* Console.log("=== Privacy Email Settings ===\n");
+  yield* Console.log("=== Language Learning Onboarding ===\n");
 
   const taxonomyPath = `${import.meta.dir}/../../.claude/skills/one-of-a-kind-design/references/TAXONOMY.yaml`;
   const taxonomy = yield* Effect.tryPromise({
@@ -25,8 +25,8 @@ const program = Effect.gen(function* () {
   });
 
   const resolved = yield* resolveStyle(taxonomy, {
-    industry: "tech",
-    mood: ["minimal"],
+    industry: "education",
+    _userIntent: USER_PROMPT,
   });
   yield* Console.log(`Style: ${resolved.id} (${resolved.name})`);
 

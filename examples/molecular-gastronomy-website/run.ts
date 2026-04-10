@@ -1,8 +1,8 @@
 /**
- * film-production-dashboard — Web-app example: Vaporwave style.
+ * molecular-gastronomy-website — Website example: Liquid Glass style.
  * Reproduces the exact invocation from the 20-test validation suite.
  *
- * Run: bun run examples/film-production-dashboard/run.ts
+ * Run: bun run examples/molecular-gastronomy-website/run.ts
  */
 import { Console, Effect, pipe } from "effect";
 import { parse as parseYaml } from "yaml";
@@ -13,10 +13,10 @@ import { computeComposite } from "../../.claude/skills/one-of-a-kind-design/scri
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 import { distillPrompt, distillNegative } from "../lib/distill-prompt";
 
-const USER_PROMPT = "Project management tool for a film production company. Timeline-heavy.";
+const USER_PROMPT = "Design a restaurant website for a molecular gastronomy place in Copenhagen";
 
 const program = Effect.gen(function* () {
-  yield* Console.log("=== Film Production Dashboard ===\n");
+  yield* Console.log("=== Molecular Gastronomy Website ===\n");
 
   const taxonomyPath = `${import.meta.dir}/../../.claude/skills/one-of-a-kind-design/references/TAXONOMY.yaml`;
   const taxonomy = yield* Effect.tryPromise({
@@ -25,8 +25,8 @@ const program = Effect.gen(function* () {
   });
 
   const resolved = yield* resolveStyle(taxonomy, {
-    industry: "entertainment",
-    mood: ["futuristic"],
+    industry: "food",
+    _userIntent: USER_PROMPT,
   });
   yield* Console.log(`Style: ${resolved.id} (${resolved.name})`);
 

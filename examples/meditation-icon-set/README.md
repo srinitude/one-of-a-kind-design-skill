@@ -9,25 +9,24 @@
 ### Message Enhancement (automatic)
 - Output type: svg (icon set)
 - Industry: meditation
-- Mood: minimal (calm, minimal)
-- Audience: none detected
+- Mood: minimal, calm
 - Specificity score: 3/7
 
 ### Style Resolution
-- Style: **editorial-minimalism** (Editorial Minimalism)
-- Why: Minimal mood maps to editorial-minimalism. Meditation industry reinforces the calm, Notion-like aesthetic
-- Dials: default
+- Style: **scandinavian-minimalism** (Scandinavian Minimalism)
+- Why: Calm mood + meditation industry both point to scandinavian-minimalism — warm neutrals and clean lines match meditative serenity
+- Dials: default (design_variance: 5, motion_intensity: 5)
 - Convention break: not applied
-- Audience fit: strong (meditation + minimalism is natural)
+- Audience fit: strong (meditation + Scandinavian minimalism is natural)
 
 ### Hero Asset
 - Archetype: SVG Vector Graphic
-- Model: Flux Pro 1.1 (pro tier, design-focused)
-- Distilled prompt (300 chars): `Editorial Minimalism, Icon set for a meditation app. 12 icons. Calm, minimal., editorial UI design, Notion-like interface, warm monochrome, serif headings, hai, palette: #F7F6F3 #111111 #EAEAEA, asymmetric bento grid with hairline 1px , high detail, professional quality`
+- Model: Flux 1.1 Ultra (premium tier)
+- Distilled prompt (subject-first): `Icon set for a meditation app. 12 icons. Calm, minimal., Scandinavian Minimalism, Scandinavian design, Nordic minimalism, warm neutrals, natural light, clean line, clean grid with abundant white space, high detail, professional quality`
 
 ### Generation + Scoring
-- fal.ai endpoint: `fal-ai/flux-pro/v1.1`
-- Generation time: ~9s (fastest example)
+- fal.ai endpoint: `fal-ai/flux-pro/v1.1-ultra`
+- Generation time: ~17s
 
 ### Quality Evaluation (LLaVA 13B)
 
@@ -35,17 +34,17 @@
 |-----------|-------|--------|
 | Anti-Slop Gate | 9.0 | 15% |
 | Asset Quality | 8.5 | 12% |
-| Prompt Alignment | 5.4 | 15% |
+| Prompt Alignment | 8.1 | 15% |
 | Aesthetic | 7.5 | 13% |
-| Style Fidelity | 6.7 | 13% |
-| Distinctiveness | 9.0 | 13% |
-| Hierarchy | 7.7 | 6% |
-| Color Harmony | 7.9 | 5% |
+| Style Fidelity | 6.9 | 13% |
+| Distinctiveness | 8.1 | 13% |
+| Hierarchy | 8.1 | 6% |
+| Color Harmony | 7.6 | 5% |
 
-**Composite: 7.67/10 PASS**
+**Composite: 8.02/10 PASS**
 
 ### What Gets Delivered
-A set of minimal icons in warm monochrome — hairline strokes, #F7F6F3 background, #111111 foreground — suitable for vectorization via QuiverAI Arrow.
+A set of minimal icons in Scandinavian style — warm neutrals, clean strokes, abundant white space — suitable for vectorization via QuiverAI Arrow.
 
 ## Try It Yourself
 

@@ -10,24 +10,23 @@
 - Output type: video (animation, reveal animation)
 - Industry: tech (startup)
 - Mood: none detected
-- Audience: none detected
 - Specificity score: 2/7
 
 ### Style Resolution
-- Style: **bento-ui** (Bento UI)
-- Why: Tech industry maps to bento-ui — modular grid layouts are native to tech branding
-- Dials: default
+- Style: **liquid-glass** (Liquid Glass)
+- Why: Compound phrase "logo reveal" triggers liquid-glass — refractive translucent surfaces suit a startup called "Prism"
+- Dials: default (design_variance: 5, motion_intensity: 5)
 - Convention break: not applied
-- Audience fit: strong (tech + bento is natural)
+- Audience fit: strong (tech + glass/prism aesthetic is natural)
 
 ### Hero Asset
 - Archetype: Panning Scene
 - Model: WAN T2V (text-to-video, pro tier)
-- Distilled prompt (300 chars): `Bento UI, 5-second logo reveal animation for a tech startup called 'Prism', bento grid UI layout, modular card grid, varied cell sizes, Apple-style feature , asymmetric CSS Grid with 2:1 and 1:1 cel, high detail, professional quality`
+- Distilled prompt (subject-first): `5-second logo reveal animation for a tech startup called 'Prism', Liquid Glass, Apple Liquid Glass UI, dynamic translucent panels, refractive surfaces, iOS 26, layered panels that reveal content depth, high detail, professional quality`
 
 ### Generation + Scoring
 - fal.ai endpoint: `fal-ai/wan-t2v`
-- Generation time: ~95s (video generation is slower)
+- Generation time: ~46s (video generation is slower)
 
 ### Quality Evaluation (LLaVA 13B)
 
@@ -45,7 +44,7 @@
 **Composite: 7.18/10 PASS**
 
 ### What Gets Delivered
-A 5-second MP4 logo reveal animation — modular grid elements animate into the "Prism" logotype with bento-style card transitions.
+A 5-second MP4 logo reveal animation — translucent refractive panels animate into the "Prism" logotype with liquid glass light diffraction effects.
 
 ## Try It Yourself
 

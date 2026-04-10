@@ -93,4 +93,152 @@ describe("inferStyleFromContext", () => {
     const styleId = inferStyleFromContext(taxonomy, { industry: "luxury" });
     expect(styleId).toBe("cinematic");
   });
+
+  // --- Expanded mood map ---
+  test('mood "dignified" → swiss-international', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { mood: ["dignified"] })).toBe("swiss-international");
+  });
+
+  test('mood "edgy" → glitch', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { mood: ["edgy"] })).toBe("glitch");
+  });
+
+  test('mood "intimate" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { mood: ["intimate"] })).toBe("cinematic");
+  });
+
+  test('mood "smoky" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { mood: ["smoky"] })).toBe("cinematic");
+  });
+
+  test('mood "underground" → brutalist-web', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { mood: ["underground"] })).toBe("brutalist-web");
+  });
+
+  // --- Expanded industry map ---
+  test('industry "funeral" → swiss-international', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "funeral" })).toBe("swiss-international");
+  });
+
+  test('industry "music" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "music" })).toBe("cinematic");
+  });
+
+  test('industry "jazz" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "jazz" })).toBe("cinematic");
+  });
+
+  test('industry "film" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "film" })).toBe("cinematic");
+  });
+
+  test('industry "fashion" → editorial-minimalism', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "fashion" })).toBe("editorial-minimalism");
+  });
+
+  test('industry "gaming" → glitch', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "gaming" })).toBe("glitch");
+  });
+
+  test('industry "nightlife" → brutalist-web', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "nightlife" })).toBe("brutalist-web");
+  });
+
+  test('industry "wearables" → studio-product', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "wearables" })).toBe("studio-product");
+  });
+
+  test('industry "wellness" → scandinavian-minimalism', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(inferStyleFromContext(taxonomy, { industry: "wellness" })).toBe(
+      "scandinavian-minimalism",
+    );
+  });
+
+  // --- Compound phrase detection via _userIntent ---
+  test('compound: "funeral home" → swiss-international', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(
+      inferStyleFromContext(taxonomy, {
+        industry: "death_care",
+        mood: ["minimal"],
+        _userIntent: "funeral home that doesn't feel depressing",
+      }),
+    ).toBe("swiss-international");
+  });
+
+  test('compound: "jazz trio" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(
+      inferStyleFromContext(taxonomy, {
+        industry: "entertainment",
+        mood: ["dark"],
+        _userIntent: "jazz trio debut record smoky intimate",
+      }),
+    ).toBe("cinematic");
+  });
+
+  test('compound: "techno party" → glitch or brutalist-web', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(["glitch", "brutalist-web"]).toContain(
+      inferStyleFromContext(taxonomy, {
+        industry: "entertainment",
+        mood: ["raw"],
+        _userIntent: "warehouse techno party in Berlin",
+      }),
+    );
+  });
+
+  test('compound: "film production" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(
+      inferStyleFromContext(taxonomy, {
+        industry: "entertainment",
+        _userIntent: "film production company timeline",
+      }),
+    ).toBe("cinematic");
+  });
+
+  test('compound: "smart watch" → studio-product', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(
+      inferStyleFromContext(taxonomy, {
+        industry: "tech",
+        _userIntent: "smartwatch product video different environments",
+      }),
+    ).toBe("studio-product");
+  });
+
+  test('compound: "molecular gastronomy" → liquid-glass', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(
+      inferStyleFromContext(taxonomy, {
+        industry: "food",
+        _userIntent: "molecular gastronomy place in Copenhagen",
+      }),
+    ).toBe("liquid-glass");
+  });
+
+  test('compound: "album cover" → cinematic', async () => {
+    const taxonomy = await loadTestTaxonomy();
+    expect(
+      inferStyleFromContext(taxonomy, {
+        industry: "entertainment",
+        _userIntent: "album cover for a jazz trio",
+      }),
+    ).toBe("cinematic");
+  });
 });

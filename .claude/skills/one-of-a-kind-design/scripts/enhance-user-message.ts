@@ -69,7 +69,18 @@ const OUTPUT_TYPE_KEYWORDS: Record<string, string[]> = {
   svg: ["svg", "vector", "logo", "icon", "badge", "icon set", "decorative pattern", "pattern"],
 };
 
+// More granular industries — order matters: specific before general
 const INDUSTRY_KEYWORDS: Record<string, string[]> = {
+  jazz: ["jazz"],
+  film: ["film", "production company"],
+  nightlife: ["techno", "warehouse party", "nightclub", "rave"],
+  gaming: ["game", "gaming"],
+  wearables: ["smartwatch", "smart watch", "wearable"],
+  fashion: ["fashion brand", "fashion"],
+  wellness: ["wellness", "spa"],
+  funeral: ["funeral", "memorial", "cemetery"],
+  meditation: ["meditation", "mindfulness", "zen"],
+  music: ["music", "album", "record label"],
   tech: [
     "tech",
     "saas",
@@ -82,7 +93,6 @@ const INDUSTRY_KEYWORDS: Record<string, string[]> = {
     "data",
     "turbine",
     "wind farm",
-    "smartwatch",
     "email client",
     "privacy",
   ],
@@ -97,7 +107,7 @@ const INDUSTRY_KEYWORDS: Record<string, string[]> = {
     "exchange",
     "institutional investor",
   ],
-  healthcare: ["health", "medical", "wellness", "fitness", "clinic", "veterinary", "therapist"],
+  healthcare: ["health", "medical", "fitness", "clinic", "veterinary", "therapist"],
   ecommerce: [
     "shop",
     "store",
@@ -110,18 +120,7 @@ const INDUSTRY_KEYWORDS: Record<string, string[]> = {
     "soap",
   ],
   education: ["education", "learning", "course", "school", "university", "language learning"],
-  entertainment: [
-    "music",
-    "game",
-    "gaming",
-    "streaming",
-    "media",
-    "film",
-    "production company",
-    "jazz",
-    "techno",
-    "opera",
-  ],
+  entertainment: ["streaming", "media", "opera"],
   food: [
     "food",
     "restaurant",
@@ -133,7 +132,7 @@ const INDUSTRY_KEYWORDS: Record<string, string[]> = {
     "gastronomy",
     "omakase",
   ],
-  luxury: ["luxury", "premium", "high-end", "exclusive", "boutique", "fashion brand"],
+  luxury: ["luxury", "premium", "high-end", "exclusive", "boutique"],
   creative: [
     "creative",
     "agency",
@@ -146,8 +145,6 @@ const INDUSTRY_KEYWORDS: Record<string, string[]> = {
   ],
   real_estate: ["real estate", "property", "architecture firm", "interior"],
   nonprofit: ["nonprofit", "annual report", "charity", "ngo"],
-  death_care: ["funeral", "memorial", "cemetery"],
-  meditation: ["meditation", "mindfulness", "calm", "zen"],
 };
 
 const MOOD_KEYWORDS: Record<string, string[]> = {
@@ -156,10 +153,18 @@ const MOOD_KEYWORDS: Record<string, string[]> = {
   playful: ["playful", "fun", "colorful", "whimsical", "energetic"],
   dark: ["dark", "moody", "mysterious", "noir", "gothic"],
   warm: ["warm", "cozy", "inviting", "organic", "natural"],
-  futuristic: ["futuristic", "modern", "cutting-edge", "innovative", "sleek"],
+  futuristic: ["futuristic", "cutting-edge", "innovative", "sleek"],
   vintage: ["vintage", "retro", "nostalgic", "classic", "old-school"],
   luxurious: ["luxurious", "elegant", "sophisticated", "refined", "opulent"],
   raw: ["raw", "brutalist", "honest", "unpolished", "gritty"],
+  dignified: ["dignified", "solemn", "respectful", "stately"],
+  intimate: ["intimate", "personal", "close"],
+  smoky: ["smoky", "hazy", "atmospheric"],
+  underground: ["underground", "subversive", "countercultural"],
+  edgy: ["edgy", "provocative", "sharp", "angular"],
+  calm: ["calm", "serene", "tranquil", "peaceful"],
+  professional: ["professional", "corporate", "formal"],
+  modern: ["modern", "contemporary"],
 };
 
 const AUDIENCE_KEYWORDS: Record<string, string[]> = {

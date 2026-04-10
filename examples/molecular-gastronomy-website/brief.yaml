@@ -1,0 +1,8 @@
+user_prompt: "Design a restaurant website for a molecular gastronomy place in Copenhagen"
+output_type: website
+resolved_style: liquid-glass
+model: "Flux 1.1 Ultra"
+endpoint: "fal-ai/flux-pro/v1.1-ultra"
+distilled_prompt: "Design a restaurant website for a molecular gastronomy place in Copenhagen, Liquid Glass, Apple Liquid Glass UI, dynamic translucent panels, refractive surfaces, iOS 26, , layered panels that reveal content depth, high detail, professional quality"
+composite_score: 8.14
+timing_ms: 17325

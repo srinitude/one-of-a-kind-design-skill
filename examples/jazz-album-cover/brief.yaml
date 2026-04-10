@@ -1,8 +1,0 @@
-user_prompt: "Album cover for a jazz trio's debut record. Smoky, intimate, blue."
-output_type: image
-resolved_style: vaporwave
-model: "Flux 1.1 Ultra"
-endpoint: "fal-ai/flux-pro/v1.1-ultra"
-distilled_prompt: "Vaporwave, Album cover for a jazz trio's debut record. Smoky, intimate, blue., vaporwave aesthetic, pink purple teal gradient, Greek statue, retro computer, pa, retro desktop/window UI metaphor over gr, high detail, professional quality"
-composite_score: 8.14
-timing_ms: 21537

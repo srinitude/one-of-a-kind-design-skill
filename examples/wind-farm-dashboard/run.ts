@@ -1,8 +1,8 @@
 /**
- * jazz-album-cover — Image example: Vaporwave style.
+ * wind-farm-dashboard — Web-app example: Bento UI style.
  * Reproduces the exact invocation from the 20-test validation suite.
  *
- * Run: bun run examples/jazz-album-cover/run.ts
+ * Run: bun run examples/wind-farm-dashboard/run.ts
  */
 import { Console, Effect, pipe } from "effect";
 import { parse as parseYaml } from "yaml";
@@ -13,10 +13,10 @@ import { computeComposite } from "../../.claude/skills/one-of-a-kind-design/scri
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 import { distillPrompt, distillNegative } from "../lib/distill-prompt";
 
-const USER_PROMPT = "Album cover for a jazz trio's debut record. Smoky, intimate, blue.";
+const USER_PROMPT = "Dashboard for a wind farm monitoring system. Real-time turbine data.";
 
 const program = Effect.gen(function* () {
-  yield* Console.log("=== Jazz Album Cover ===\n");
+  yield* Console.log("=== Wind Farm Dashboard ===\n");
 
   const taxonomyPath = `${import.meta.dir}/../../.claude/skills/one-of-a-kind-design/references/TAXONOMY.yaml`;
   const taxonomy = yield* Effect.tryPromise({
@@ -25,8 +25,8 @@ const program = Effect.gen(function* () {
   });
 
   const resolved = yield* resolveStyle(taxonomy, {
-    industry: "entertainment",
-    mood: ["dark"],
+    industry: "tech",
+    _userIntent: USER_PROMPT,
   });
   yield* Console.log(`Style: ${resolved.id} (${resolved.name})`);
 
@@ -40,7 +40,7 @@ const program = Effect.gen(function* () {
   const genResult = yield* runFalGeneration({
     endpoint: selection.primary.endpoint,
     prompt: distilled,
-    params: { image_size: "square", negative_prompt: negative, num_inference_steps: 28, guidance_scale: 3.5 },
+    params: { image_size: "landscape_16_9", negative_prompt: negative, num_inference_steps: 28, guidance_scale: 3.5 },
   });
   yield* Console.log(`Generated: ${genResult.url}`);
 

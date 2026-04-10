@@ -3,10 +3,11 @@
  *
  * fal.ai models (especially Flux) have effective prompt attention that degrades
  * after ~77 tokens (CLIP limit). This function produces a ~55-77 token prompt
- * by layering: style anchor, subject, composition, color palette, quality markers.
+ * by layering: subject, style anchor, composition, color palette, quality markers.
  *
  * Pure string function — no LLM needed, deterministic.
  */
+import { Effect, pipe } from "effect";
 
 const MAX_PROMPT_LENGTH = 300;
 
@@ -23,6 +24,17 @@ interface StyleLike {
     colorShift?: string | null;
   };
   readonly antiSlopOverrides?: string[];
+}
+
+/**
+ * Truncates text at the last complete word before maxChars.
+ */
+function truncateAtWord(text: string, maxChars: number): string {
+  if (text.length <= maxChars) return text;
+  const truncated = text.slice(0, maxChars);
+  const lastSpace = truncated.lastIndexOf(" ");
+  const cutPoint = lastSpace > maxChars * 0.7 ? lastSpace : maxChars;
+  return text.slice(0, cutPoint).trimEnd();
 }
 
 /**
@@ -56,22 +68,22 @@ function extractComposition(style: StyleLike): string {
 
 /**
  * Distills a resolved style + user intent into a focused fal.ai prompt.
+ * Subject-first ordering: intent before style tokens.
  * Output is capped at MAX_PROMPT_LENGTH (~300 chars, ~55-77 tokens).
  */
 export function distillPrompt(style: StyleLike, intent: string): string {
   const parts: string[] = [];
 
-  // 1. Style anchor (~5 tokens)
-  parts.push(style.name ?? style.id);
-
-  // 2. Subject from intent (~15 tokens) — trim to essentials
+  // 1. Subject from intent FIRST (~15 tokens) — subject-first ordering
   const trimmedIntent = intent.slice(0, 120);
   parts.push(trimmedIntent);
+
+  // 2. Style anchor (~5 tokens)
+  parts.push(style.name ?? style.id);
 
   // 3. Positive style tokens from taxonomy (~15 tokens)
   const positive = style.generativeAi?.positivePrompt ?? "";
   if (positive) {
-    // Take first ~80 chars of positive tokens
     parts.push(positive.slice(0, 80));
   }
 
@@ -91,13 +103,9 @@ export function distillPrompt(style: StyleLike, intent: string): string {
   // 7. Quality markers (~5 tokens)
   parts.push("high detail, professional quality");
 
-  // Join and cap
-  let prompt = parts.join(", ");
-  if (prompt.length > MAX_PROMPT_LENGTH) {
-    prompt = prompt.slice(0, MAX_PROMPT_LENGTH - 3) + "...";
-  }
-
-  return prompt;
+  // Join and cap at word boundary
+  const prompt = parts.join(", ");
+  return truncateAtWord(prompt, MAX_PROMPT_LENGTH);
 }
 
 /**
@@ -114,7 +122,6 @@ export function distillNegative(style: StyleLike): string {
 
   parts.push("blurry, low quality, watermark, text overlay");
 
-  let result = parts.join(", ");
-  if (result.length > 150) result = result.slice(0, 147) + "...";
-  return result;
+  const result = parts.join(", ");
+  return truncateAtWord(result, 150);
 }

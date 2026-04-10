@@ -1,8 +1,8 @@
 /**
- * crypto-exchange-landing — Website example: Swiss International style.
+ * ocean-plastic-infographic — Image example: Swiss International style.
  * Reproduces the exact invocation from the 20-test validation suite.
  *
- * Run: bun run examples/crypto-exchange-landing/run.ts
+ * Run: bun run examples/ocean-plastic-infographic/run.ts
  */
 import { Console, Effect, pipe } from "effect";
 import { parse as parseYaml } from "yaml";
@@ -13,10 +13,10 @@ import { computeComposite } from "../../.claude/skills/one-of-a-kind-design/scri
 import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 import { distillPrompt, distillNegative } from "../lib/distill-prompt";
 
-const USER_PROMPT = "I need a landing page for a cryptocurrency exchange that targets institutional investors";
+const USER_PROMPT = "Infographic about ocean plastic pollution for a nonprofit annual report";
 
 const program = Effect.gen(function* () {
-  yield* Console.log("=== Crypto Exchange Landing Page ===\n");
+  yield* Console.log("=== Ocean Plastic Infographic ===\n");
 
   const taxonomyPath = `${import.meta.dir}/../../.claude/skills/one-of-a-kind-design/references/TAXONOMY.yaml`;
   const taxonomy = yield* Effect.tryPromise({
@@ -25,8 +25,8 @@ const program = Effect.gen(function* () {
   });
 
   const resolved = yield* resolveStyle(taxonomy, {
-    industry: "finance",
-    audience: "enterprise",
+    industry: "nonprofit",
+    _userIntent: USER_PROMPT,
   });
   yield* Console.log(`Style: ${resolved.id} (${resolved.name})`);
 
@@ -40,7 +40,7 @@ const program = Effect.gen(function* () {
   const genResult = yield* runFalGeneration({
     endpoint: selection.primary.endpoint,
     prompt: distilled,
-    params: { image_size: "landscape_16_9", negative_prompt: negative, num_inference_steps: 28, guidance_scale: 3.5 },
+    params: { image_size: "portrait_4_3", negative_prompt: negative, num_inference_steps: 28, guidance_scale: 3.5 },
   });
   yield* Console.log(`Generated: ${genResult.url}`);
 

@@ -1,0 +1,8 @@
+user_prompt: "Dashboard for a wind farm monitoring system. Real-time turbine data."
+output_type: web-app
+resolved_style: bento-ui
+model: "Flux 1.1 Ultra"
+endpoint: "fal-ai/flux-pro/v1.1-ultra"
+distilled_prompt: "Dashboard for a wind farm monitoring system. Real-time turbine data., Bento UI, bento grid UI layout, modular card grid, varied cell sizes, Apple-style feature , asymmetric CSS Grid with 2:1 and 1:1 cel, high detail, professional quality"
+composite_score: 7.69
+timing_ms: 15748

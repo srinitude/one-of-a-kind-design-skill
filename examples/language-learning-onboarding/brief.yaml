@@ -1,0 +1,8 @@
+user_prompt: "Onboarding screens for a language learning app targeting adults"
+output_type: mobile-app
+resolved_style: material-design
+model: "Flux 1.1 Ultra"
+endpoint: "fal-ai/flux-pro/v1.1-ultra"
+distilled_prompt: "Onboarding screens for a language learning app targeting adults, Material Design, Material Design UI, layered surfaces, subtle shadows, clean typography, Google d, responsive grid with breakpoint columns, high detail, professional quality"
+composite_score: 7.35
+timing_ms: 16273

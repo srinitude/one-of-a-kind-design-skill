@@ -47,6 +47,7 @@ interface StyleResolutionInput {
   readonly mood?: string[];
   readonly audience?: string;
   readonly dialOverrides?: Record<string, number>;
+  readonly _userIntent?: string;
 }
 
 // --- Taxonomy Loader ---
@@ -132,6 +133,27 @@ export function checkConflicts(
 
   return { isHard: false, isSoft: false, detail: "" };
 }
+
+// --- Compound Phrase Map ---
+
+const COMPOUND_MAP: Record<string, string> = {
+  "molecular gastronomy": "liquid-glass",
+  "funeral home": "swiss-international",
+  "techno party": "glitch",
+  "warehouse party": "brutalist-web",
+  "jazz trio": "cinematic",
+  "film production": "cinematic",
+  "logo reveal": "liquid-glass",
+  "smart watch": "studio-product",
+  smartwatch: "studio-product",
+  "album cover": "cinematic",
+  "book cover": "editorial-minimalism",
+  "icon set": "scandinavian-minimalism",
+  "annual report": "swiss-international",
+  "soap packaging": "art-nouveau",
+  "language learning": "material-design",
+  "email client": "dark-mode-ui",
+};
 
 // --- Resolution ---
 
@@ -222,10 +244,18 @@ export function inferStyleFromContext(
   _taxonomy: Record<string, unknown>,
   input: StyleResolutionInput,
 ): string {
-  // Default fallback heuristics based on mood/industry
   const mood = input.mood?.[0] ?? "";
   const industry = input.industry ?? "";
+  const intent = (input._userIntent ?? "").toLowerCase();
 
+  // 1. Check compound phrases first (most specific)
+  if (intent) {
+    for (const [phrase, style] of Object.entries(COMPOUND_MAP)) {
+      if (intent.includes(phrase)) return style;
+    }
+  }
+
+  // 2. Check mood map
   const moodMap: Record<string, string> = {
     bold: "neubrutalism",
     minimal: "editorial-minimalism",
@@ -236,8 +266,28 @@ export function inferStyleFromContext(
     vintage: "retro-vintage-print",
     luxurious: "art-deco",
     raw: "brutalist-web",
+    dignified: "swiss-international",
+    somber: "dark-mode-ui",
+    intimate: "cinematic",
+    smoky: "cinematic",
+    underground: "brutalist-web",
+    clean: "scandinavian-minimalism",
+    whimsical: "claymorphism",
+    calm: "scandinavian-minimalism",
+    edgy: "glitch",
+    nostalgic: "retro-vintage-print",
+    elegant: "art-deco",
+    organic: "wabi-sabi",
+    industrial: "brutalist-web",
+    geometric: "bauhaus",
+    dreamy: "glassmorphism",
+    professional: "swiss-international",
+    modern: "editorial-minimalism",
   };
 
+  if (moodMap[mood]) return moodMap[mood];
+
+  // 3. Check industry map
   const industryMap: Record<string, string> = {
     tech: "bento-ui",
     finance: "swiss-international",
@@ -250,11 +300,26 @@ export function inferStyleFromContext(
     creative: "editorial-minimalism",
     real_estate: "cinematic",
     nonprofit: "editorial-minimalism",
-    death_care: "wabi-sabi",
+    death_care: "swiss-international",
     meditation: "scandinavian-minimalism",
+    funeral: "swiss-international",
+    music: "cinematic",
+    jazz: "cinematic",
+    fashion: "editorial-minimalism",
+    film: "cinematic",
+    architecture: "brutalist-web",
+    wellness: "scandinavian-minimalism",
+    gaming: "glitch",
+    nightlife: "brutalist-web",
+    "smart home": "liquid-glass",
+    wearables: "studio-product",
+    "pet care": "claymorphism",
+    children: "claymorphism",
+    privacy: "dark-mode-ui",
+    productivity: "bento-ui",
   };
 
-  return moodMap[mood] ?? industryMap[industry] ?? "editorial-minimalism";
+  return industryMap[industry] ?? "editorial-minimalism";
 }
 
 // --- CLI Entry ---
