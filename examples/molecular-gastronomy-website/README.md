@@ -1,15 +1,12 @@
 # Molecular Gastronomy Restaurant Website
 
 ## The Request
-
 > "Design a restaurant website for a molecular gastronomy place in Copenhagen"
 
 ## What the Skill Does
 
-### Message Enhancement (automatic)
-- Output type: website
-- Industry: food (gastronomy)
-- Mood: none detected
+### Message Enhancement
+- Extracted dimensions: output type=website, industry=food, mood=none
 - Specificity score: 2/7
 
 ### Style Resolution
@@ -18,14 +15,14 @@
 - Dials: default (design_variance: 5, motion_intensity: 5)
 - Convention break: not applied
 
-### Hero Asset
-- Archetype: Generative Canvas
-- Model: Flux 1.1 Ultra (premium tier, matched via style affinity)
-- Distilled prompt (subject-first): `Design a restaurant website for a molecular gastronomy place in Copenhagen, Liquid Glass, Apple Liquid Glass UI, dynamic translucent panels, refractive surfaces, iOS 26, layered panels that reveal content depth, high detail, professional quality`
-
-### Generation + Scoring
-- fal.ai endpoint: `fal-ai/flux-pro/v1.1-ultra`
+### Hero Asset Generation
+- Model: Flux 1.1 Ultra (`fal-ai/flux-pro/v1.1-ultra`)
+- Distilled prompt: `website interface design screenshot, restaurant molecular gastronomy place in Copenhagen, Liquid Glass aesthetic, Apple Liquid Glass UI, dynamic translucent panels, refractive surfaces, layered panels that reveal content depth, sharp, detailed`
 - Generation time: ~17s
+
+### E2B Post-Processing
+- Website scaffold with Tailwind v4 liquid-glass preset
+- Hero image composited into layout with translucent panel overlays
 
 ### Quality Evaluation (LLaVA 13B)
 
@@ -33,26 +30,22 @@
 |-----------|-------|--------|
 | Anti-Slop Gate | 9.0 | 15% |
 | Asset Quality | 8.5 | 12% |
-| Prompt Alignment | 8.1 | 15% |
-| Aesthetic | 7.5 | 13% |
-| Style Fidelity | 6.9 | 13% |
-| Distinctiveness | 8.8 | 13% |
-| Hierarchy | 8.5 | 6% |
-| Color Harmony | 7.6 | 5% |
+| Prompt Alignment | 3.6 | 15% |
+| Aesthetic | 7.4 | 13% |
+| Style Fidelity | 7.0 | 13% |
+| Distinctiveness | 7.0 | 13% |
+| Hierarchy | 7.4 | 6% |
+| Color Harmony | 8.0 | 5% |
 
-**Composite: 8.14/10 PASS** (highest scoring example)
+**Composite: 7.10/10 PASS**
 
 ### What Gets Delivered
 A restaurant website hero in Liquid Glass style — translucent layered panels with refractive surfaces, capturing the futuristic precision of molecular gastronomy.
 
 ## Try It Yourself
-
-```
-Design a restaurant website for a molecular gastronomy place in Copenhagen
-```
+> Type in Claude Code: "Design a restaurant website for a molecular gastronomy place in Copenhagen"
 
 ## Pipeline Test
-
 ```bash
 bun run examples/molecular-gastronomy-website/run.ts
 ```

@@ -1,32 +1,28 @@
-# Meditation Icon Set
+# Meditation App Icon Set
 
 ## The Request
-
 > "Icon set for a meditation app. 12 icons. Calm, minimal."
 
 ## What the Skill Does
 
-### Message Enhancement (automatic)
-- Output type: svg (icon set)
-- Industry: meditation
-- Mood: minimal, calm
+### Message Enhancement
+- Extracted dimensions: output type=svg, industry=wellness, mood=calm, minimal
 - Specificity score: 3/7
 
 ### Style Resolution
 - Style: **scandinavian-minimalism** (Scandinavian Minimalism)
-- Why: Calm mood + meditation industry both point to scandinavian-minimalism — warm neutrals and clean lines match meditative serenity
+- Why: "Calm, minimal" mood tags directly match Scandinavian Minimalism — warm neutrals, clean forms, abundant white space
 - Dials: default (design_variance: 5, motion_intensity: 5)
 - Convention break: not applied
-- Audience fit: strong (meditation + Scandinavian minimalism is natural)
 
-### Hero Asset
-- Archetype: SVG Vector Graphic
-- Model: Flux 1.1 Ultra (premium tier)
-- Distilled prompt (subject-first): `Icon set for a meditation app. 12 icons. Calm, minimal., Scandinavian Minimalism, Scandinavian design, Nordic minimalism, warm neutrals, natural light, clean line, clean grid with abundant white space, high detail, professional quality`
+### Hero Asset Generation
+- Model: Flux 1.1 Ultra (`fal-ai/flux-pro/v1.1-ultra`)
+- Distilled prompt: `grid of uniform icons on white background, meditation app. 12 icons. Calm, minimal, Scandinavian Minimalism aesthetic, Scandinavian design, Nordic minimalism, warm neutrals, clean grid with abundant white space, sharp, detailed`
+- Generation time: ~13s
 
-### Generation + Scoring
-- fal.ai endpoint: `fal-ai/flux-pro/v1.1-ultra`
-- Generation time: ~17s
+### E2B Post-Processing
+- SVG vectorization via QuiverAI Arrow
+- Icon grid normalization to uniform viewbox sizes
 
 ### Quality Evaluation (LLaVA 13B)
 
@@ -34,26 +30,22 @@
 |-----------|-------|--------|
 | Anti-Slop Gate | 9.0 | 15% |
 | Asset Quality | 8.5 | 12% |
-| Prompt Alignment | 8.1 | 15% |
-| Aesthetic | 7.5 | 13% |
-| Style Fidelity | 6.9 | 13% |
-| Distinctiveness | 8.1 | 13% |
-| Hierarchy | 8.1 | 6% |
-| Color Harmony | 7.6 | 5% |
+| Prompt Alignment | 9.0 | 15% |
+| Aesthetic | 7.3 | 13% |
+| Style Fidelity | 7.0 | 13% |
+| Distinctiveness | 7.0 | 13% |
+| Hierarchy | 7.3 | 6% |
+| Color Harmony | 8.0 | 5% |
 
-**Composite: 8.02/10 PASS**
+**Composite: 7.96/10 PASS** (highest scoring example)
 
 ### What Gets Delivered
-A set of minimal icons in Scandinavian style — warm neutrals, clean strokes, abundant white space — suitable for vectorization via QuiverAI Arrow.
+A grid of 12 meditation icons in Scandinavian Minimalism style — clean uniform forms on white background, warm neutral tones, calm and minimal.
 
 ## Try It Yourself
-
-```
-Icon set for a meditation app. 12 icons. Calm, minimal.
-```
+> Type in Claude Code: "Icon set for a meditation app. 12 icons. Calm, minimal."
 
 ## Pipeline Test
-
 ```bash
 bun run examples/meditation-icon-set/run.ts
 ```

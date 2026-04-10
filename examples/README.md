@@ -6,12 +6,12 @@ Six end-to-end pipelines demonstrating the one-of-a-kind-design skill. Each reso
 
 | Example | User Prompt | Output Type | Style | Composite |
 |---------|------------|-------------|-------|-----------|
-| [molecular-gastronomy-website](./molecular-gastronomy-website/) | "Design a restaurant website for a molecular gastronomy place in Copenhagen" | website | liquid-glass | 8.14 |
-| [wind-farm-dashboard](./wind-farm-dashboard/) | "Dashboard for a wind farm monitoring system. Real-time turbine data." | web-app | bento-ui | 7.69 |
-| [ocean-plastic-infographic](./ocean-plastic-infographic/) | "Infographic about ocean plastic pollution for a nonprofit annual report" | image | swiss-international | 7.70 |
-| [meditation-icon-set](./meditation-icon-set/) | "Icon set for a meditation app. 12 icons. Calm, minimal." | svg | scandinavian-minimalism | 8.02 |
-| [prism-logo-reveal](./prism-logo-reveal/) | "5-second logo reveal animation for a tech startup called 'Prism'" | video | liquid-glass | 7.18 |
-| [language-learning-onboarding](./language-learning-onboarding/) | "Onboarding screens for a language learning app targeting adults" | mobile-app | material-design | 7.35 |
+| [molecular-gastronomy-website](./molecular-gastronomy-website/) | "Design a restaurant website for a molecular gastronomy place in Copenhagen" | website | liquid-glass | 7.10 |
+| [wind-farm-dashboard](./wind-farm-dashboard/) | "Dashboard for a wind farm monitoring system. Real-time turbine data." | web-app | bento-ui | 7.52 |
+| [ocean-plastic-infographic](./ocean-plastic-infographic/) | "Infographic about ocean plastic pollution for a nonprofit annual report" | image | swiss-international | 7.53 |
+| [meditation-icon-set](./meditation-icon-set/) | "Icon set for a meditation app. 12 icons. Calm, minimal." | svg | scandinavian-minimalism | 7.96 |
+| [prism-logo-reveal](./prism-logo-reveal/) | "5-second logo reveal animation for a tech startup called 'Prism'" | video | liquid-glass | 7.00 |
+| [language-learning-onboarding](./language-learning-onboarding/) | "Onboarding screens for a language learning app targeting adults" | mobile-app | material-design | 7.08 |
 
 ## Running
 
@@ -30,7 +30,7 @@ bun run examples/language-learning-onboarding/run.ts
 1. Load `brief.yaml` with user prompt and resolved metadata
 2. Load `TAXONOMY.yaml` and call `resolveStyle` (attaches `dialModifiers`, `conventionBreak`, `audienceFit`)
 3. `selectModel` picks fal.ai endpoint based on style affinity and tier
-4. `distillPrompt` produces a <=300 char prompt with subject-first ordering and word-boundary truncation
+4. `distillPrompt` produces a <=300 char prompt with visual-subject-first ordering and word-boundary truncation
 5. `runFalGeneration` calls the API with seed pinning and retry logic
 6. `computeRealScores` runs LLaVA 13B vision for structured quality evaluation
 7. `computeComposite` scores quality (9 sub-scores with weights)
@@ -38,3 +38,7 @@ bun run examples/language-learning-onboarding/run.ts
 ## Quality Threshold
 
 All examples target a composite score >= 7.0/10. The score card breaks down all sub-scores with weights. Selected from the top-performing invocations in the 20-test validation suite (one per output type).
+
+## Validation Suite (v4)
+
+20/20 passing | Avg composite: 7.35 | Avg alignment: 5.31

@@ -67,41 +67,82 @@ function extractComposition(style: StyleLike): string {
 }
 
 /**
+ * Strips filler words and normalizes whitespace for clean detail extraction.
+ */
+function cleanDetails(raw: string): string {
+  return raw
+    .replace(/\b(for|a|an|the|my|our|we need|i need|design|create|build|make|screens?)\b/gi, "")
+    .replace(/\b(packaging|branding|marketing|campaign|annual report|nonprofit)\b/gi, "")
+    .replace(/[.,]+\s*$/, "")
+    .replace(/^[.,\s]+/, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+/**
+ * Transforms conversational intent into concrete visual description.
+ * fal.ai needs to know what to DEPICT, not what the user WANTS.
+ */
+function describeVisually(intent: string): string {
+  const subjectPatterns: Array<[RegExp, string]> = [
+    [/website|site|landing\s*page|homepage/i, "website interface design screenshot"],
+    [/dashboard|admin\s*panel/i, "application dashboard interface"],
+    [/onboarding\s*screens?/i, "mobile onboarding screen with illustrations and text"],
+    [/settings\s*page/i, "settings interface with toggle controls and sections"],
+    [/mobile|app\s+screen/i, "mobile app screen design"],
+    [/album\s*cover/i, "album cover artwork"],
+    [/poster|event\s*poster/i, "graphic design poster"],
+    [/book\s*cover/i, "book cover design"],
+    [/product\s*(shot|photo|video)/i, "product photography on clean surface"],
+    [/infographic/i, "data visualization infographic with charts and statistics"],
+    [/logo\s*reveal|logo\s*animation/i, "logo animation key frame on dark background"],
+    [/logo/i, "logo design on neutral background"],
+    [/icon\s*set|(\d+)\s*icons/i, "grid of uniform icons on white background"],
+    [/pattern/i, "ornate floral pattern, intricate detailed design, colorful artistic tile"],
+    [/video|animation|reveal/i, "key frame from motion design"],
+  ];
+
+  for (const [pattern, visual] of subjectPatterns) {
+    if (pattern.test(intent)) {
+      const details = cleanDetails(intent.replace(pattern, ""));
+      if (!details) return visual;
+      return `${visual}, ${details}`;
+    }
+  }
+  return intent;
+}
+
+/**
  * Distills a resolved style + user intent into a focused fal.ai prompt.
- * Subject-first ordering: intent before style tokens.
+ * Visual-subject-first ordering: concrete depiction before style tokens.
  * Output is capped at MAX_PROMPT_LENGTH (~300 chars, ~55-77 tokens).
  */
 export function distillPrompt(style: StyleLike, intent: string): string {
   const parts: string[] = [];
 
-  // 1. Subject from intent FIRST (~15 tokens) — subject-first ordering
-  const trimmedIntent = intent.slice(0, 120);
-  parts.push(trimmedIntent);
+  // 1. Visual subject description FIRST — what to depict
+  const visual = describeVisually(intent);
+  parts.push(visual);
 
-  // 2. Style anchor (~5 tokens)
-  parts.push(style.name ?? style.id);
-
-  // 3. Positive style tokens from taxonomy (~15 tokens)
+  // 2. Style tokens (first 3 comma-separated phrases)
   const positive = style.generativeAi?.positivePrompt ?? "";
   if (positive) {
-    parts.push(positive.slice(0, 80));
+    const tokens = positive.split(",").slice(0, 3).join(",").trim();
+    parts.push(`${style.name ?? style.id} aesthetic, ${tokens}`);
+  } else {
+    parts.push(`${style.name ?? style.id} aesthetic`);
   }
 
-  // 4. Color palette with hex values (~10 tokens)
+  // 3. Color palette with hex values
   const colors = extractColors(style.designSystemParameters);
   if (colors) parts.push(`palette: ${colors}`);
 
-  // 5. Composition (~10 tokens)
+  // 4. Composition directive
   const comp = extractComposition(style);
   if (comp) parts.push(comp);
 
-  // 6. Color shift
-  if (style.dialModifiers?.colorShift) {
-    parts.push(`${style.dialModifiers.colorShift} tones`);
-  }
-
-  // 7. Quality markers (~5 tokens)
-  parts.push("high detail, professional quality");
+  // 5. Quality markers
+  parts.push("sharp, detailed");
 
   // Join and cap at word boundary
   const prompt = parts.join(", ");
