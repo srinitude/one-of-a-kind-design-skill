@@ -1,10 +1,16 @@
 /**
  * resolve-style-step.ts — Wraps existing resolve-style.ts as a Mastra workflow step.
+ * Now includes intent parsing from enhance-user-message.ts (formerly a platform hook).
  */
 
 import { createStep } from "@mastra/core/workflows";
 import { Effect } from "effect";
 import { z } from "zod";
+import {
+  buildEnhancement,
+  computeSpecificity,
+  extractDimensions,
+} from "../../../enhance-user-message.js";
 import { resolveStyle } from "../../../resolve-style.js";
 
 const inputSchema = z.object({
@@ -29,11 +35,13 @@ const outputSchema = z.object({
   motionSignature: z.string(),
   premiumPatterns: z.array(z.string()),
   negativePrompt: z.string(),
+  specificity: z.number(),
+  enhancement: z.string(),
 });
 
 export const resolveStyleStep = createStep({
   id: "resolve-style",
-  description: "Deterministic style resolution from taxonomy",
+  description: "Parse intent dimensions and resolve style from taxonomy",
   inputSchema,
   outputSchema,
   execute: ({ inputData, writer }) =>
@@ -44,6 +52,18 @@ export const resolveStyleStep = createStep({
             writer.write({ type: "step-progress", step: "resolve-style", status: "running" }),
           catch: () => new Error("writer failed"),
         });
+
+        const dimensions = extractDimensions(inputData.userIntent);
+        const specificity = computeSpecificity(dimensions);
+        const enhancement = buildEnhancement(dimensions);
+
+        const effectiveOutputType = inputData.outputType || dimensions.outputType || "website";
+        const effectiveIndustry = inputData.industry || dimensions.industry || undefined;
+        const effectiveMood = inputData.mood?.length
+          ? inputData.mood
+          : dimensions.moodAestheticTags.length > 0
+            ? dimensions.moodAestheticTags
+            : undefined;
 
         const taxonomyPath = `${import.meta.dir}/../../../../assets/TAXONOMY.yaml`;
         const taxonomyText = yield* Effect.tryPromise({
@@ -57,9 +77,9 @@ export const resolveStyleStep = createStep({
         const taxonomy = parse(taxonomyText) as Record<string, unknown>;
 
         const resolved = yield* resolveStyle(taxonomy, {
-          outputType: inputData.outputType,
-          industry: inputData.industry,
-          mood: inputData.mood,
+          outputType: effectiveOutputType,
+          industry: effectiveIndustry,
+          mood: effectiveMood,
           _userIntent: inputData.userIntent,
           dialOverrides: inputData.dialOverrides as Record<string, number> | undefined,
           hasReferenceImage: inputData.hasReferenceImage,
@@ -84,6 +104,8 @@ export const resolveStyleStep = createStep({
           motionSignature: resolved.motionSignature,
           premiumPatterns: resolved.premiumPatterns,
           negativePrompt: resolved.generativeAi.negativePrompt,
+          specificity,
+          enhancement,
         };
       }),
     ),
