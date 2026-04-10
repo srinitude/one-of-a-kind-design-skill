@@ -3,3 +3,6 @@ node_modules/
 dist/
 *.log
 .claude/settings.local.json
+.mastra/store.db
+.mastra/*.db
+.mastra/*.db-journal
