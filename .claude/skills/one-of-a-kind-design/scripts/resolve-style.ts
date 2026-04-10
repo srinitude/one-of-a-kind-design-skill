@@ -364,6 +364,8 @@ const program = Effect.gen(function* () {
     industry: getArg("--industry"),
     mood: getArg("--mood")?.split(","),
     audience: getArg("--audience"),
+    _userIntent: getArg("--intent"),
+    outputType: getArg("--output-type"),
     dialOverrides: getArg("--dials")
       ? yield* Effect.try({
           try: () => JSON.parse(getArg("--dials") ?? "{}") as Record<string, number>,
