@@ -127,12 +127,21 @@ Then ask your coding agent to design something.
 
 ## Interactive vs. headless
 
-**In a coding agent:** Streams progress. Shows scores. Asks what to do at quality gates. You stay in the loop.
+**Interactive (default):**
+```
+/one-of-a-kind-design Design a portfolio site for an architecture firm
+```
+Streams progress. Shows scores. Asks what to do at quality gates. You stay in the loop.
 
-**In CI/CD:** Zero human input. Pass, retry, or fail. Exit code 0 or 1. Snapshots saved on failure.
+**Headless (`--print`):**
+```
+/one-of-a-kind-design --print Album cover for a jazz trio
+```
+Zero human input. Pass, retry, or fail. No quality gate prompts. Auto-retries up to 3 times.
 
+For CI/CD scripts:
 ```bash
-bun run scripts/mastra/modes/ci.ts '{"userIntent":"...","outputType":"image"}'
+bun run .claude/skills/one-of-a-kind-design/scripts/mastra/modes/ci.ts '{"userIntent":"...","outputType":"image"}'
 ```
 
 ## License

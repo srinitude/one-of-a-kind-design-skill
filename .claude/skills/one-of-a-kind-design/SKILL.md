@@ -16,15 +16,22 @@ description: >-
 
 ### Step 1: Parse the Request
 
-Run `bun run scripts/mastra/modes/interactive.ts` with the user's request as JSON input.
+The user invokes the skill with `/one-of-a-kind-design` followed by their request.
+
+Interactive mode (default):
+```
+/one-of-a-kind-design Design a site for my omakase restaurant
+```
+
+Headless mode (no human input, for CI/CD or batch processing):
+```
+/one-of-a-kind-design --print Design a site for my omakase restaurant
+```
+
 The Mastra workflow automatically:
 - Extracts output type, industry, mood, audience from the intent
 - Computes specificity (0-7). If below 3, ask the user 1-3 clarifying questions
 - Resolves style from taxonomy with convention-breaking detection
-
-```bash
-bun run scripts/mastra/modes/interactive.ts '{"userIntent":"Design a site for my omakase restaurant","outputType":"website"}'
-```
 
 Expected output: streaming progress events for each pipeline step.
 
@@ -81,13 +88,22 @@ Share the generated artifact with the user. The artifact includes:
 
 ### Headless / CI Mode
 
-For automated pipelines without human interaction:
+For automated pipelines without human interaction, use the `--print` flag:
 
-```bash
-bun run scripts/mastra/modes/ci.ts '{"userIntent":"...","outputType":"..."}'
+```
+/one-of-a-kind-design --print Album cover for a jazz trio
 ```
 
-Exit code 0 for success (composite at or above 7.0), exit code 1 for failure. Auto-retries 3 times before failing.
+In `--print` mode:
+- No suspend, no quality gate prompts, no human-in-the-loop
+- Auto-retries up to 3 times with seed bumps if quality is below 7.0
+- Outputs the artifact URL and composite score when done
+- Exit code 0 for success, 1 for failure
+
+For CI/CD scripts:
+```bash
+bun run .claude/skills/one-of-a-kind-design/scripts/mastra/modes/ci.ts '{"userIntent":"...","outputType":"..."}'
+```
 
 ### MCP Integration
 
@@ -120,49 +136,73 @@ All scripts use Bun-only APIs, Effect-native TypeScript, max nesting depth 3.
 ## Examples
 
 ### Example 1: Restaurant Website
-**User says:** "Design a website for my omakase restaurant in Brooklyn. No food photos."
-**Actions:**
-1. Pipeline resolves wabi-sabi style, variance 7, convention break applied
-2. Flux Pro generates hero image with wabi-sabi tokens, seed 42
-3. E2B converts to WebP, LLaVA scores 8.1/10 composite
-4. Website generated with wabi-sabi Tailwind preset
-**Result:** Full website with hand-textured hero, no food photography, seasonal palette.
+**User says:** "/one-of-a-kind-design Design a website for my omakase restaurant in Brooklyn. No food photos."
 
-### Example 2: Data Dashboard
-**User says:** "Climate nonprofit needs an internal dashboard for Arctic ice shelf data."
 **Actions:**
-1. Pipeline resolves swiss-international plus generative-art cross-pollination
-2. Flux Pro generates hero with glacial palette, verified unique (hamming 38)
-3. E2B processes with sharp optimization, LLaVA scores 8.3/10
-4. Dashboard with glacial-to-volcanic color coding, aurora gradients
-**Result:** Interactive dashboard with generative data visualizations.
+1. Resolve style: wabi-sabi (food + warm + intimate), variance 7, convention break: no food photography
+2. Select model: Flux Pro 1.1 (cinematic affinity), chain: t2i
+3. Craft prompt: 280 chars, subject-first, hex palette #8B7355 #D4C5A9 #F5F0E8
+4. Generate hero image via fal.ai, seed 42, E2B converts to WebP
+5. Verify: pHash stored, uniqueness confirmed (hamming 42 to nearest)
+6. Score: LLaVA 13B composite 7.9/10 PASS
+
+**Result:** Full website with hand-textured hero, no food photography, seasonal palette system.
+
+### Example 2: Album Cover
+**User says:** "/one-of-a-kind-design Album cover for a jazz trio's debut. Smoky, intimate, blue."
+
+**Actions:**
+1. Resolve style: cinematic (jazz + intimate via compound map)
+2. Select model: Flux Pro 1.1, chain: t2i
+3. Craft prompt: atmospheric lighting, rich shadows, palette #1A1A2E #0F3460 #E94560
+4. Generate, E2B post-process, verify uniqueness
+5. Score: LLaVA 13B composite 7.7/10 PASS
+
+**Result:** Cinematic album artwork with atmospheric depth and jazz-appropriate color theory.
 
 ### Example 3: Video Trailer
-**User says:** "15-second trailer for a contemporary opera"
-**Actions:**
-1. Pipeline resolves deconstructivism, chain t2i-i2v
-2. Flux Pro generates keyframe, Seedance 2.0 animates to video
-3. E2B extracts frame for quality check, LLaVA scores 7.5/10
-4. Camera choreography: slow push to whip pan to static hold
-**Result:** 15s cinematic video with fractured visual language.
+**User says:** "/one-of-a-kind-design 15-second trailer for a contemporary opera staging deconstructed Madama Butterfly"
 
-### Example 4: SVG Identity System
-**User says:** "Lagos animation studio needs vector identity -- logo, silhouettes, patterns."
 **Actions:**
-1. Pipeline resolves afrofuturism style for SVG output
-2. QuiverAI Arrow generates Nsibidi-inspired geometric logo
-3. SVGO optimization in E2B sandbox, LLaVA scores 8.6/10
-4. Pattern library generated from logo motifs
-**Result:** Complete vector identity with logo, 5 silhouettes, pattern library.
+1. Resolve style: deconstructivism, chain: t2i-i2v (keyframe then animate)
+2. Generate keyframe via Flux Pro, animate via Seedance 2.0 (duration "15", aspect "21:9")
+3. E2B extracts first frame for quality verification
+4. Score: LLaVA 13B composite 7.2/10 PASS
+
+**Result:** 15s cinematic video with fractured visual language and camera choreography mirroring emotional arc.
+
+### Example 4: SVG Logo
+**User says:** "/one-of-a-kind-design Logo for a sustainable fashion brand called Thread"
+
+**Actions:**
+1. Resolve style: editorial-minimalism (fashion + minimal)
+2. Route to SVG pipeline: Recraft V3 vector illustration mode
+3. E2B runs SVGO optimization, tests at 16px and 4K
+4. Score: LLaVA 13B composite 7.5/10 PASS
+
+**Result:** Single-color vector logo with real SVG paths, tested across sizes.
 
 ### Example 5: Mobile App
-**User says:** "Somatic therapist needs app screens for booking. Clients are trauma survivors."
+**User says:** "/one-of-a-kind-design Onboarding screens for a language learning app targeting adults over 40"
+
 **Actions:**
-1. Pipeline resolves scandinavian-minimalism plus wabi-sabi fusion
-2. Flux Pro generates warm neutral hero, generous touch targets
-3. Trauma-informed UX patterns applied, LLaVA scores 8.3/10
-4. Phone-frame wrapper with body-aware design tokens
-**Result:** Trauma-informed mobile screens with warm neutrals.
+1. Resolve style: material-design (education + clean)
+2. Generate hero texture, E2B creates phone-frame mockup
+3. Verify uniqueness, score quality
+4. Score: LLaVA 13B composite 7.4/10 PASS
+
+**Result:** Accessible onboarding screens with warm typography and generous touch targets.
+
+### Example 6: Headless / CI
+**User says:** "/one-of-a-kind-design --print Event poster for a warehouse techno party in Berlin"
+
+**Actions:**
+1. Headless mode: no suspend, no human input
+2. Resolve style: glitch (techno + underground), generate via Flux Pro
+3. Auto-score: composite 6.8 (below 7.0), auto-retry with seed 43
+4. Re-score: composite 7.3/10 PASS on second attempt
+
+**Result:** Poster with neon typography, scan lines, RGB split. Delivered with score and URL, exit code 0.
 
 ## Troubleshooting
 
