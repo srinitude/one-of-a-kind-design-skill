@@ -3,7 +3,13 @@
  *
  * fal.ai models (especially Flux) have effective prompt attention that degrades
  * after ~77 tokens (CLIP limit). This function produces a ~55-77 token prompt
- * by layering: subject, style anchor, composition, color palette, quality markers.
+ * by layering: visual metaphor, style anchor, palette, composition, quality.
+ *
+ * ROOT CAUSE FIXES (from visual evaluation):
+ * 1. NEVER include text, typography, buttons, or UI elements — fal.ai can't render text
+ * 2. Avoid visual cliches — no "saxophone in spotlight", no "gradient hero"
+ * 3. Find an OBLIQUE visual metaphor, not a literal depiction of the subject
+ * 4. Pick ONE specific expression of the style for THIS project, not generic style tokens
  *
  * Pure string function — no LLM needed, deterministic.
  */
@@ -23,12 +29,13 @@ interface StyleLike {
     compositionOverride?: string | null;
     colorShift?: string | null;
   };
+  readonly conventionBreak?: {
+    applied?: boolean;
+    breakText?: string;
+  };
   readonly antiSlopOverrides?: string[];
 }
 
-/**
- * Truncates text at the last complete word before maxChars.
- */
 function truncateAtWord(text: string, maxChars: number): string {
   if (text.length <= maxChars) return text;
   const truncated = text.slice(0, maxChars);
@@ -37,9 +44,6 @@ function truncateAtWord(text: string, maxChars: number): string {
   return text.slice(0, cutPoint).trimEnd();
 }
 
-/**
- * Extracts 2-3 hex colors from design system parameters.
- */
 function extractColors(dsp: Record<string, string> | undefined): string {
   if (!dsp) return "";
   const hexPattern = /#[0-9a-fA-F]{3,8}/g;
@@ -51,106 +55,176 @@ function extractColors(dsp: Record<string, string> | undefined): string {
   return allColors.slice(0, 3).join(" ");
 }
 
-/**
- * Extracts composition hint from design system or dial modifiers.
- */
 function extractComposition(style: StyleLike): string {
   if (style.dialModifiers?.compositionOverride) {
     return style.dialModifiers.compositionOverride.slice(0, 40);
   }
   const dsp = style.designSystemParameters;
   if (!dsp) return "";
-  const layoutKey = Object.keys(dsp).find((k) =>
-    k.includes("layout") || k.includes("grid") || k.includes("composition"),
+  const layoutKey = Object.keys(dsp).find(
+    (k) => k.includes("layout") || k.includes("composition"),
   );
   return layoutKey ? (dsp[layoutKey] ?? "").slice(0, 40) : "";
 }
 
 /**
- * Strips filler words and normalizes whitespace for clean detail extraction.
+ * CLICHE MAP: for each output type + style combo, defines what to AVOID
+ * and what OBLIQUE ANGLE to take instead.
+ *
+ * The key insight: a jazz album cover shouldn't show a saxophone.
+ * A funeral home shouldn't show flowers. An architecture firm shouldn't
+ * show a building facade. Those are the FIRST things anyone would think of.
+ * One-of-a-kind means finding the SECOND or THIRD association.
  */
-function cleanDetails(raw: string): string {
-  return raw
-    .replace(/\b(for|a|an|the|my|our|we need|i need|design|create|build|make|screens?)\b/gi, "")
-    .replace(/\b(packaging|branding|marketing|campaign|annual report|nonprofit)\b/gi, "")
-    .replace(/[.,]+\s*$/, "")
-    .replace(/^[.,\s]+/, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
+const OBLIQUE_ANGLES: Record<string, Record<string, string>> = {
+  // Output type → industry/subject → oblique visual
+  "album cover": {
+    jazz: "close-up of piano keys with condensation from a cold glass, warm amber light reflecting off lacquered wood, shallow depth of field",
+    electronic: "long-exposure light trails through rain-streaked window, abstracted city grid dissolving into frequency patterns",
+    ambient: "frozen lake surface with trapped air bubbles forming patterns, aerial perspective, muted silver-blue",
+    _default: "abstract texture that evokes the music's emotional core, not the instruments",
+  },
+  poster: {
+    techno: "thermal camera view of a concrete wall with body heat traces where dancers pressed against it, infrared palette",
+    concert: "empty stage with a single mic stand casting a long shadow across worn floorboards, dramatic side-light",
+    _default: "abstract environmental detail that captures the event's energy without showing people or text",
+  },
+  website: {
+    architecture: "macro detail of material intersection — where two different reclaimed materials meet, the joint itself tells the story of craft",
+    restaurant: "the surface of the counter or table, showing wear patterns from years of use, warm indirect light",
+    funeral: "soft light passing through textured glass, casting warm diffused patterns on stone, no flowers no crosses",
+    _default: "environmental texture or material detail that embodies the brand, not a screenshot of a website layout",
+  },
+  logo: {
+    _default: "abstract geometric mark on neutral background, single weight, no text no letters no words",
+  },
+  video: {
+    opera: "slow-motion fabric falling through fractured light, deconstructed and layered, no people",
+    _default: "single continuous camera movement through an environment that embodies the mood",
+  },
+  "mobile-app": {
+    _default: "abstract background texture with the brand's emotional temperature, not a UI screenshot",
+  },
+};
+
+/**
+ * Finds an oblique visual angle for the given output type and subject.
+ * Falls back through: exact match → output type default → generic.
+ */
+function findObliqueAngle(intent: string, outputType: string): string | null {
+  const lower = intent.toLowerCase();
+  const typeKey = detectOutputCategory(lower);
+  const typeMap = OBLIQUE_ANGLES[typeKey];
+  if (!typeMap) return null;
+
+  for (const [subject, angle] of Object.entries(typeMap)) {
+    if (subject === "_default") continue;
+    if (lower.includes(subject)) return angle;
+  }
+  return typeMap._default ?? null;
+}
+
+function detectOutputCategory(intent: string): string {
+  if (/album\s*cover/i.test(intent)) return "album cover";
+  if (/poster|flyer/i.test(intent)) return "poster";
+  if (/website|site|landing|homepage/i.test(intent)) return "website";
+  if (/logo/i.test(intent)) return "logo";
+  if (/video|trailer|animation/i.test(intent)) return "video";
+  if (/mobile|app\s+screen|onboarding/i.test(intent)) return "mobile-app";
+  return "website";
 }
 
 /**
- * Transforms conversational intent into concrete visual description.
- * fal.ai needs to know what to DEPICT, not what the user WANTS.
+ * CRITICAL: Things that must NEVER appear in a fal.ai prompt.
+ * Flux cannot render text — any text in the prompt becomes garbled pixels.
  */
-function describeVisually(intent: string): string {
-  const subjectPatterns: Array<[RegExp, string]> = [
-    [/website|site|landing\s*page|homepage/i, "website interface design screenshot"],
-    [/dashboard|admin\s*panel/i, "application dashboard interface"],
-    [/onboarding\s*screens?/i, "mobile onboarding screen with illustrations and text"],
-    [/settings\s*page/i, "settings interface with toggle controls and sections"],
-    [/mobile|app\s+screen/i, "mobile app screen design"],
-    [/album\s*cover/i, "album cover artwork"],
-    [/poster|event\s*poster/i, "graphic design poster"],
-    [/book\s*cover/i, "book cover design"],
-    [/product\s*(shot|photo|video)/i, "product photography on clean surface"],
-    [/infographic/i, "data visualization infographic with charts and statistics"],
-    [/logo\s*reveal|logo\s*animation/i, "logo animation key frame on dark background"],
-    [/logo/i, "logo design on neutral background"],
-    [/icon\s*set|(\d+)\s*icons/i, "grid of uniform icons on white background"],
-    [/pattern/i, "ornate floral pattern, intricate detailed design, colorful artistic tile"],
-    [/video|animation|reveal/i, "key frame from motion design"],
-  ];
+const BANNED_TERMS = [
+  /\btext\b/i, /\btypography\b/i, /\bfont\b/i, /\bletter(s|ing)?\b/i,
+  /\bword(s)?\b/i, /\bheadline\b/i, /\btitle\b/i, /\bslogan\b/i,
+  /\bbutton\b/i, /\bCTA\b/i, /\bcall.to.action\b/i, /\bUI\b/i,
+  /\binterface\b/i, /\bscreenshot\b/i, /\blayout\b/i, /\bgrid\b/i,
+  /\bnavigation\b/i, /\bmenu\b/i, /\bheader\b/i, /\bfooter\b/i,
+  /\bbusiness name\b/i, /\bcompany name\b/i,
+];
 
-  for (const [pattern, visual] of subjectPatterns) {
-    if (pattern.test(intent)) {
-      const details = cleanDetails(intent.replace(pattern, ""));
-      if (!details) return visual;
-      return `${visual}, ${details}`;
-    }
+function removeBannedTerms(prompt: string): string {
+  let cleaned = prompt;
+  for (const pattern of BANNED_TERMS) {
+    cleaned = cleaned.replace(pattern, "");
   }
-  return intent;
+  return cleaned.replace(/,\s*,/g, ",").replace(/\s{2,}/g, " ").trim();
+}
+
+/**
+ * Picks ONE specific style expression, not the entire style's positive_prompt.
+ * The first token of the positive_prompt is usually the most distinctive.
+ */
+function pickStyleAnchor(style: StyleLike): string {
+  const positive = style.generativeAi?.positivePrompt ?? "";
+  const tokens = positive.split(",").map((t) => t.trim());
+  // Take the MOST SPECIFIC token (usually position 2-3, not the genre name at position 0)
+  const specific = tokens.find(
+    (t) => t.length > 10 && !t.includes("aesthetic") && !t.includes("style"),
+  );
+  return specific ?? tokens[0] ?? style.id;
 }
 
 /**
  * Distills a resolved style + user intent into a focused fal.ai prompt.
- * Visual-subject-first ordering: concrete depiction before style tokens.
- * Output is capped at MAX_PROMPT_LENGTH (~300 chars, ~55-77 tokens).
+ *
+ * Strategy: OBLIQUE ANGLE first (not literal depiction), then style anchor
+ * (one specific expression), then palette, then quality markers.
+ * NEVER includes text, UI elements, or layout terms.
  */
 export function distillPrompt(style: StyleLike, intent: string): string {
   const parts: string[] = [];
 
-  // 1. Visual subject description FIRST — what to depict
-  const visual = describeVisually(intent);
-  parts.push(visual);
-
-  // 2. Style tokens (first 3 comma-separated phrases)
-  const positive = style.generativeAi?.positivePrompt ?? "";
-  if (positive) {
-    const tokens = positive.split(",").slice(0, 3).join(",").trim();
-    parts.push(`${style.name ?? style.id} aesthetic, ${tokens}`);
+  // 1. OBLIQUE visual angle — the surprising interpretation
+  const oblique = findObliqueAngle(intent, "");
+  if (oblique) {
+    parts.push(oblique);
   } else {
-    parts.push(`${style.name ?? style.id} aesthetic`);
+    // Fallback: extract the core visual subject without cliches
+    const cleaned = intent
+      .replace(/\b(design|create|build|make|for|a|an|the|my|our|we need|i need)\b/gi, "")
+      .replace(/\b(website|site|landing page|app|screen|poster|cover)\b/gi, "")
+      .trim();
+    parts.push(cleaned || intent);
   }
 
-  // 3. Color palette with hex values
+  // 2. ONE specific style expression (not generic "aesthetic" tokens)
+  const anchor = pickStyleAnchor(style);
+  parts.push(anchor);
+
+  // 3. Convention break injection (if applied)
+  if (style.conventionBreak?.applied && style.conventionBreak?.breakText) {
+    // Extract the actionable part of the break
+    const breakAction = style.conventionBreak.breakText.split("—").pop()?.trim() ?? "";
+    if (breakAction.length > 10) {
+      parts.push(breakAction.slice(0, 60));
+    }
+  }
+
+  // 4. Palette (2-3 hex values)
   const colors = extractColors(style.designSystemParameters);
   if (colors) parts.push(`palette: ${colors}`);
 
-  // 4. Composition directive
+  // 5. Composition
   const comp = extractComposition(style);
   if (comp) parts.push(comp);
 
-  // 5. Quality markers
+  // 6. Quality markers
   parts.push("sharp, detailed");
 
   // Join and cap at word boundary
-  const prompt = parts.join(", ");
-  return truncateAtWord(prompt, MAX_PROMPT_LENGTH);
+  // NOTE: don't run removeBannedTerms on the output — it strips legitimate "no text" instructions
+  // Instead, the NEGATIVE prompt handles anti-text
+  const raw = parts.join(", ");
+  return truncateAtWord(raw, MAX_PROMPT_LENGTH);
 }
 
 /**
- * Builds a negative prompt from style data, capped at 150 chars.
+ * Builds a negative prompt. Now ALWAYS includes anti-text terms.
  */
 export function distillNegative(style: StyleLike): string {
   const parts: string[] = [];
@@ -159,10 +233,12 @@ export function distillNegative(style: StyleLike): string {
   if (negative) parts.push(negative.slice(0, 80));
 
   const antiSlop = style.antiSlopOverrides ?? [];
-  if (antiSlop.length > 0) parts.push(antiSlop.slice(0, 3).join(", "));
+  if (antiSlop.length > 0) parts.push(antiSlop.slice(0, 2).join(", "));
 
-  parts.push("blurry, low quality, watermark, text overlay");
+  // ALWAYS ban text rendering — Flux can't do it
+  parts.push("text, words, letters, numbers, watermark, signature, logo text, UI elements, buttons");
+  parts.push("blurry, low quality, generic, stock photo, cliche");
 
   const result = parts.join(", ");
-  return truncateAtWord(result, 150);
+  return truncateAtWord(result, 200);
 }
