@@ -225,9 +225,14 @@ function isExemptContext(
   // Inside Effect.try(() => ...) or Effect.try({ try: () => ... }) — JSON.parse is allowed
   const inEffectTry = /Effect\.try\s*\(/.test(surroundingContext);
 
+  // Mastra workflow .then() chaining — not Promise.then()
+  const widerContext = lines.slice(Math.max(0, lineIndex - 40), lineIndex + 5).join("\n");
+  const inWorkflowChain =
+    /createWorkflow\s*\(/.test(widerContext) || /\.commit\s*\(/.test(widerContext);
+
   return {
     bunOnly: false, // No bun-only exemptions in code context
-    effectNative: inTryPromise || inEffectSync || inEffectTry,
+    effectNative: inTryPromise || inEffectSync || inEffectTry || inWorkflowChain,
   };
 }
 
