@@ -260,7 +260,7 @@ const program = Effect.gen(function* () {
   }
 
   // Write JSONL results
-  const jsonlPath = "/home/user/workspace/test-results-v2.jsonl";
+  const jsonlPath = "/home/user/workspace/test-results-v3.jsonl";
   const jsonlContent = allResults.map((r) => JSON.stringify(r)).join("\n");
   yield* Effect.tryPromise({
     try: async () => Bun.write(jsonlPath, jsonlContent),

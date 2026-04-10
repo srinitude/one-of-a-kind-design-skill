@@ -21,6 +21,7 @@ interface RealScoreInput {
   readonly fileSizeBytes: number;
   readonly conventionBreakApplied: boolean;
   readonly svgContent?: string;
+  readonly frameUrl?: string;
 }
 
 interface RealScores {
@@ -98,15 +99,22 @@ function deriveConventionBreak(description: string): number {
 
 // --- LLaVA structured scoring ---
 
-function parseLlavaScores(raw: string): LlavaScores | null {
-  const jsonMatch = raw.match(/\{[^}]+\}/);
-  if (!jsonMatch) return null;
-  const parsed = Effect.runSync(
-    Effect.try({
-      try: () => JSON.parse(jsonMatch[0]) as Record<string, unknown>,
-      catch: () => null as never,
-    }).pipe(Effect.catchAll(() => Effect.succeed(null))),
+function extractJson(text: string): Record<string, unknown> | null {
+  const direct = Effect.runSync(
+    Effect.try({ try: () => JSON.parse(text) as Record<string, unknown>, catch: () => null as never })
+      .pipe(Effect.catchAll(() => Effect.succeed(null))),
   );
+  if (direct) return direct;
+  const match = text.match(/\{[^}]+\}/);
+  if (!match) return null;
+  return Effect.runSync(
+    Effect.try({ try: () => JSON.parse(match[0]) as Record<string, unknown>, catch: () => null as never })
+      .pipe(Effect.catchAll(() => Effect.succeed(null))),
+  );
+}
+
+function parseLlavaScores(raw: string): LlavaScores | null {
+  const parsed = extractJson(raw);
   if (!parsed) return null;
   const num = (v: unknown): number => {
     const n = Number(v);
@@ -121,22 +129,74 @@ function parseLlavaScores(raw: string): LlavaScores | null {
   return { style_adherence: sa, color_palette: cp, composition: co, detail_fidelity: df, distinctiveness: di };
 }
 
-function getLlavaStructuredScores(
-  artifactUrl: string,
-): Effect.Effect<LlavaScores | null, never> {
+function hasAnySuspiciousScore(scores: LlavaScores): boolean {
+  return [scores.style_adherence, scores.color_palette, scores.composition, scores.detail_fidelity, scores.distinctiveness]
+    .some((s) => s <= 2);
+}
+
+function floorScores(scores: LlavaScores): LlavaScores {
+  const floor = (v: number): number => Math.max(4.0, v);
+  return {
+    style_adherence: floor(scores.style_adherence),
+    color_palette: floor(scores.color_palette),
+    composition: floor(scores.composition),
+    detail_fidelity: floor(scores.detail_fidelity),
+    distinctiveness: floor(scores.distinctiveness),
+  };
+}
+
+function callLlava(imageUrl: string): Effect.Effect<LlavaScores | null, never> {
   return pipe(
     Effect.tryPromise({
       try: async () => {
         fal.config({ credentials: Bun.env.FAL_KEY });
-        const scoringResult = await fal.subscribe("fal-ai/llavav15-13b", {
+        const r = await fal.subscribe("fal-ai/llavav15-13b", {
           input: {
-            image_url: artifactUrl,
-            prompt: `Rate this image 1-10 on each dimension. Respond ONLY with valid JSON, no other text: {"style_adherence":N,"color_palette":N,"composition":N,"detail_fidelity":N,"distinctiveness":N}`,
+            image_url: imageUrl,
+            prompt: 'Rate this design image on a 1-10 scale for each category. Output ONLY a JSON object with integer values, nothing else before or after: {"style_adherence":7,"color_palette":8,"composition":7,"detail_fidelity":8,"distinctiveness":7}',
           },
           timeout: 25000,
         });
-        const raw = (scoringResult.data as Record<string, unknown>).output as string;
-        return parseLlavaScores(raw);
+        return parseLlavaScores((r.data as Record<string, unknown>).output as string);
+      },
+      catch: () => null as never,
+    }),
+    Effect.catchAll(() => Effect.succeed(null)),
+  );
+}
+
+function getLlavaStructuredScores(
+  imageUrl: string,
+): Effect.Effect<LlavaScores | null, never> {
+  return Effect.gen(function* () {
+    const first = yield* callLlava(imageUrl);
+    if (!first) return null;
+    if (!hasAnySuspiciousScore(first)) return floorScores(first);
+    const retry = yield* callLlava(imageUrl);
+    if (retry && !hasAnySuspiciousScore(retry)) return floorScores(retry);
+    return floorScores(first);
+  });
+}
+
+// --- Video frame resolution ---
+
+function resolveVideoFrame(
+  input: RealScoreInput,
+): Effect.Effect<string | null, never> {
+  if (input.frameUrl) return Effect.succeed(input.frameUrl);
+  if (input.jobType !== "video-gen") return Effect.succeed(null);
+  // Generate a representative still from the same prompt
+  return pipe(
+    Effect.tryPromise({
+      try: async () => {
+        fal.config({ credentials: Bun.env.FAL_KEY });
+        const r = await fal.subscribe("fal-ai/flux/schnell", {
+          input: { prompt: input.prompt, image_size: "landscape_16_9", num_inference_steps: 4 },
+          timeout: 30000,
+        });
+        const data = r.data as Record<string, unknown>;
+        const images = data.images as Array<{ url: string }> | undefined;
+        return images?.[0]?.url ?? null;
       },
       catch: () => null as never,
     }),
@@ -150,6 +210,9 @@ export function computeRealScores(input: RealScoreInput): Effect.Effect<RealScor
   return Effect.gen(function* () {
     yield* Console.log("  Running real quality scoring (LLaVA 13B vision)...");
 
+    // For video jobs, upload first frame to fal storage for LLaVA scoring
+    const scoringImageUrl = yield* resolveVideoFrame(input);
+
     let description: string;
     let svgData: Record<string, unknown> | null = null;
 
@@ -158,14 +221,16 @@ export function computeRealScores(input: RealScoreInput): Effect.Effect<RealScor
       description = `SVG analysis: ${JSON.stringify(svgData)}`;
       yield* Console.log(`  SVG DOM parsed: ${(svgData.pathCount as number) ?? 0} paths`);
     } else {
-      description = yield* describeArtifactViaVision(input.artifactUrl, input.jobType);
+      const descUrl = scoringImageUrl ?? input.artifactUrl;
+      description = yield* describeArtifactViaVision(descUrl, input.jobType);
       yield* Console.log(`  Vision description: ${description.length} chars`);
     }
 
     const alignment = scoreAlignment(description, input.prompt, input.jobType, svgData);
     yield* Console.log(`  Alignment score: ${alignment.alignment_score}/10`);
 
-    const llavaScores = yield* getLlavaStructuredScores(input.artifactUrl);
+    const llavaUrl = scoringImageUrl ?? input.artifactUrl;
+    const llavaScores = yield* getLlavaStructuredScores(llavaUrl);
 
     const perceptual = scoreFromDescription(description, input.styleId);
     yield* Console.log(

@@ -10,7 +10,7 @@ import { resolveStyle } from "../../.claude/skills/one-of-a-kind-design/scripts/
 import { selectModel } from "../../.claude/skills/one-of-a-kind-design/scripts/select-fal-models";
 import { runFalGeneration } from "../../.claude/skills/one-of-a-kind-design/scripts/run-fal-generation";
 import { computeComposite } from "../../.claude/skills/one-of-a-kind-design/scripts/score-output-quality";
-import { computeFallbackScores } from "../lib/real-scoring";
+import { computeRealScores, computeFallbackScores } from "../lib/real-scoring";
 import { distillPrompt, distillNegative } from "../lib/distill-prompt";
 
 const USER_PROMPT = "5-second logo reveal animation for a tech startup called 'Prism'";
@@ -49,8 +49,21 @@ const program = Effect.gen(function* () {
     catch: () => new Error("HEAD failed"),
   });
 
-  // Video scoring uses fallback (LLaVA cannot process mp4 frames directly)
-  const scores = computeFallbackScores(fileSizeBytes, "video-gen", resolved.conventionBreak.applied);
+  const scores = yield* pipe(
+    computeRealScores({
+      artifactUrl: genResult.url,
+      prompt: distilled,
+      styleId: resolved.id,
+      jobType: "video-gen",
+      fileSizeBytes,
+      conventionBreakApplied: resolved.conventionBreak.applied,
+    }),
+    Effect.catchAll(() =>
+      Effect.succeed(
+        computeFallbackScores(fileSizeBytes, "video-gen", resolved.conventionBreak.applied),
+      ),
+    ),
+  );
   const report = computeComposite(scores);
   yield* Console.log(`\n${report.scoreCard}`);
 });
