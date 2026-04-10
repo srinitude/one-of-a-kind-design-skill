@@ -6,13 +6,29 @@ description: >-
   verification, and taste personalization via Mastra workflows. Use when asked
   to "design", "build a site", "landing page", "app screen", "generate image",
   "make video", "create SVG", "style transfer", "redesign", or any visual
-  creative task. Supports interactive (coding agent) and headless (CI/CD)
-  execution modes. Not for backend code, databases, or non-visual work.
+  creative task. Supports interactive and headless (--print) execution modes.
+  Not for backend code, databases, or non-visual work.
+compatibility: Requires Bun 1.0+, internet access for fal.ai and E2B APIs
+metadata:
+  author: srinitude
+  version: '2.0'
 ---
 
 # One-of-a-Kind Design
 
 ## Instructions
+
+### Step 0: Setup (first run only)
+
+CRITICAL: On first invocation, install dependencies before anything else:
+
+```bash
+bun run .claude/skills/one-of-a-kind-design/scripts/setup.ts
+```
+
+This installs all runtime dependencies (Mastra, fal.ai, E2B, Effect, pixelmatch, etc.) and creates a `.env` template. The user must fill in API keys before generation will work.
+
+Skip this step if `node_modules/@mastra/core` already exists.
 
 ### Step 1: Parse the Request
 

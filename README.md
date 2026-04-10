@@ -115,6 +115,14 @@ No platform-specific features. No vendor lock-in. All agent directories are syml
 npx skills add srinitude/one-of-a-kind-design-skill
 ```
 
+Then run setup (installs Bun dependencies, Mastra, fal.ai SDK, E2B, etc.):
+
+```
+/one-of-a-kind-design setup
+```
+
+Or manually: `bun run .claude/skills/one-of-a-kind-design/scripts/setup.ts`
+
 Add API keys to `.env`:
 
 ```
