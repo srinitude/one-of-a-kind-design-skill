@@ -1,215 +1,117 @@
 # one-of-a-kind-design
 
-An agent skill that generates unique, high-quality websites, apps, images, SVGs, and videos. Deterministic pipeline, every time. Works in any coding agent.
+Every output is unique. Every output is high-quality. Every time.
 
-Built on [Mastra](https://mastra.ai) for typed workflows, streaming, time-travel debugging, and persistence. Follows the [agentskills.io](https://agentskills.io) specification.
+This is an agent skill that generates websites, apps, images, SVGs, and videos that don't look like anything else — and never look like each other.
 
-## What it does
+## The problem
 
-Describe what you want. The skill handles the rest.
+AI-generated design looks like AI-generated design. The same gradients, the same layouts, the same stock-photo compositions, the same Inter font on the same purple-to-blue hero section. You can spot it instantly. Your audience can too.
+
+## What this solves
+
+Tell your coding agent what you need. The skill handles everything else — and what comes back is genuinely yours.
 
 ```
-"Design a website for my omakase restaurant in Brooklyn. No food photos."
+"Design a website for my 12-seat omakase restaurant in Brooklyn. No food photos."
 ```
 
-The pipeline:
+What you get: a wabi-sabi website with hand-textured typography, seasonal palette that changes with the menu, deliberate imperfection that feels like sitting at the counter. No food photography — because you said so, and the skill understood why.
 
-1. **Parses your intent** — extracts output type, industry, mood, audience, specificity
-2. **Resolves a visual style** from a taxonomy of 66 styles (wabi-sabi, art deco, brutalist, glitch, etc.)
-3. **Applies creative dials** — design variance, motion intensity, visual density, audience formality
-4. **Selects convention breaks** — deterministic subversion of design dogma based on variance level
-5. **Crafts an optimized prompt** via a Mastra agent (never passes raw user words to generation APIs)
-6. **Generates via fal.ai** — text-to-image, image-to-image, image-to-video (Seedance 2.0), text-to-video
-7. **Post-processes in E2B** — sandbox execution for format conversion, optimization, compositing
-8. **Verifies with 4 layers** — pixelmatch (pixel diff), SSIM (structural), pHash (perceptual), uniqueness check
-9. **Scores quality** via LLaVA 13B vision model — real measured scores, not simulated
-10. **Gates at 7.0/10** — below that, auto-retries with seed bump and time-travel back to prompt crafting
+```
+"Album cover for a jazz trio's debut record. Smoky, intimate, blue."
+```
 
-Same inputs produce the same creative decisions every time. The pixels change, the taste doesn't.
+What you get: cinematic artwork with atmospheric lighting, shadows that have weight, a palette built from three specific hex values pulled from the jazz-appropriate color theory — not "blue" the way every AI tool interprets blue.
 
-## Supported coding agents
+```
+"15-second trailer for our deconstructed Madama Butterfly staging"
+```
 
-This skill works in any agent that reads the [agentskills.io](https://agentskills.io) specification:
+What you get: a video with fractured visual language, camera movements that mirror the opera's emotional arc, shot transitions that feel like set design — because the skill understands deconstructivism as a philosophy, not a filter.
 
-| Agent | Skill Path |
-|---|---|
-| Claude Code | `.claude/skills/one-of-a-kind-design/` |
-| Cursor | `.cursor/skills/one-of-a-kind-design/` |
-| GitHub Copilot | `.github/skills/one-of-a-kind-design/` |
-| OpenAI Codex | `.codex/skills/one-of-a-kind-design/` |
-| Gemini CLI | `.gemini/skills/one-of-a-kind-design/` |
-| Windsurf | `.windsurf/skills/one-of-a-kind-design/` |
-| Augment | `.augment/skills/one-of-a-kind-design/` |
-| OpenCode | `.opencode/skills/one-of-a-kind-design/` |
-| Antigravity | `.agent/skills/one-of-a-kind-design/` |
-| Cross-platform | `.agents/skills/one-of-a-kind-design/` |
+## Why every output is unique
 
-All paths are symlinks to the canonical `.claude/skills/one-of-a-kind-design/` directory.
+The skill maintains a fingerprint library. Every image it generates gets a perceptual hash. Before delivering anything, it checks that hash against every previous generation. If two outputs are too similar — even across different sessions, different prompts, different projects — it regenerates with a different seed until the result is genuinely distinct.
 
-## Install
+Run the same prompt twice. You'll get two different images that both nail the brief. The creative decisions are identical (same style, same palette, same composition logic). The pixels are not.
+
+## Why every output is high-quality
+
+A vision model (LLaVA 13B) evaluates every generation across 10 dimensions: style fidelity, color harmony, composition, distinctiveness, prompt alignment, aesthetic quality, asset quality, hierarchy, anti-slop compliance, and convention break adherence. Each dimension gets a real score from the vision model actually looking at the output — not a simulated number.
+
+The minimum composite score to deliver is 7.0 out of 10. Below that, the pipeline automatically retries — adjusting the prompt, bumping the seed, escalating one model tier at a time. After 3 failed attempts, it stops and tells you honestly rather than delivering something mediocre.
+
+## Why every output is deterministic
+
+Given the same request, the skill makes the same creative decisions every time:
+
+- Same style resolution (wabi-sabi for the omakase, cinematic for the jazz album)
+- Same dial settings (design variance 7, motion intensity 3, visual density 3)
+- Same convention breaks (no food photography on a restaurant site — deterministic, not random)
+- Same prompt structure (subject first, 2-3 hex colors, composition directive, 300 char max)
+- Same model selection (Flux Pro 1.1 for cinematic, Seedance 2.0 for video)
+- Same quality threshold (7.0/10 minimum, same scoring weights)
+
+The pipeline is fixed. The judgment is fixed. Only the pixels vary — and that's the point.
+
+## What you can make
+
+**Websites** — Landing pages, portfolios, product sites. The skill generates hero images, selects typography, builds Tailwind presets, and composes realistic content. No Lorem Ipsum, no Acme Corp.
+
+**Web apps** — Dashboards, admin panels, internal tools. Data visualization that serves the data, not the other way around.
+
+**Images** — Album covers, event posters, book covers, product photography, editorial illustrations. Style-transferred, composited, or generated from scratch.
+
+**SVGs** — Logos, icon sets, decorative patterns. Real vector paths, not rasters wrapped in SVG tags.
+
+**Videos** — Trailers, product reveals, logo animations, architectural flythroughs. Image-to-video via Seedance 2.0 with timeline notation for multi-shot sequences.
+
+**Mobile apps** — Onboarding flows, settings pages, social feeds. Phone-framed mockups with touch-appropriate design.
+
+## How it works (for the curious)
+
+The skill resolves your request against a taxonomy of 66 visual styles — from wabi-sabi to brutalist web to afrofuturism to liquid glass. Each style carries its own color theory, typography rules, motion signatures, and convention-breaking pairs (the things that style intentionally violates).
+
+It then applies four tunable dials — design variance (how experimental), motion intensity (how kinetic), visual density (how much breathing room), and audience formality (how polished). These dials are set by the style but can be overridden.
+
+A prompt gets crafted by a dedicated agent — 300 characters max, subject-first, with exact hex values and composition directives. The prompt goes to fal.ai for generation, then through an E2B sandbox for post-processing, then through pixel-level verification (4 layers: exact pixel diff, structural similarity, perceptual fingerprint, uniqueness check), then through vision-model scoring.
+
+If the output doesn't pass, the pipeline time-travels back to prompt crafting with feedback from the scorer and tries again. No manual intervention needed.
+
+## Works everywhere
+
+This skill follows the [agentskills.io](https://agentskills.io) open standard. It runs in:
+
+Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Windsurf, Augment, OpenCode, Antigravity — and any other coding agent that reads the standard.
+
+No platform-specific features. No vendor lock-in.
+
+## Get started
 
 ```bash
 npx skills add srinitude/one-of-a-kind-design-skill
 ```
 
-Or clone manually:
+Add your API keys to `.env`:
+
+```
+FAL_KEY=your-key-from-fal.ai
+E2B_API_KEY=your-key-from-e2b.dev
+QUIVERAI_API_KEY=your-key-from-quiver.ai
+```
+
+Then ask your coding agent to design something.
+
+## Interactive vs. headless
+
+**In a coding agent:** The skill streams progress as it works. When the quality gate fires, it shows you the scores and asks what to do — accept, retry with feedback, or adjust the creative direction. You're in the loop.
+
+**In CI/CD:** The skill runs autonomously with zero human input. Pass, retry, or fail. Exit code 0 or 1. Snapshots saved on failure for debugging.
 
 ```bash
-git clone https://github.com/srinitude/one-of-a-kind-design-skill.git
-cd one-of-a-kind-design-skill
-bun install
+bun run scripts/mastra/modes/ci.ts '{"userIntent":"...","outputType":"image"}'
 ```
-
-## Prerequisites
-
-- [Bun](https://bun.sh) v1.0+
-- API keys (in `.env` at project root):
-
-```
-FAL_KEY=your-fal-ai-key
-E2B_API_KEY=your-e2b-key
-QUIVERAI_API_KEY=your-quiverai-key
-```
-
-Get keys from: [fal.ai/dashboard/keys](https://fal.ai/dashboard/keys), [e2b.dev/dashboard](https://e2b.dev/dashboard), [app.quiver.ai](https://app.quiver.ai)
-
-## Two execution modes
-
-### Interactive (coding agent)
-
-Type a request in your coding agent. The Mastra workflow streams progress, suspends at quality gates for your feedback, and supports "try again" via time-travel.
-
-```
-> "Design a portfolio site for an architecture firm that builds with reclaimed materials"
-```
-
-The agent runs `bun run scripts/mastra/modes/interactive.ts` with your request and streams each pipeline step.
-
-### Headless (CI/CD)
-
-Fully autonomous. No suspend, no human input. Auto-retries via time-travel on failure. Exit code 0 for success, 1 for failure.
-
-```bash
-bun run scripts/mastra/modes/ci.ts '{"userIntent":"album cover for a jazz trio","outputType":"image"}'
-```
-
-## Output types
-
-| Type | Generation chain | Models |
-|---|---|---|
-| Website | t2i → E2B → website build | Flux Pro 1.1 |
-| Web App | t2i → E2B → app build | Flux Pro 1.1 |
-| Image | t2i (or t2i → i2i for style transfer) | Flux Pro, Recraft V3 |
-| SVG | QuiverAI Arrow (or Recraft V3 vector) | QuiverAI, Recraft |
-| Video | t2i → i2v (or t2v direct) | Seedance 2.0, WAN T2V |
-| Mobile App | t2i → E2B → phone frame | Flux Pro 1.1 |
-| Style Transfer | i2i with reference | Flux Dev I2I |
-
-## Architecture
-
-### Mastra workflow pipeline
-
-```
-resolveStyle → selectModels → craftPrompt → generate → postProcess → verify → score → qualityGate → persistContext
-```
-
-Each step is a typed Mastra `createStep()` with Zod input/output schemas, streaming via `writer`, and automatic snapshot persistence for time-travel.
-
-### Mastra tools (typed, traceable)
-
-| Tool | Purpose |
-|---|---|
-| `fal-generate-image` | Text-to-image via fal.ai |
-| `fal-generate-video` | Text/image-to-video (Seedance 2.0, WAN) |
-| `fal-i2i` | Image-to-image style transfer |
-| `llava-score` | LLaVA 13B vision quality scoring |
-| `e2b-process` | E2B sandbox post-processing |
-| `verify-image` | 4-layer pixel verification |
-
-### Verification stack
-
-Every generation passes through 4 deterministic checks:
-
-| Layer | What it measures | Used for |
-|---|---|---|
-| Pixelmatch | Exact pixel diff | Confirming refinement changes were applied |
-| SSIM | Structural similarity (0-1) | Style transfer validation (target 0.4-0.7) |
-| pHash | Perceptual fingerprint | Convergence detection (hamming 0 = stop) |
-| Uniqueness | Distance to known outputs | Ensuring every output is one-of-a-kind |
-
-### Quality scoring (LLaVA 13B)
-
-Real vision model evaluation — no simulated scores:
-
-| Dimension | Weight |
-|---|---|
-| Anti-slop gate | 0.15 |
-| Prompt-artifact alignment | 0.15 |
-| Aesthetic quality | 0.13 |
-| Style fidelity | 0.13 |
-| Distinctiveness | 0.13 |
-| Asset quality | 0.12 |
-| Code standards | 0.03 |
-| Hierarchy | 0.06 |
-| Color harmony | 0.05 |
-| Convention break adherence | 0.05 |
-
-Composite must reach 7.0/10 to pass.
-
-### MCP server
-
-The skill exposes its tools as an MCP server for use by any MCP-compatible client:
-
-```bash
-bun run scripts/mastra/mcp/server.ts
-```
-
-### Project context persistence
-
-Across a session, the skill remembers:
-- Locked style (same visual DNA for all subsequent generations)
-- Extracted palette (exact hex values enforced)
-- Character references (consistent faces/subjects)
-- Generation history (prompt + seed + URL for every output)
-- pHash library (growing uniqueness baseline)
-
-### Taste profiles
-
-Learned user preferences across 7 axes: density, tone, color energy, type personality, radius, elevation, motion. Built from pair ranking and accept/reject signals.
-
-## Code rules
-
-Enforced across all scripts:
-
-1. **Bun-only** — `Bun.file`, `Bun.write`, `Bun.env`, `Bun.argv` (no Node.js APIs)
-2. **Effect-native** — `Effect.gen`, `Effect.tryPromise`, `Data.TaggedError` (no raw promises, try/catch)
-3. **Max nesting depth 3** — no more than 3 levels of `Effect.gen`/`flatMap` per function
-4. **50-line limit** — all functions, types, interfaces, classes
-
-## Commands
-
-| Command | Description |
-|---|---|
-| `bun run build` | Typecheck |
-| `bun run lint` | Biome lint |
-| `bun run test` | Run 267 tests |
-| `bun run enforce` | Verify code rules (75 files, 0 violations) |
-| `bun run validate` | Full: build + lint + enforce + test |
-| `bun run check-keys` | Verify API keys |
-
-## Examples
-
-See `examples/` for project-based walkthroughs showing real user invocations across all output types. Each example has a README.md documenting the skill invocation experience — what you type, what the pipeline does, what scores it gets.
-
-## Troubleshooting
-
-| Issue | Fix |
-|---|---|
-| fal.ai 404 | Model endpoint deprecated. Run `bun run test` to verify working endpoints |
-| Composite below 7.0 | In interactive mode, provide feedback. In headless, auto-retries 3 times |
-| E2B sandbox fails | Check `E2B_API_KEY` quota at [e2b.dev/dashboard](https://e2b.dev/dashboard) |
-| QuiverAI timeout | Falls back to Recraft V3 vector illustration mode |
-| Same output twice | Uniqueness check catches it — auto-bumps seed |
 
 ## License
 
