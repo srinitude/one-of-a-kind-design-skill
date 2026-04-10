@@ -8,84 +8,106 @@ This is an agent skill that generates websites, apps, images, SVGs, and videos t
 
 AI-generated design looks like AI-generated design. The same gradients, the same layouts, the same stock-photo compositions, the same Inter font on the same purple-to-blue hero section. You can spot it instantly. Your audience can too.
 
-## What this solves
+Generic design skills generate generic output. They pick a template, fill in the blanks, and ship. There's no taste, no verification, no guarantee that what comes back actually matches what was asked for — or that it's any different from what they made for the last person.
 
-Tell your coding agent what you need. The skill handles everything else — and what comes back is genuinely yours.
+## What makes this different
+
+### Deterministic creative decisions
+
+Given the same request, this skill makes the same creative decisions every time. Same style resolution, same dial settings, same convention breaks, same prompt structure, same model selection, same quality threshold. The pipeline is fixed. The judgment is fixed. Only the pixels vary.
+
+Other skills roll the dice. This one doesn't.
+
+### Verified uniqueness
+
+Every generation gets a perceptual fingerprint. Before delivering anything, the skill checks that fingerprint against every previous output. If two results are too similar — across sessions, prompts, or projects — it regenerates until the output is genuinely distinct.
+
+Other skills have no memory. This one accumulates a uniqueness baseline that gets stricter over time.
+
+### Real quality scoring
+
+A vision model (LLaVA 13B) evaluates every output across 10 dimensions. Real scores from a model actually looking at the image — not simulated numbers. Minimum 7.0/10 composite to deliver. Below that, auto-retry with adjusted prompts and escalated models. After 3 failures, honest reporting instead of mediocre delivery.
+
+Other skills trust the first generation. This one verifies.
+
+### 4-layer pixel verification
+
+Every output passes through pixelmatch (exact pixel diff), SSIM (structural similarity), pHash (perceptual fingerprint), and uniqueness checking. Style transfers are validated for the right similarity range. Refinement loops are confirmed to have actually changed something. Convergence is detected automatically.
+
+Other skills generate and hope. This one measures.
+
+### 66-style taxonomy with convention breaking
+
+Not "modern" or "minimalist" — specific styles like wabi-sabi, brutalist-web, afrofuturism, liquid-glass, retro-vintage-print, each with their own color theory, typography, motion signatures, and documented rules about which design conventions they intentionally violate.
+
+Other skills have a handful of themes. This one has a design education.
+
+## When to use this skill
+
+Use when the user asks to design, build, create, generate, or make anything visual:
+
+- "Design a website for..." → website with hero image, Tailwind preset, realistic content
+- "Create a logo for..." → SVG with real vector paths, multi-size tested
+- "Make an album cover..." → image with style-specific composition, exact hex palette
+- "Build an app screen for..." → mobile mockup with touch-appropriate design
+- "Generate a video for..." → image-to-video via Seedance 2.0 with camera choreography
+- "Redesign this in art deco style" → image-to-image style transfer with similarity verification
+
+Do NOT use for backend code, database schemas, API design, or non-visual work.
+
+## What you can make
+
+**Websites** — Landing pages, portfolios, product sites. Hero images, typography, Tailwind presets, realistic content. No Lorem Ipsum, no Acme Corp.
+
+**Web apps** — Dashboards, admin panels, internal tools. Data visualization that serves the data.
+
+**Images** — Album covers, posters, book covers, product photography, editorial illustrations. Style-transferred, composited, or generated from scratch.
+
+**SVGs** — Logos, icon sets, patterns. Real vector paths, not rasters in SVG wrappers.
+
+**Videos** — Trailers, reveals, animations, flythroughs. Timeline notation for multi-shot sequences. Native audio generation.
+
+**Mobile apps** — Onboarding, settings, feeds. Phone-framed with platform-appropriate patterns.
+
+## Examples
 
 ```
 "Design a website for my 12-seat omakase restaurant in Brooklyn. No food photos."
 ```
 
-What you get: a wabi-sabi website with hand-textured typography, seasonal palette that changes with the menu, deliberate imperfection that feels like sitting at the counter. No food photography — because you said so, and the skill understood why.
+→ Wabi-sabi style, hand-textured typography, seasonal palette, deliberate imperfection. Convention break: no food photography on a restaurant site. Composite score 7.9/10.
 
 ```
 "Album cover for a jazz trio's debut record. Smoky, intimate, blue."
 ```
 
-What you get: cinematic artwork with atmospheric lighting, shadows that have weight, a palette built from three specific hex values pulled from the jazz-appropriate color theory — not "blue" the way every AI tool interprets blue.
+→ Cinematic style, atmospheric lighting, shadows with weight. Three hex values from jazz-appropriate color theory. Composite score 7.7/10.
 
 ```
 "15-second trailer for our deconstructed Madama Butterfly staging"
 ```
 
-What you get: a video with fractured visual language, camera movements that mirror the opera's emotional arc, shot transitions that feel like set design — because the skill understands deconstructivism as a philosophy, not a filter.
+→ Deconstructivism style, fractured visual language, camera movements mirroring emotional arc. Keyframe generated, then animated via Seedance 2.0. Composite score 7.2/10.
 
-## Why every output is unique
+```
+"Logo for a sustainable fashion brand called Thread"
+```
 
-The skill maintains a fingerprint library. Every image it generates gets a perceptual hash. Before delivering anything, it checks that hash against every previous generation. If two outputs are too similar — even across different sessions, different prompts, different projects — it regenerates with a different seed until the result is genuinely distinct.
-
-Run the same prompt twice. You'll get two different images that both nail the brief. The creative decisions are identical (same style, same palette, same composition logic). The pixels are not.
-
-## Why every output is high-quality
-
-A vision model (LLaVA 13B) evaluates every generation across 10 dimensions: style fidelity, color harmony, composition, distinctiveness, prompt alignment, aesthetic quality, asset quality, hierarchy, anti-slop compliance, and convention break adherence. Each dimension gets a real score from the vision model actually looking at the output — not a simulated number.
-
-The minimum composite score to deliver is 7.0 out of 10. Below that, the pipeline automatically retries — adjusting the prompt, bumping the seed, escalating one model tier at a time. After 3 failed attempts, it stops and tells you honestly rather than delivering something mediocre.
-
-## Why every output is deterministic
-
-Given the same request, the skill makes the same creative decisions every time:
-
-- Same style resolution (wabi-sabi for the omakase, cinematic for the jazz album)
-- Same dial settings (design variance 7, motion intensity 3, visual density 3)
-- Same convention breaks (no food photography on a restaurant site — deterministic, not random)
-- Same prompt structure (subject first, 2-3 hex colors, composition directive, 300 char max)
-- Same model selection (Flux Pro 1.1 for cinematic, Seedance 2.0 for video)
-- Same quality threshold (7.0/10 minimum, same scoring weights)
-
-The pipeline is fixed. The judgment is fixed. Only the pixels vary — and that's the point.
-
-## What you can make
-
-**Websites** — Landing pages, portfolios, product sites. The skill generates hero images, selects typography, builds Tailwind presets, and composes realistic content. No Lorem Ipsum, no Acme Corp.
-
-**Web apps** — Dashboards, admin panels, internal tools. Data visualization that serves the data, not the other way around.
-
-**Images** — Album covers, event posters, book covers, product photography, editorial illustrations. Style-transferred, composited, or generated from scratch.
-
-**SVGs** — Logos, icon sets, decorative patterns. Real vector paths, not rasters wrapped in SVG tags.
-
-**Videos** — Trailers, product reveals, logo animations, architectural flythroughs. Image-to-video via Seedance 2.0 with timeline notation for multi-shot sequences.
-
-**Mobile apps** — Onboarding flows, settings pages, social feeds. Phone-framed mockups with touch-appropriate design.
+→ Editorial-minimalism, single-color vector mark, tested at 16px favicon and 4K. Real SVG paths via Recraft V3. Composite score 7.5/10.
 
 ## How it works (for the curious)
 
-The skill resolves your request against a taxonomy of 66 visual styles — from wabi-sabi to brutalist web to afrofuturism to liquid glass. Each style carries its own color theory, typography rules, motion signatures, and convention-breaking pairs (the things that style intentionally violates).
+The skill resolves your request against 66 visual styles, applies 4 tunable dials (variance, motion, density, formality), crafts a 300-character prompt with exact hex values, generates via fal.ai, post-processes in an E2B sandbox, verifies through 4 pixel-level checks, scores with a vision model, and gates at 7.0/10 minimum.
 
-It then applies four tunable dials — design variance (how experimental), motion intensity (how kinetic), visual density (how much breathing room), and audience formality (how polished). These dials are set by the style but can be overridden.
+If the output fails, the pipeline time-travels back to prompt crafting with scorer feedback and tries again. No manual intervention needed.
 
-A prompt gets crafted by a dedicated agent — 300 characters max, subject-first, with exact hex values and composition directives. The prompt goes to fal.ai for generation, then through an E2B sandbox for post-processing, then through pixel-level verification (4 layers: exact pixel diff, structural similarity, perceptual fingerprint, uniqueness check), then through vision-model scoring.
-
-If the output doesn't pass, the pipeline time-travels back to prompt crafting with feedback from the scorer and tries again. No manual intervention needed.
+The full pipeline runs as a Mastra workflow — typed steps with Zod schemas, streaming progress, snapshot persistence, and time-travel debugging. Interactive mode suspends at quality gates for human feedback. Headless mode runs fully autonomous for CI/CD.
 
 ## Works everywhere
 
-This skill follows the [agentskills.io](https://agentskills.io) open standard. It runs in:
+Follows the [agentskills.io](https://agentskills.io) open standard. Runs in Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Windsurf, Augment, OpenCode, Antigravity, and any other agent that reads the spec.
 
-Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Windsurf, Augment, OpenCode, Antigravity — and any other coding agent that reads the standard.
-
-No platform-specific features. No vendor lock-in.
+No platform-specific features. No vendor lock-in. All agent directories are symlinked to one canonical source.
 
 ## Get started
 
@@ -93,7 +115,7 @@ No platform-specific features. No vendor lock-in.
 npx skills add srinitude/one-of-a-kind-design-skill
 ```
 
-Add your API keys to `.env`:
+Add API keys to `.env`:
 
 ```
 FAL_KEY=your-key-from-fal.ai
@@ -105,9 +127,9 @@ Then ask your coding agent to design something.
 
 ## Interactive vs. headless
 
-**In a coding agent:** The skill streams progress as it works. When the quality gate fires, it shows you the scores and asks what to do — accept, retry with feedback, or adjust the creative direction. You're in the loop.
+**In a coding agent:** Streams progress. Shows scores. Asks what to do at quality gates. You stay in the loop.
 
-**In CI/CD:** The skill runs autonomously with zero human input. Pass, retry, or fail. Exit code 0 or 1. Snapshots saved on failure for debugging.
+**In CI/CD:** Zero human input. Pass, retry, or fail. Exit code 0 or 1. Snapshots saved on failure.
 
 ```bash
 bun run scripts/mastra/modes/ci.ts '{"userIntent":"...","outputType":"image"}'
