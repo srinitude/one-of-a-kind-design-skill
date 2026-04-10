@@ -39,21 +39,15 @@ const retryPolicy = pipe(
 
 // --- Generation ---
 
-function truncatePrompt(prompt: string): string {
-  if (prompt.length <= 500) return prompt;
-  return `${prompt.slice(0, 497)}...`;
-}
+// Flux Pro uses T5-XXL encoder — no need to truncate prompts
+// Full creative prompts pass through unmodified
 
 export function runFalGeneration(
   input: FalGenerationInput,
 ): Effect.Effect<FalGenerationResult, Error> {
-  const prompt = truncatePrompt(input.prompt);
-  const logTruncation =
-    prompt.length < input.prompt.length
-      ? Console.log(`[run-fal] Prompt truncated: ${input.prompt.length} -> ${prompt.length} chars`)
-      : Effect.void;
+  const prompt = input.prompt;
   return pipe(
-    logTruncation,
+    Effect.void,
     Effect.flatMap(() =>
       pipe(
         Effect.tryPromise({

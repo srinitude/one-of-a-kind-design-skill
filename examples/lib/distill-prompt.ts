@@ -1,9 +1,9 @@
 /**
  * distill-prompt.ts — Distills rich style context into a focused fal.ai prompt.
  *
- * fal.ai models (especially Flux) have effective prompt attention that degrades
- * after ~77 tokens (CLIP limit). This function produces a ~55-77 token prompt
- * by layering: visual metaphor, style anchor, palette, composition, quality.
+ * Flux Pro uses T5-XXL encoder which handles 512+ tokens.
+ * No artificial truncation — the full creative prompt goes through.
+ * Layers: oblique visual metaphor, style anchor, convention break, palette, composition.
  *
  * ROOT CAUSE FIXES (from visual evaluation):
  * 1. NEVER include text, typography, buttons, or UI elements — fal.ai can't render text
@@ -15,7 +15,9 @@
  */
 import { Effect, pipe } from "effect";
 
-const MAX_PROMPT_LENGTH = 300;
+// Flux Pro uses T5-XXL encoder (not CLIP) — supports 512+ tokens (~2000 chars)
+// No artificial truncation. Let the full prompt through.
+const MAX_PROMPT_LENGTH = 2000;
 
 interface StyleLike {
   readonly id: string;
