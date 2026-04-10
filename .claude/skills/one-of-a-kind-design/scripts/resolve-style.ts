@@ -16,6 +16,8 @@ import { resolveConventionBreak } from "./resolve-convention-break";
 
 // --- Types ---
 
+type RecommendedChain = "t2i" | "t2i-i2i" | "t2i-i2v" | "i2i" | "t2i-i2i-i2v";
+
 interface ResolvedStyle {
   readonly id: string;
   readonly name: string;
@@ -39,6 +41,7 @@ interface ResolvedStyle {
   readonly dialModifiers: DialModifiers;
   readonly conventionBreak: ConventionBreakSelection;
   readonly audienceFit: AudienceFitResult;
+  readonly recommendedChain: RecommendedChain;
 }
 
 interface StyleResolutionInput {
@@ -48,6 +51,8 @@ interface StyleResolutionInput {
   readonly audience?: string;
   readonly dialOverrides?: Record<string, number>;
   readonly _userIntent?: string;
+  readonly outputType?: string;
+  readonly hasReferenceImage?: boolean;
 }
 
 // --- Taxonomy Loader ---
@@ -157,6 +162,25 @@ const COMPOUND_MAP: Record<string, string> = {
 
 // --- Resolution ---
 
+function determineChain(
+  input: StyleResolutionInput,
+  conventionBreak: ConventionBreakSelection,
+  variance: number,
+): RecommendedChain {
+  const intent = (input._userIntent ?? "").toLowerCase();
+  const outputType = input.outputType ?? "";
+  const isStyleTransfer =
+    intent.includes("style transfer") || intent.includes("redesign") || intent.includes("restyle");
+  const isVideo = outputType === "video";
+  const hasRef = input.hasReferenceImage ?? false;
+
+  if (isVideo && hasRef) return "t2i-i2i-i2v";
+  if (isVideo) return "t2i-i2v";
+  if (isStyleTransfer) return "i2i";
+  if (conventionBreak.applied && variance >= 8) return "t2i-i2i";
+  return "t2i";
+}
+
 export const resolveStyle = (
   taxonomy: Record<string, unknown>,
   input: StyleResolutionInput,
@@ -237,6 +261,7 @@ export const resolveStyle = (
     dialModifiers,
     conventionBreak,
     audienceFit,
+    recommendedChain: determineChain(input, conventionBreak, dials.design_variance ?? 5),
   });
 };
 

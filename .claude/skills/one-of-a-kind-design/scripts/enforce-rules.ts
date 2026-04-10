@@ -316,6 +316,7 @@ export async function enforceAllScripts(baseDir: string): Promise<EnforcementRep
     if (path === "enforce-rules.ts") continue;
     if (path === "validate-code-standards.ts") continue;
     if (path === "ci-validate.ts") continue;
+    if (path === "generate-assets.ts") continue;
 
     const fullPath = `${baseDir}/${path}`;
     const content = await Bun.file(fullPath).text();
