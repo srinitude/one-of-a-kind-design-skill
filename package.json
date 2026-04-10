@@ -15,21 +15,25 @@
     "validate": "bun run build && bun run lint && bun run enforce && bun run test",
     "validate:full": "bun run validate && bun run .claude/skills/one-of-a-kind-design/scripts/check-api-keys.ts",
     "check-keys": "bun run .claude/skills/one-of-a-kind-design/scripts/check-api-keys.ts",
-    "generate-assets": "bun run .claude/skills/one-of-a-kind-design/generate-assets.ts"
+    "generate-assets": "bun run .claude/skills/one-of-a-kind-design/scripts/generate-assets.ts"
   },
   "dependencies": {
-    "effect": "^3.14.0",
+    "@e2b/code-interpreter": "^1.2.0",
     "@effect/platform": "^0.78.0",
     "@fal-ai/client": "^1.2.0",
     "@quiverai/sdk": "^0.4.0",
-    "@e2b/code-interpreter": "^1.2.0",
-    "yaml": "^2.7.0",
-    "archiver": "^7.0.0"
+    "archiver": "^7.0.0",
+    "effect": "^3.14.0",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "ssim.js": "^3.5.0",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
     "@types/archiver": "^6.0.0",
     "@types/bun": "^1.2.0",
+    "@types/pngjs": "^6.0.5",
     "bun-types": "^1.3.11",
     "typescript": "^5.8.0"
   }
