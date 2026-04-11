@@ -6552,7 +6552,7 @@ implementation:
       scene_templates:
         website_hero: "a clean geometric form being torn apart by data corruption, color channels separating in bands, the destruction reveals hidden color layers beneath the surface"
         album_cover: "a face-down phone screen cracked in a starburst pattern, each crack refracting a different color from the display beneath, the break pattern is beautiful"
-        event_poster: "thermal imaging camera view of a raw concrete warehouse wall showing residual body heat signatures where dancers pressed against the surface, handprints and shoulder impressions glowing in infrared magenta fading at edges, horizontal scan line artifacts cutting through the thermal data"
+        event_poster: "condensation on the inside of a filthy industrial warehouse window, hundreds of breaths have fogged the glass, finger-drawn smears cut through revealing blurred neon green and magenta lights outside, the glass itself is the canvas of the party, grime and sweat, concrete window frame, extreme close-up macro"
         logo: "abstract mark that appears to be a clean form suffering a single glitch — one horizontal band shifted, or one color channel displaced, the error IS the mark"
         video_keyframe: "clean footage that develops progressive corruption, starting from one corner and spreading, the corruption has its own rhythm and logic"
         mobile_hero: "horizontal bands of shifted color channels on a dark background, each band a different displacement amount, data-corruption as color palette"
