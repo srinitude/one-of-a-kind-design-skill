@@ -30,10 +30,22 @@ const INDUSTRY_VOCAB: Record<string, IndustryVocab> = {
     heroObject: "the joint where two materials meet",
   },
   food: {
-    materials: ["ceramic", "lacquered wood", "copper", "hand-thrown pottery"],
-    props: ["signature dish", "chef's knife", "steam rising", "condensation"],
-    environments: ["kitchen counter", "prep station", "dining counter"],
-    heroObject: "the surface where food is served",
+    materials: ["hand-thrown ceramic", "lacquered hinoki wood", "hammered copper"],
+    props: ["steam rising from broth", "condensation on cold glass", "a single perfect ingredient"],
+    environments: ["intimate counter with 8 seats", "open kitchen pass", "seasonal ingredient display"],
+    heroObject: "a single ceramic bowl with steam rising, the glaze catching warm light",
+  },
+  ramen: {
+    materials: ["rough unglazed ceramic", "worn hinoki counter", "bamboo"],
+    props: ["thick wheat noodles lifted by chopsticks", "soft-boiled egg halved", "nori sheet", "chashu pork"],
+    environments: ["8-seat counter with steam", "behind the noren curtain"],
+    heroObject: "a bowl of ramen with noodles lifted by chopsticks, steam rising between them, the broth surface reflecting a single warm overhead light",
+  },
+  "molecular-gastronomy": {
+    materials: ["lab glass", "pipette", "stainless steel", "edible gel"],
+    props: ["a spherified drop mid-air", "foam dissolving on a mirror plate", "tweezers placing a micro herb"],
+    environments: ["laboratory-kitchen hybrid", "plating station under surgical light"],
+    heroObject: "a single spherified droplet of liquid suspended mid-air above a mirror-black plate, the droplet refracting the surgical overhead light like a lens",
   },
   music: {
     materials: ["lacquered piano", "brass", "vinyl", "worn leather"],
@@ -72,10 +84,10 @@ const INDUSTRY_VOCAB: Record<string, IndustryVocab> = {
     heroObject: "a single frame from the work",
   },
   sustainability: {
-    materials: ["living moss", "reclaimed wood", "glacial ice", "rich soil"],
-    props: ["seedling", "growth cycle", "satellite data abstracted"],
-    environments: ["greenhouse", "forest floor", "research station"],
-    heroObject: "the moment of transformation — decay becoming growth",
+    materials: ["living moss on reclaimed wood", "mycelium texture", "weathered driftwood"],
+    props: ["seedling pushing through cracked earth", "cross-section of old-growth tree rings", "morning dew on leaf"],
+    environments: ["greenhouse interior with condensation", "rewilded forest floor", "carbon sink wetland"],
+    heroObject: "a seedling pushing through cracked dry earth, the crack pattern radiating outward like a map of the carbon cycle",
   },
   tech: {
     materials: ["matte black surface", "ambient LED edge", "frosted glass"],
@@ -101,6 +113,20 @@ const INDUSTRY_VOCAB: Record<string, IndustryVocab> = {
     environments: ["gym floor", "boxing ring corner", "starting block"],
     heroObject: "the equipment surface showing use",
   },
+};
+
+// --- Style Rendering Override ---
+// For non-photorealistic styles, Flux needs explicit rendering instructions
+const STYLE_RENDER: Record<string, string> = {
+  claymorphism: "3D clay render, soft rounded forms, pastel matte material, Blender-style clay shader, NOT a photograph",
+  "liquid-glass": "translucent glass-like material, refractive caustics, liquid transparency, see-through iridescent surface",
+  glassmorphism: "frosted glass layers with blur and transparency, light bleeding through translucent panels",
+  "pixel-art": "pixel art style, 16-bit retro game aesthetic, visible square pixels, NOT photorealistic",
+  "risograph": "risograph print texture, limited ink colors with halftone dots, slight misregistration between color layers",
+  "woodcut": "woodcut print style, bold black lines carved into wood, limited color with visible wood grain texture",
+  "papercut": "layered paper cutout art, visible paper edges and shadows between layers, handcraft aesthetic",
+  vaporwave: "vaporwave aesthetic, 80s/90s digital gradient, Roman busts, grid planes, sunset palette, retro-digital",
+  afrofuturism: "Afrofuturist aesthetic, gold and indigo, geometric African patterns, sci-fi ceremonial, speculative design",
 };
 
 // --- Style Lighting Defaults ---
@@ -215,7 +241,13 @@ export function assembleScenePrompt(input: AssemblyInput): string {
     parts.push(c);
   }
 
-  // 10. QUALITY
+  // 10. STYLE RENDERING (for non-photorealistic styles)
+  const renderOverride = STYLE_RENDER[input.styleId];
+  if (renderOverride) {
+    parts.push(renderOverride);
+  }
+
+  // 11. QUALITY
   parts.push("sharp, detailed");
 
   return parts.join(", ");

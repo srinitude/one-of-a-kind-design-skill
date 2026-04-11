@@ -122,11 +122,14 @@ function extractMoods(intent: string): string[] {
 
 const INDUSTRY_PATTERNS: Array<[RegExp, string]> = [
   [/architect/i, "architecture"],
-  [/restaurant|food|chef|cook|ramen|omakase/i, "food"],
+  [/ramen/i, "ramen"],
+  [/molecular gastronomy|spherification|foam.*plat/i, "molecular-gastronomy"],
+  [/restaurant|food|chef|cook|omakase/i, "food"],
   [/crypto|blockchain|exchange|defi/i, "crypto"],
   [/funeral|memorial|grief/i, "funeral"],
   [/music|jazz|band|album|concert|vinyl|record/i, "music"],
   [/fashion|clothing|apparel|boutique/i, "fashion"],
+  [/carbon offset|climate|sustainability|green energy|renewable/i, "sustainability"],
   [/tech|startup|saas|software|app\b/i, "tech"],
   [/photo|camera|documentary/i, "photography"],
   [/children|kids|bookstore|toy/i, "children"],
