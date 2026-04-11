@@ -190,12 +190,13 @@ export function assembleScenePrompt(input: AssemblyInput): string {
   const parts: string[] = [];
 
   // 1. SUBJECT — the most important part
-  if (input.sceneTemplate) {
-    parts.push(input.sceneTemplate);
+  // Industry heroObject wins over generic style template
+  if (vocab && vocab.heroObject) {
+    parts.push(vocab.heroObject);
   } else if (input.subjects.length > 0) {
     parts.push(input.subjects.join(" and "));
-  } else if (vocab) {
-    parts.push(vocab.heroObject);
+  } else if (input.sceneTemplate) {
+    parts.push(input.sceneTemplate);
   } else {
     parts.push(extractCoreConcept(input.intent));
   }
