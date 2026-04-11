@@ -143,15 +143,44 @@ export function checkConflicts(
 // --- Compound Phrase Map ---
 
 const COMPOUND_MAP: Record<string, string> = {
+  // Food & drink
   "molecular gastronomy": "liquid-glass",
+  "ramen shop": "wabi-sabi",
+  omakase: "wabi-sabi",
+  "tasting menu": "cinematic",
+  brewery: "brutalist-web",
+  "coffee roast": "wabi-sabi",
+  // Services
   "funeral home": "swiss-international",
+  therapist: "scandinavian-minimalism",
+  "law firm": "swiss-international",
+  // Music & nightlife
   "techno party": "glitch",
   "warehouse party": "brutalist-web",
   "jazz trio": "cinematic",
+  jazz: "cinematic",
+  "vinyl record": "retro-vintage-print",
+  "record shop": "retro-vintage-print",
+  // Tech & finance
+  cryptocurrency: "dark-mode-ui",
+  "crypto exchange": "dark-mode-ui",
+  blockchain: "dark-mode-ui",
+  "carbon offset": "swiss-international",
+  startup: "bento-ui",
+  saas: "bento-ui",
+  "data center": "dark-mode-ui",
+  // Creative
   "film production": "cinematic",
   "logo reveal": "liquid-glass",
+  perfume: "art-nouveau",
+  fragrance: "art-nouveau",
+  "animation studio": "afrofuturism",
+  // Product
   "smart watch": "studio-product",
   smartwatch: "studio-product",
+  "fashion brand": "editorial-minimalism",
+  "sneaker company": "neubrutalism",
+  // Content types
   "album cover": "cinematic",
   "book cover": "editorial-minimalism",
   "icon set": "scandinavian-minimalism",
@@ -159,6 +188,21 @@ const COMPOUND_MAP: Record<string, string> = {
   "soap packaging": "art-nouveau",
   "language learning": "material-design",
   "email client": "dark-mode-ui",
+  // Places & institutions
+  "private library": "art-deco",
+  "members club": "art-deco",
+  gallery: "editorial-minimalism",
+  museum: "swiss-international",
+  "research station": "swiss-international",
+  // Photography
+  "documentary photo": "brutalist-web",
+  "war zone": "brutalist-web",
+  "wedding photo": "cinematic",
+  // Children & education
+  bookstore: "claymorphism",
+  "children": "claymorphism",
+  "coding school": "material-design",
+  conservatory: "art-deco",
 };
 
 // --- Resolution ---
@@ -316,6 +360,13 @@ export function inferStyleFromContext(
 
   if (moodMap[mood]) return moodMap[mood];
 
+  // 2b. Scan intent for mood words when mood not explicit
+  if (!mood && intent) {
+    for (const [moodWord, style] of Object.entries(moodMap)) {
+      if (intent.includes(moodWord)) return style;
+    }
+  }
+
   // 3. Check industry map
   const industryMap: Record<string, string> = {
     tech: "bento-ui",
@@ -348,7 +399,16 @@ export function inferStyleFromContext(
     productivity: "bento-ui",
   };
 
-  return industryMap[industry] ?? "editorial-minimalism";
+  if (industryMap[industry]) return industryMap[industry];
+
+  // 3b. Scan intent for industry words when not explicit
+  if (intent) {
+    for (const [indWord, style] of Object.entries(industryMap)) {
+      if (intent.includes(indWord)) return style;
+    }
+  }
+
+  return "editorial-minimalism";
 }
 
 // --- CLI Entry ---
