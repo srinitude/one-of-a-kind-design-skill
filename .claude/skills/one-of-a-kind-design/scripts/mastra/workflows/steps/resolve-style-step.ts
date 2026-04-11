@@ -65,7 +65,7 @@ export const resolveStyleStep = createStep({
             ? dimensions.moodAestheticTags
             : undefined;
 
-        const taxonomyPath = `${import.meta.dir}/../../../../assets/TAXONOMY.yaml`;
+        const taxonomyPath = `${import.meta.dir}/../../../../references/TAXONOMY.yaml`;
         const taxonomyText = yield* Effect.tryPromise({
           try: async () => Bun.file(taxonomyPath).text(),
           catch: () => new Error("Failed to read taxonomy"),

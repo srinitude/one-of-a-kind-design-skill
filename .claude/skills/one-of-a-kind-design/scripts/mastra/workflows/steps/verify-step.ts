@@ -1,6 +1,6 @@
 /**
  * verify-step.ts — 4-layer verification.
- * Input matches post-process-step output.
+ * Input matches post-process-step output, plus styleId from pipeline context.
  */
 
 import { createStep } from "@mastra/core/workflows";
@@ -12,6 +12,7 @@ const inputSchema = z.object({
   artifactUrl: z.string(),
   contentType: z.string(),
   optimized: z.boolean(),
+  styleId: z.string().optional(),
 });
 
 const outputSchema = z.object({
@@ -20,6 +21,7 @@ const outputSchema = z.object({
   ssimIndex: z.number(),
   pHashSimilarity: z.number(),
   pixelVerdict: z.string(),
+  styleId: z.string(),
 });
 
 export const verifyStep = createStep({
@@ -36,7 +38,8 @@ export const verifyStep = createStep({
           catch: () => new Error("writer failed"),
         });
 
-        const result = yield* verifyImage(inputData.artifactUrl, null);
+        const style = inputData.styleId ?? "unknown";
+        const result = yield* verifyImage(inputData.artifactUrl, null, style);
 
         yield* Effect.tryPromise({
           try: async () =>
@@ -50,6 +53,7 @@ export const verifyStep = createStep({
           ssimIndex: result.structuralSimilarity.ssimIndex,
           pHashSimilarity: result.perceptualHash.similarity,
           pixelVerdict: result.pixelDiff.verdict,
+          styleId: style,
         };
       }),
     ),

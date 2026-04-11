@@ -6,6 +6,7 @@
 import { createScorer } from "@mastra/core/evals";
 import { createContentSimilarityScorer } from "@mastra/evals/scorers/prebuilt";
 import { Effect } from "effect";
+import { hammingDistance } from "../../verify-image.js";
 
 export type ScorerRef = Effect.Effect<void>;
 
@@ -52,5 +53,5 @@ export const uniquenessScorer = createScorer({
   })
   .generateScore((ctx) => {
     const { currentHash, prior } = ctx.results.preprocessStepResult;
-    return prior.some((h: string) => h === currentHash) ? 0 : 1;
+    return prior.some((h: string) => hammingDistance(h, currentHash) < 10) ? 0 : 1;
   });

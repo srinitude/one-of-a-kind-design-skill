@@ -1,6 +1,6 @@
 /**
  * score-step.ts — LLaVA + composite scoring.
- * Input matches verify-step output.
+ * Input matches verify-step output with styleId from resolve-style step.
  */
 
 import { createStep } from "@mastra/core/workflows";
@@ -15,6 +15,7 @@ const inputSchema = z.object({
   ssimIndex: z.number(),
   pHashSimilarity: z.number(),
   pixelVerdict: z.string(),
+  styleId: z.string(),
 });
 
 const outputSchema = z.object({
@@ -39,7 +40,7 @@ export const scoreStep = createStep({
           catch: () => new Error("writer failed"),
         });
 
-        const styleId = "resolved";
+        const { styleId } = inputData;
 
         const perceptual = yield* analyzeQuality({
           imageUrl: inputData.artifactUrl,
