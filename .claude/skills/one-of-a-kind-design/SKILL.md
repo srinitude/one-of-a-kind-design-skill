@@ -250,3 +250,16 @@ All scripts use Bun-only APIs, Effect-native TypeScript, max nesting depth 3.
 - After 2 failed regenerations at the same tier, escalate exactly one tier.
 - Maximum 15 fal.ai calls per pipeline run.
 - Never fabricate alignment scores or quality sub-scores.
+
+### Video Generation Reference
+
+For video output types, consult these reference documents:
+- `references/VIDEO-SCENE-SCHEMA.md` — Complete scene ontology (entities, composition, motion, lighting, materials, atmosphere, audio, narrative, editing), JSON/YAML schemas, prompt templates for Runway/Sora/Pika styles, identity locks, continuity locks, motion realism blocks, anti-failure blocks, and evaluation rubric.
+- `references/VIDEO-ELEMENT-TEMPLATES.yaml` — Reusable element templates with shared enums (realism levels, framing layers, camera angles, lens types, motion types, materials, surface finishes), validation primitives, reference image roles, and clip assembly templates for multi-shot continuity.
+
+When generating video:
+1. Build a scene schema using the ontology (entities, composition, lighting, motion)
+2. Use the appropriate prompt template variant (Runway-style, Sora-style, etc.) based on the selected model
+3. Apply identity lock and continuity lock blocks for multi-shot consistency
+4. Include the anti-failure block in negative prompts
+5. Evaluate output against the rubric in section 9

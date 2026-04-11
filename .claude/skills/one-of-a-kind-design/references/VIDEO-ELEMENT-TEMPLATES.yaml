@@ -1,0 +1,868 @@
+schema_version: "1.0.0"
+bundle_name: "video_element_templates"
+description: >
+  Unified YAML bundle containing reusable element templates, shared enums,
+  validation primitives, and clip assembly templates for clip-to-clip video generation
+  grounded by reference images and continuity rules.
+
+shared:
+  enums:
+    realism_level: [photoreal, cinematic_real, stylized_real, animated_3d, animated_2d, abstract]
+    framing_layer: [foreground, midground, background, sky]
+    importance_level: [critical, high, medium, low]
+    continuity_mode: [lock, prefer, flexible, replace]
+    reference_image_role: [identity, wardrobe, prop, environment, lighting, composition, motion, texture, style, continuity]
+    camera_angle: [eye_level, high_angle, low_angle, overhead, dutch, pov, over_shoulder]
+    lens_type: [ultra_wide, wide, normal, portrait, telephoto, macro]
+    motion_type: [static, walk, run, turn, gesture, idle, push_in, pull_out, pan, tilt, dolly, crane, handheld, orbit]
+    time_of_day: [dawn, morning, noon, afternoon, dusk, night, midnight, overcast_day, blue_hour, golden_hour]
+    weather_type: [clear, cloudy, overcast, foggy, misty, rainy, stormy, snowy, windy, indoor_controlled]
+    material_type: [skin, hair, fabric, leather, denim, metal, glass, plastic, rubber, wood, stone, concrete, water, paper]
+    surface_finish: [matte, satin, semi_gloss, glossy, reflective, rough, weathered, wet, dusty]
+    shot_type: [establishing, wide, medium_wide, medium, medium_close, close_up, extreme_close]
+    aspect_ratio: ["16:9", "9:16", "1:1", "4:3", "2.39:1"]
+
+  validation_primitives:
+    id:
+      regex: "^[a-z0-9_\\-]{3,64}$"
+    hex_color:
+      regex: "^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"
+    normalized_float:
+      min: 0.0
+      max: 1.0
+    positive_int:
+      min: 1
+    seconds:
+      min: 0.0
+      max: 600.0
+    non_empty_string:
+      min_length: 1
+    prompt_weight:
+      min: -3.0
+      max: 3.0
+
+  reference_images_template:
+    - ref_id: "img_char_mara_face_front"
+      role: identity
+      uri: "file:///refs/mara_face_front.png"
+      source_type: frame_extract
+      derived_from_clip_id: "clip_001"
+      derived_from_timestamp_s: 1.24
+      crop: face
+      priority: critical
+      weight: 1.0
+      notes: "primary face identity anchor"
+
+  source_type_enums:
+    source_type:
+      - frame_extract
+      - still_photo
+      - concept_art
+      - generated_reference
+      - style_board
+      - texture_sample
+      - depth_pass
+      - segmentation_extract
+
+  reference_images_validation:
+    required_fields: [ref_id, role, uri, priority, weight]
+    rules:
+      - "ref_id must match shared.validation_primitives.id.regex"
+      - "role must be one of shared.enums.reference_image_role"
+      - "uri must be non-empty"
+      - "weight must be between 0.0 and 1.0"
+      - "if source_type=frame_extract, derived_from_clip_id is required"
+      - "if crop=face, role should usually be identity"
+
+templates:
+  source_clip_continuity_template:
+    source_clip:
+      clip_id: "clip_001"
+      uri: "file:///clips/clip_001.mp4"
+      fps: 24
+      aspect_ratio: "16:9"
+      duration_s: 8.0
+
+    extraction:
+      sampled_frames:
+        - timestamp_s: 0.50
+          frame_uri: "file:///frames/clip_001_f00012.png"
+        - timestamp_s: 2.00
+          frame_uri: "file:///frames/clip_001_f00048.png"
+        - timestamp_s: 5.25
+          frame_uri: "file:///frames/clip_001_f00126.png"
+
+    carry_forward:
+      identity: lock
+      wardrobe: lock
+      environment_layout: prefer
+      prop_positions: prefer
+      lighting_direction: prefer
+      camera_language: flexible
+      motion_pattern: flexible
+      color_palette: prefer
+      weather: lock
+
+    change_request:
+      allowed_changes:
+        - "camera pushes closer"
+        - "character turns head"
+        - "fog increases slightly"
+      forbidden_changes:
+        - "new characters"
+        - "wardrobe swap"
+        - "time of day change"
+        - "major environment redesign"
+
+    validation:
+      required_fields:
+        - source_clip.clip_id
+        - source_clip.uri
+        - carry_forward
+        - change_request
+      rules:
+        - "fps must be positive integer"
+        - "duration_s must be between 0 and 600"
+        - "aspect_ratio must be one of shared.enums.aspect_ratio"
+        - "at least one carry_forward field should be lock or prefer"
+
+  character_element_template:
+    element_type: character
+    character_id: "char_mara"
+    version: "1.0"
+
+    identity:
+      display_name: "Mara"
+      role_in_scene: protagonist
+      continuity_mode: lock
+      realism_level: cinematic_real
+
+    required_visual_identity:
+      age_range: "30s"
+      apparent_gender_presentation: "androgynous_feminine"
+      species: "human"
+      face_shape: "angular"
+      skin_tone: "light_olive"
+      hair:
+        color: "dark_brown"
+        style: "short windswept bob"
+        length: short
+      body:
+        height_relative: "average"
+        build: "lean"
+
+    wardrobe:
+      continuity_mode: lock
+      required_items:
+        - item_id: "wardrobe_trench_01"
+          category: outerwear
+          description: "dark trench coat"
+          primary_color: "#1F2328"
+          material_type: fabric
+          surface_finish: wet
+      optional_items:
+        - item_id: "wardrobe_boots_01"
+          category: footwear
+          description: "black boots"
+
+    distinguishing_features:
+      required:
+        - "scar over right eyebrow"
+      forbidden:
+        - "beard"
+        - "glasses"
+
+    expression_pose_defaults:
+      neutral_expression: "focused, restrained"
+      pose_bias: "upright, shoulders squared"
+      gesture_bias: "economical movements"
+
+    motion_profile:
+      primary_motion_style: idle
+      allowed_motions: [idle, walk, turn, gesture]
+      forbidden_motions: [run, dance, slapstick]
+      motion_energy: 0.35
+
+    screen_presence:
+      importance_level: critical
+      preferred_frame_coverage: 0.18
+      preferred_layer: foreground
+
+    source_clip_anchors:
+      first_seen_timestamp_s: 0.40
+      best_identity_frame_uri: "file:///frames/clip_001_char_mara_best.png"
+
+    reference_images:
+      - ref_id: "img_mara_face_front"
+        role: identity
+        uri: "file:///refs/mara_face_front.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 0.82
+        crop: face
+        priority: critical
+        weight: 1.0
+
+      - ref_id: "img_mara_full_body"
+        role: wardrobe
+        uri: "file:///refs/mara_full_body.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 1.66
+        crop: full_body
+        priority: critical
+        weight: 0.95
+
+    prompts:
+      positive:
+        - text: "same character identity, same facial structure, same scar placement"
+          weight: 1.8
+        - text: "dark wet trench coat, restrained performance"
+          weight: 1.3
+      negative:
+        - text: "extra fingers"
+          weight: -2.0
+        - text: "different haircut"
+          weight: -1.8
+        - text: "different face"
+          weight: -2.5
+
+    validation:
+      required_fields:
+        - element_type
+        - character_id
+        - identity
+        - required_visual_identity
+        - wardrobe
+        - reference_images
+      enums:
+        element_type: [character]
+        continuity_mode: [lock, prefer, flexible, replace]
+        realism_level: [photoreal, cinematic_real, stylized_real, animated_3d, animated_2d, abstract]
+        primary_motion_style: [static, walk, run, turn, gesture, idle]
+        preferred_layer: [foreground, midground, background, sky]
+      rules:
+        - "character_id must match shared.validation_primitives.id.regex"
+        - "reference_images must contain at least 1 role=identity image"
+        - "reference_images should contain at least 1 wardrobe image if wardrobe.continuity_mode=lock"
+        - "preferred_frame_coverage must be between 0.0 and 1.0"
+        - "motion_energy must be between 0.0 and 1.0"
+        - "positive/negative prompt weights must be between -3.0 and 3.0"
+
+  object_element_template:
+    element_type: object
+    object_id: "prop_briefcase_01"
+    version: "1.0"
+
+    identity:
+      display_name: "scratched metal briefcase"
+      category: hero_prop
+      continuity_mode: lock
+      realism_level: cinematic_real
+
+    physical_description:
+      object_class: briefcase
+      dimensions_relative: "medium_handheld"
+      silhouette: "rectangular hard case"
+      primary_material: metal
+      finish: brushed
+      primary_color: "#8A8F98"
+      secondary_colors: ["#4C525B"]
+      condition: [scratched, wet]
+
+    usage_context:
+      owner_character_id: "char_mara"
+      narrative_significance: "contains critical evidence"
+      interaction_type: handheld
+
+    placement_defaults:
+      preferred_layer: foreground
+      preferred_side: left
+      continuity_position_rule: "must remain in left hand unless change_request explicitly overrides"
+
+    motion_profile:
+      allowed_motions: [held_sway, pickup, set_down]
+      forbidden_motions: [floating, spinning]
+      physics_behavior: realistic
+
+    source_clip_anchors:
+      best_prop_frame_uri: "file:///frames/clip_001_briefcase_best.png"
+      first_seen_timestamp_s: 0.45
+
+    reference_images:
+      - ref_id: "img_briefcase_profile"
+        role: prop
+        uri: "file:///refs/briefcase_profile.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 1.13
+        crop: prop_only
+        priority: critical
+        weight: 1.0
+
+      - ref_id: "img_briefcase_texture"
+        role: texture
+        uri: "file:///refs/briefcase_texture.png"
+        source_type: texture_sample
+        priority: high
+        weight: 0.8
+
+    prompts:
+      positive:
+        - text: "same scratched aluminum briefcase, same scale, same silhouette"
+          weight: 1.8
+      negative:
+        - text: "different bag"
+          weight: -2.0
+        - text: "floating prop"
+          weight: -2.2
+
+    validation:
+      required_fields:
+        - element_type
+        - object_id
+        - identity
+        - physical_description
+        - reference_images
+      enums:
+        element_type: [object]
+        category: [hero_prop, support_prop, background_prop, vehicle, tool, furniture]
+        interaction_type: [handheld, worn, stationary, drivable, mechanical, throwable]
+        preferred_layer: [foreground, midground, background]
+        primary_material: [skin, hair, fabric, leather, denim, metal, glass, plastic, rubber, wood, stone, concrete, water, paper]
+      rules:
+        - "object_id must match shared.validation_primitives.id.regex"
+        - "reference_images must contain at least 1 role=prop or role=texture image"
+        - "if category=hero_prop, continuity_mode should usually be lock or prefer"
+
+  environment_element_template:
+    element_type: environment
+    environment_id: "env_rooftop_neon_dusk"
+    version: "1.0"
+
+    identity:
+      display_name: "urban rooftop at dusk"
+      environment_type: exterior
+      continuity_mode: prefer
+      realism_level: cinematic_real
+
+    location_definition:
+      specific_location: "city rooftop"
+      era: "near_future"
+      geography: "dense downtown skyline"
+      time_of_day: dusk
+      weather_type: misty
+
+    layout:
+      must_include:
+        - "roof access door"
+        - "hvac units"
+        - "metal railings"
+        - "distant skyline"
+      optional:
+        - "antenna cables"
+        - "steam vents"
+      forbidden:
+        - "trees"
+        - "suburban houses"
+        - "beach elements"
+
+    surfaces:
+      - surface_id: "roof_concrete"
+        material_type: concrete
+        surface_finish: wet
+        color: "#4E535A"
+      - surface_id: "railings"
+        material_type: metal
+        surface_finish: weathered
+        color: "#6E737A"
+
+    spatial_character:
+      openness: 0.72
+      verticality: 0.81
+      clutter_density: 0.35
+      horizon_visibility: 0.88
+
+    atmosphere:
+      haze_density: 0.42
+      fog_density: 0.25
+      wind_strength: 0.55
+      precipitation: none
+
+    continuity_constraints:
+      preserve_layout_zones: true
+      preserve_skyline_identity: true
+      allow_minor_reframing: true
+
+    source_clip_anchors:
+      master_layout_frame_uri: "file:///frames/clip_001_env_master.png"
+
+    reference_images:
+      - ref_id: "img_rooftop_master"
+        role: environment
+        uri: "file:///refs/rooftop_master.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 0.15
+        crop: wide_frame
+        priority: critical
+        weight: 1.0
+
+      - ref_id: "img_rooftop_skyline"
+        role: continuity
+        uri: "file:///refs/rooftop_skyline.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 2.40
+        crop: background
+        priority: high
+        weight: 0.9
+
+    prompts:
+      positive:
+        - text: "same rooftop environment, same skyline arrangement, same wet concrete"
+          weight: 1.7
+      negative:
+        - text: "generic city background"
+          weight: -2.2
+        - text: "daytime sky"
+          weight: -2.0
+
+    validation:
+      required_fields:
+        - element_type
+        - environment_id
+        - identity
+        - location_definition
+        - layout
+        - reference_images
+      enums:
+        element_type: [environment]
+        environment_type: [interior, exterior, hybrid]
+        time_of_day: [dawn, morning, noon, afternoon, dusk, night, midnight, overcast_day, blue_hour, golden_hour]
+        weather_type: [clear, cloudy, overcast, foggy, misty, rainy, stormy, snowy, windy, indoor_controlled]
+      rules:
+        - "environment_id must match shared.validation_primitives.id.regex"
+        - "openness, verticality, clutter_density, horizon_visibility, haze_density, fog_density, wind_strength must be between 0.0 and 1.0"
+        - "reference_images must include at least 1 role=environment image"
+        - "must_include should not be empty"
+
+  background_layer_template:
+    element_type: background_layer
+    layer_id: "bg_skyline_01"
+
+    identity:
+      display_name: "neon skyline"
+      framing_layer: background
+      continuity_mode: prefer
+
+    visual_definition:
+      dominant_shapes:
+        - "rectilinear skyscrapers"
+        - "dense window grids"
+      color_bias:
+        dominant: ["#2C3140", "#3B4454"]
+        accent: ["#FF4FD8", "#4DE8FF"]
+      light_pattern: "scattered neon and window lights"
+      atmospheric_depth: 0.68
+
+    layout_constraints:
+      left_zone: "taller towers"
+      center_zone: "lower clustered buildings"
+      right_zone: "bright cyan sign"
+
+    reference_images:
+      - ref_id: "img_skyline_bg"
+        role: continuity
+        uri: "file:///refs/skyline_bg.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 0.30
+        crop: background
+        priority: critical
+        weight: 1.0
+
+    validation:
+      required_fields:
+        - element_type
+        - layer_id
+        - identity
+        - visual_definition
+        - reference_images
+      enums:
+        element_type: [background_layer]
+        framing_layer: [foreground, midground, background, sky]
+      rules:
+        - "atmospheric_depth must be between 0.0 and 1.0"
+
+  lighting_element_template:
+    element_type: lighting
+    lighting_id: "light_dusk_neon_mix"
+
+    identity:
+      display_name: "cool dusk with magenta-cyan neon"
+      continuity_mode: prefer
+
+    sources:
+      - source_id: "ambient_sky"
+        type: natural_ambient
+        direction: top_back
+        color_temperature_k: 9000
+        intensity_relative: 0.45
+      - source_id: "neon_magenta"
+        type: practical
+        direction: back_left
+        color_hex: "#FF4FD8"
+        intensity_relative: 0.35
+      - source_id: "neon_cyan"
+        type: practical
+        direction: back_right
+        color_hex: "#4DE8FF"
+        intensity_relative: 0.30
+
+    lighting_character:
+      contrast: 0.62
+      softness: 0.58
+      rim_light_presence: 0.66
+      shadow_density: 0.40
+      flicker_allowed: false
+
+    continuity_constraints:
+      preserve_directionality: true
+      preserve_palette_bias: true
+      allow_exposure_shift_minor: true
+
+    reference_images:
+      - ref_id: "img_lighting_key"
+        role: lighting
+        uri: "file:///refs/lighting_key.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 1.05
+        crop: full_frame
+        priority: critical
+        weight: 1.0
+
+    validation:
+      required_fields:
+        - element_type
+        - lighting_id
+        - sources
+        - lighting_character
+        - reference_images
+      enums:
+        element_type: [lighting]
+        type: [natural, natural_ambient, practical, motivated_offscreen, screen_light, firelight, moonlight]
+      rules:
+        - "each intensity_relative must be between 0.0 and 1.0"
+        - "contrast, softness, rim_light_presence, shadow_density must be between 0.0 and 1.0"
+        - "if color_hex is present, it must match shared.validation_primitives.hex_color.regex"
+
+  camera_element_template:
+    element_type: camera
+    camera_id: "cam_pushin_eyelevel_01"
+
+    identity:
+      continuity_mode: flexible
+      display_name: "slow eye-level push-in"
+
+    framing:
+      shot_type: medium_wide
+      aspect_ratio: "16:9"
+      camera_angle: eye_level
+      lens_type: portrait
+      focal_feel_mm_equivalent: 70
+      subject_screen_position: left_third
+
+    motion:
+      motion_type: push_in
+      duration_profile: "full_shot"
+      stability: smooth
+      speed_normalized: 0.25
+
+    focus:
+      depth_of_field_strength: 0.70
+      focus_target: "primary_character"
+      rack_focus_allowed: false
+
+    continuity_constraints:
+      preserve_shot_language: prefer
+      preserve_lens_feel: prefer
+      allow_reframe: true
+
+    reference_images:
+      - ref_id: "img_composition_ref"
+        role: composition
+        uri: "file:///refs/composition_ref.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 0.90
+        crop: full_frame
+        priority: high
+        weight: 0.85
+
+    validation:
+      required_fields:
+        - element_type
+        - camera_id
+        - framing
+        - motion
+      enums:
+        element_type: [camera]
+        shot_type: [establishing, wide, medium_wide, medium, medium_close, close_up, extreme_close]
+        camera_angle: [eye_level, high_angle, low_angle, overhead, dutch, pov, over_shoulder]
+        lens_type: [ultra_wide, wide, normal, portrait, telephoto, macro]
+        motion_type: [static, walk, run, turn, gesture, idle, push_in, pull_out, pan, tilt, dolly, crane, handheld, orbit]
+      rules:
+        - "speed_normalized must be between 0.0 and 1.0"
+        - "depth_of_field_strength must be between 0.0 and 1.0"
+        - "focal_feel_mm_equivalent should be between 10 and 300"
+
+  motion_element_template:
+    element_type: motion
+    motion_id: "motion_mara_turn_head"
+
+    identity:
+      continuity_mode: prefer
+      display_name: "subtle head turn with coat movement"
+
+    subject_binding:
+      subject_type: character
+      subject_id: "char_mara"
+
+    motion_definition:
+      motion_type: turn
+      start_pose: "facing rival"
+      end_pose: "slightly more camera visible"
+      timing:
+        start_s: 0.8
+        end_s: 2.2
+      intensity: 0.25
+      realism_priority: critical
+
+    secondary_motion:
+      - type: cloth_response
+        description: "coat hem follows turn with slight wind lag"
+      - type: hair_response
+        description: "hair shifts with wind and turn"
+
+    forbidden_artifacts:
+      - "body warping"
+      - "limb popping"
+      - "rubber motion"
+
+    reference_images:
+      - ref_id: "img_motion_start"
+        role: motion
+        uri: "file:///refs/motion_start.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 0.80
+        crop: subject
+        priority: high
+        weight: 0.8
+
+      - ref_id: "img_motion_end"
+        role: motion
+        uri: "file:///refs/motion_end.png"
+        source_type: frame_extract
+        derived_from_clip_id: "clip_001"
+        derived_from_timestamp_s: 2.20
+        crop: subject
+        priority: high
+        weight: 0.8
+
+    validation:
+      required_fields:
+        - element_type
+        - motion_id
+        - subject_binding
+        - motion_definition
+      enums:
+        element_type: [motion]
+        subject_type: [character, object, environment, camera]
+        motion_type: [static, walk, run, turn, gesture, idle, push_in, pull_out, pan, tilt, dolly, crane, handheld, orbit]
+      rules:
+        - "timing.start_s must be less than timing.end_s"
+        - "intensity must be between 0.0 and 1.0"
+
+  style_element_template:
+    element_type: style
+    style_id: "style_cinematic_neon_noir"
+
+    identity:
+      display_name: "restrained neon noir"
+      continuity_mode: prefer
+      realism_level: cinematic_real
+
+    image_treatment:
+      contrast: 0.60
+      saturation: 0.48
+      grain_amount: 0.12
+      bloom_amount: 0.16
+      sharpness: 0.52
+
+    palette:
+      dominant: ["#2D3442", "#4D5560"]
+      accent: ["#FF4FD8", "#4DE8FF"]
+      skin_tone_preservation: true
+
+    prohibited_treatments:
+      - "cartoon stylization"
+      - "hyper_hdr"
+      - "washed out exposure"
+
+    reference_images:
+      - ref_id: "img_style_board_01"
+        role: style
+        uri: "file:///refs/style_board_01.png"
+        source_type: style_board
+        priority: high
+        weight: 0.85
+
+    validation:
+      required_fields:
+        - element_type
+        - style_id
+        - image_treatment
+        - palette
+      enums:
+        element_type: [style]
+        realism_level: [photoreal, cinematic_real, stylized_real, animated_3d, animated_2d, abstract]
+      rules:
+        - "contrast, saturation, grain_amount, bloom_amount, sharpness must be between 0.0 and 1.0"
+
+  audio_element_template:
+    element_type: audio
+    audio_id: "audio_rooftop_tension"
+
+    identity:
+      display_name: "wind + distant city + sparse synth"
+      continuity_mode: prefer
+
+    layers:
+      dialogue:
+        present: false
+      sfx:
+        required:
+          - "wind gusts"
+          - "distant sirens"
+          - "fabric rustle"
+        forbidden:
+          - "birds chirping"
+          - "crowd cheering"
+      music:
+        present: true
+        style: "minimal synth tension"
+        intensity: 0.25
+
+    validation:
+      required_fields:
+        - element_type
+        - audio_id
+        - layers
+      enums:
+        element_type: [audio]
+      rules:
+        - "music.intensity must be between 0.0 and 1.0 if present"
+
+  target_clip_template:
+    target_clip:
+      clip_id: "clip_002"
+      based_on_source_clip_id: "clip_001"
+      objective: "generate a closer continuation of the same rooftop scene"
+
+    continuity_policy:
+      source_clip_manifest: "file:///manifests/source_clip_001.yaml"
+      default_mode: prefer
+      overrides:
+        character_identity: lock
+        wardrobe: lock
+        hero_props: lock
+        environment: prefer
+        camera: flexible
+        motion: flexible
+        style: prefer
+
+    element_refs:
+      characters:
+        - "file:///elements/char_mara.yaml"
+      objects:
+        - "file:///elements/prop_briefcase_01.yaml"
+      environments:
+        - "file:///elements/env_rooftop_neon_dusk.yaml"
+      background_layers:
+        - "file:///elements/bg_skyline_01.yaml"
+      lighting:
+        - "file:///elements/light_dusk_neon_mix.yaml"
+      camera:
+        - "file:///elements/cam_pushin_eyelevel_01.yaml"
+      motion:
+        - "file:///elements/motion_mara_turn_head.yaml"
+      style:
+        - "file:///elements/style_cinematic_neon_noir.yaml"
+      audio:
+        - "file:///elements/audio_rooftop_tension.yaml"
+
+    requested_changes:
+      clip_duration_s: 5.0
+      action_delta:
+        - "camera moves closer"
+        - "Mara turns slightly toward camera"
+        - "fog increases subtly"
+      forbidden_changes:
+        - "new props"
+        - "new location"
+        - "identity drift"
+        - "daylight conversion"
+
+    output_spec:
+      fps: 24
+      aspect_ratio: "16:9"
+      resolution: "1920x1080"
+
+    validation:
+      required_fields:
+        - target_clip.clip_id
+        - target_clip.based_on_source_clip_id
+        - continuity_policy
+        - element_refs
+        - output_spec
+      rules:
+        - "clip_duration_s must be between 0 and 600"
+        - "fps must be positive integer"
+        - "aspect_ratio must be one of shared.enums.aspect_ratio"
+        - "at least 1 character or 1 environment element must be referenced"
+
+global_validation_rules:
+  - "Every element manifest must include element_type, version or schema version, validation block, and reference_images when visually meaningful"
+  - "Every critical character must include at least 1 identity reference image and 1 full-body or wardrobe reference image"
+  - "Every hero prop must include at least 1 prop-only reference image"
+  - "Every environment must include at least 1 wide-frame environment reference image"
+  - "If continuity_mode=lock, at least 1 critical reference image must be present"
+  - "If a target clip references a character, that character's source clip or reference images must resolve"
+  - "No reference image weight may exceed 1.0"
+  - "All IDs must be unique across a project"
+  - "Prompt weights must be between -3.0 and 3.0"
+  - "All normalized values must be between 0.0 and 1.0"
+
+recommended_project_structure:
+  manifests:
+    - "source_clip_001.yaml"
+    - "target_clip_002.yaml"
+  elements:
+    - "char_mara.yaml"
+    - "prop_briefcase_01.yaml"
+    - "env_rooftop_neon_dusk.yaml"
+    - "bg_skyline_01.yaml"
+    - "light_dusk_neon_mix.yaml"
+    - "cam_pushin_eyelevel_01.yaml"
+    - "motion_mara_turn_head.yaml"
+    - "style_cinematic_neon_noir.yaml"
+    - "audio_rooftop_tension.yaml"
+  refs:
+    - "frame extracts"
+    - "identity crops"
+    - "prop crops"
+    - "environment master frames"
+    - "style boards"
