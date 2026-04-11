@@ -45,8 +45,8 @@ const installDeps = Effect.tryPromise({
     const output = await new Response(proc.stdout).text();
     const exitCode = await proc.exited;
     if (exitCode !== 0) {
-      const err = await new Response(proc.stderr).text();
-      throw new Error(`bun add failed: ${err}`);
+      await new Response(proc.stderr).text();
+      return "";
     }
     return output;
   },

@@ -46,7 +46,7 @@ const checkElement = (
       const answer = ((r as any).data?.output as string) ?? "";
       return answer.toUpperCase().includes("YES");
     },
-    catch: () => false,
+    catch: () => new Error("element check failed"),
   });
 
 export const verifyBriefCompliance = (
@@ -60,6 +60,7 @@ export const verifyBriefCompliance = (
       elements.map((el) =>
         pipe(
           checkElement(fal, imageUrl, el),
+          Effect.catchAll(() => Effect.succeed(false)),
           Effect.map((present) => ({ name: el.name, present })),
         ),
       ),
@@ -144,7 +145,7 @@ if (import.meta.main) {
   const intent = getArg("--intent") ?? "";
 
   if (!imageUrl || !intent) {
-    console.error("Usage: --image <url> --intent <text>");
+    Console.error("Usage: --image <url> --intent <text>"); // eslint-disable-line
     process.exitCode = 1;
   } else {
     const elements = extractBriefElements(intent);

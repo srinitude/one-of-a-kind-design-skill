@@ -107,7 +107,7 @@ const checkElementPresent = (
       const answer = ((r as any).data?.output as string) ?? "";
       return answer.toUpperCase().includes("YES");
     },
-    catch: () => false,
+    catch: () => new Error("element check failed"),
   });
 
 export const refineForElement = (
@@ -143,7 +143,10 @@ export const refineForElement = (
       attempts++;
 
       // Verify the element was added
-      const present = yield* checkElementPresent(fal, currentUrl, element);
+      const present = yield* pipe(
+        checkElementPresent(fal, currentUrl, element),
+        Effect.catchAll(() => Effect.succeed(false)),
+      );
       if (present) {
         yield* Console.log(`[refine] "${element}" successfully added`);
         return {
@@ -218,7 +221,7 @@ if (import.meta.main) {
   const seed = Number(getArg("--seed") ?? "42");
 
   if (!imageUrl || elements.length === 0) {
-    console.error("Usage: --image <url> --elements <el1,el2,...> [--seed 42]");
+    Console.error("Usage: --image <url> --elements <el1,el2,...> [--seed 42]"); // eslint-disable-line
     process.exitCode = 1;
   } else {
     pipe(

@@ -6,7 +6,7 @@
  */
 import { parse as parseYaml } from "yaml";
 
-const TAXONOMY_PATH = "./visual-styles-taxonomy.yaml";
+const TAXONOMY_PATH = "./TAXONOMY.yaml";
 const SKILL_DIR = ".";
 
 // --- Load Taxonomy ---
@@ -131,7 +131,7 @@ async function generateTailwindPresets() {
     const content = `/* ${style.name} — Tailwind v4 @theme preset
  * Category: ${style.category}
  * Tags: ${style.tags.join(", ")}
- * Generated from visual-styles-taxonomy v0.1.0
+ * Generated from TAXONOMY v2.0
  */
 
 @theme inline {
@@ -276,7 +276,7 @@ async function generateFigmaTokenSets() {
     const tokenSet = {
       $metadata: {
         tokenSetName: style.id,
-        generatedFrom: "visual-styles-taxonomy v0.1.0",
+        generatedFrom: "TAXONOMY v2.0",
         styleName: style.name,
         category: style.category,
       },

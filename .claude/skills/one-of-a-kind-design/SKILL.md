@@ -81,14 +81,15 @@ Composite score is computed from 9 weighted sub-scores:
 | Sub-score | Weight |
 |---|---|
 | Anti-slop gate | 0.15 |
-| Code standards | 0.08 |
-| Asset quality | 0.12 |
 | Prompt-artifact alignment | 0.15 |
 | Aesthetic | 0.13 |
 | Style fidelity | 0.13 |
 | Distinctiveness | 0.13 |
+| Asset quality | 0.12 |
 | Hierarchy | 0.06 |
+| Convention break adherence | 0.05 |
 | Color harmony | 0.05 |
+| Code standards | 0.03 |
 
 **Minimum: 7.0/10.** If below, the workflow suspends in interactive mode.
 Present the scores to the user and ask: accept, retry with feedback, or adjust dials.
