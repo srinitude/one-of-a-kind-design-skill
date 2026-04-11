@@ -188,60 +188,130 @@ const I2V_MODELS: FalModel[] = [
   },
 ];
 
-// --- Style-to-Model Affinity ---
+// --- Style-to-Model Affinity (all 66 styles) ---
 
-const STYLE_MODEL_AFFINITY: Record<
-  string,
-  { image: string[]; video: string[]; i2i: string[]; i2v: string[] }
-> = {
-  "art-deco": {
-    image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
-    video: ["WAN T2V"],
-    i2i: ["Recraft V3 I2I"],
-    i2v: ["Minimax Video 01"],
-  },
-  cinematic: {
-    image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
-    video: ["WAN T2V"],
-    i2i: ["Flux Pro 1.1 Ref"],
-    i2v: ["WAN I2V"],
-  },
-  neubrutalism: {
-    image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
-    video: ["WAN T2V"],
-    i2i: ["Recraft V3 I2I"],
-    i2v: ["Minimax Video 01"],
-  },
-  glassmorphism: {
-    image: ["Flux Pro 1.1", "Flux 1.1 Ultra"],
-    video: ["WAN T2V"],
-    i2i: ["Flux Pro New"],
-    i2v: ["CogVideoX 5B I2V"],
-  },
-  bauhaus: {
-    image: ["Ideogram V3", "Flux Pro 1.1", "Recraft V3"],
-    video: ["WAN T2V"],
-    i2i: ["Recraft V3 I2I"],
-    i2v: ["Minimax Video 01"],
-  },
-  "editorial-minimalism": {
-    image: ["Flux 1.1 Ultra", "Flux Pro 1.1"],
-    video: ["WAN T2V"],
-    i2i: ["Flux Pro 1.1 Ref"],
-    i2v: ["WAN I2V"],
-  },
-  "pixel-art": {
-    image: ["Flux Pro 1.1", "Flux Dev"],
-    video: ["WAN T2V"],
-    i2i: ["Flux Pro New"],
-    i2v: ["CogVideoX 5B I2V"],
-  },
-  "wabi-sabi": {
-    image: ["Flux 1.1 Ultra", "Luma Photon"],
-    video: ["WAN T2V"],
-    i2i: ["Flux Pro 1.1 Ref"],
-    i2v: ["WAN I2V"],
-  },
+type AffinityEntry = { image: string[]; video: string[]; i2i: string[]; i2v: string[] };
+
+// Group defaults by archetype
+const PHOTOGRAPHIC: AffinityEntry = {
+  image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
+  video: ["WAN T2V"],
+  i2i: ["Flux Pro 1.1 Ref"],
+  i2v: ["WAN I2V"],
+};
+const ILLUSTRATIVE: AffinityEntry = {
+  image: ["Ideogram V3", "Recraft V3", "Flux Pro 1.1"],
+  video: ["WAN T2V"],
+  i2i: ["Recraft V3 I2I"],
+  i2v: ["Minimax Video 01"],
+};
+const GEOMETRIC: AffinityEntry = {
+  image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"],
+  video: ["WAN T2V"],
+  i2i: ["Recraft V3 I2I"],
+  i2v: ["Minimax Video 01"],
+};
+const ORGANIC: AffinityEntry = {
+  image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"],
+  video: ["WAN T2V"],
+  i2i: ["Flux Pro 1.1 Ref"],
+  i2v: ["WAN I2V"],
+};
+const DIGITAL: AffinityEntry = {
+  image: ["Flux Dev", "Flux Pro 1.1"],
+  video: ["WAN T2V"],
+  i2i: ["Flux Pro New"],
+  i2v: ["CogVideoX 5B I2V"],
+};
+const ABSTRACT: AffinityEntry = {
+  image: ["Flux Pro 1.1", "Flux 1.1 Ultra"],
+  video: ["WAN T2V"],
+  i2i: ["Flux Pro New"],
+  i2v: ["Minimax Video 01"],
+};
+
+const STYLE_MODEL_AFFINITY: Record<string, AffinityEntry> = {
+  // --- Historical / Fine Art Movements ---
+  "art-deco": { ...GEOMETRIC, image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"] },
+  impressionism: { ...ILLUSTRATIVE, image: ["Flux 1.1 Ultra", "Flux Pro 1.1"] },
+  constructivism: GEOMETRIC,
+  "art-nouveau": ORGANIC,
+  bauhaus: { ...GEOMETRIC, image: ["Ideogram V3", "Flux Pro 1.1", "Recraft V3"] },
+  "de-stijl": GEOMETRIC,
+  rococo: ORGANIC,
+  surrealism: { ...ILLUSTRATIVE, image: ["Flux 1.1 Ultra", "Ideogram V3", "Flux Pro 1.1"] },
+  "pop-art": ILLUSTRATIVE,
+  "minimalism-fine-art": { ...GEOMETRIC, image: ["Flux Pro 1.1", "Flux 1.1 Ultra"] },
+
+  // --- Modern Digital / UI-Native ---
+  "flat-design": GEOMETRIC,
+  "material-design": GEOMETRIC,
+  neomorphism: DIGITAL,
+  glassmorphism: { ...DIGITAL, image: ["Flux Pro 1.1", "Flux 1.1 Ultra"] },
+  "brutalist-web": GEOMETRIC,
+  skeuomorphism: PHOTOGRAPHIC,
+  "aurora-ui": DIGITAL,
+  claymorphism: { ...DIGITAL, image: ["Flux Pro 1.1", "Ideogram V3"] },
+  "dark-mode-ui": DIGITAL,
+
+  // --- Illustration & Graphic ---
+  isometric: { ...ILLUSTRATIVE, image: ["Ideogram V3", "Recraft V3", "Flux Pro 1.1"] },
+  "line-art": ILLUSTRATIVE,
+  risograph: ILLUSTRATIVE,
+  duotone: ILLUSTRATIVE,
+  woodcut: ORGANIC,
+  "retro-vintage-print": ILLUSTRATIVE,
+  papercut: ORGANIC,
+  "low-poly": DIGITAL,
+  "pixel-art": { ...DIGITAL, image: ["Flux Pro 1.1", "Flux Dev"] },
+
+  // --- Cultural & Regional ---
+  "wabi-sabi": { ...ORGANIC, image: ["Flux 1.1 Ultra", "Luma Photon"] },
+  "scandinavian-minimalism": { ...GEOMETRIC, image: ["Flux Pro 1.1", "Flux 1.1 Ultra"] },
+  psychedelic: ILLUSTRATIVE,
+  afrofuturism: { ...ILLUSTRATIVE, image: ["Flux 1.1 Ultra", "Ideogram V3", "Flux Pro 1.1"] },
+  vaporwave: DIGITAL,
+  "ukiyo-e": ILLUSTRATIVE,
+  "memphis-design": ILLUSTRATIVE,
+  "swiss-international": GEOMETRIC,
+
+  // --- Generative / Algorithmic ---
+  "generative-art": ABSTRACT,
+  glitch: DIGITAL,
+  fractal: ABSTRACT,
+  "ai-diffusion": ABSTRACT,
+  "cellular-automata": ABSTRACT,
+  "noise-field": ABSTRACT,
+  "particle-systems": ABSTRACT,
+  "wireframe-mesh": DIGITAL,
+
+  // --- Photography & Rendering ---
+  cinematic: { ...PHOTOGRAPHIC, image: ["Flux 1.1 Ultra", "Luma Photon", "Flux Pro 1.1"] },
+  "tilt-shift": PHOTOGRAPHIC,
+  "analog-film-grain": PHOTOGRAPHIC,
+  "hdr-hyperrealism": PHOTOGRAPHIC,
+  infrared: PHOTOGRAPHIC,
+  cyanotype: PHOTOGRAPHIC,
+  "double-exposure": PHOTOGRAPHIC,
+  "miniature-diorama": PHOTOGRAPHIC,
+  "studio-product": PHOTOGRAPHIC,
+
+  // --- Emerging / Post-2020 Digital ---
+  neubrutalism: { ...GEOMETRIC, image: ["Flux Pro 1.1", "Ideogram V3", "Recraft V3"] },
+  "liquid-glass": DIGITAL,
+  "bento-ui": GEOMETRIC,
+  "resonant-stark": { ...GEOMETRIC, image: ["Flux Pro 1.1", "Flux 1.1 Ultra"] },
+  "editorial-minimalism": { ...PHOTOGRAPHIC, image: ["Flux 1.1 Ultra", "Flux Pro 1.1"] },
+  "minimalist-maximalism": { ...ILLUSTRATIVE, image: ["Flux 1.1 Ultra", "Ideogram V3"] },
+  "y2k-revival": DIGITAL,
+  "tactile-craft-digital": ORGANIC,
+  solarpunk: { ...ILLUSTRATIVE, image: ["Flux 1.1 Ultra", "Ideogram V3", "Flux Pro 1.1"] },
+
+  // --- Avant-Garde & Under-Represented ---
+  suprematism: GEOMETRIC,
+  "arte-povera-digital": ORGANIC,
+  deconstructivism: { ...ABSTRACT, image: ["Flux Pro 1.1", "Ideogram V3"] },
+  "mono-ha": ORGANIC,
 };
 
 // --- Selection Logic ---

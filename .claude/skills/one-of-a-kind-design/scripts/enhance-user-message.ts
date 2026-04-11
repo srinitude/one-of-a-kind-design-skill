@@ -224,7 +224,7 @@ const STYLE_IDS = [
   "tilt-shift",
   "analog-film-grain",
   "hdr-hyperrealism",
-  "infrared-photography",
+  "infrared",
   "cyanotype",
   "double-exposure",
   "miniature-diorama",

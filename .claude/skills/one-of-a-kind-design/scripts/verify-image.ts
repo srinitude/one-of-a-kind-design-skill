@@ -291,6 +291,7 @@ export const addToLibrary = (
 export const verifyImage = (
   generatedUrl: string,
   referenceUrl: string | null,
+  style?: string,
 ): Effect.Effect<VerificationResult, Error> =>
   Effect.gen(function* () {
     const genBytes = yield* fetchImage(generatedUrl);
@@ -313,6 +314,8 @@ export const verifyImage = (
 
     const library = yield* loadKnownHashes();
     const uniqueness = checkUniqueness(hashA, library);
+
+    yield* addToLibrary(hashA, generatedUrl, style ?? "unknown");
 
     return {
       pixelDiff,
@@ -338,9 +341,10 @@ if (import.meta.main) {
 
   const urlA = getArg("--a") ?? "";
   const urlB = getArg("--b") ?? null;
+  const style = getArg("--style");
 
   pipe(
-    verifyImage(urlA, urlB),
+    verifyImage(urlA, urlB, style),
     Effect.tap((result) =>
       Effect.sync(() => {
         console.log(JSON.stringify(result, null, 2));

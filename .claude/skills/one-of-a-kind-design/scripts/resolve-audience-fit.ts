@@ -1,6 +1,6 @@
 /**
  * resolve-audience-fit.ts — Deterministic audience-style fit scoring.
- * String matching against audience_market_fit arrays. No randomness.
+ * Substring matching against audience_market_fit arrays. No randomness.
  *
  * Run: bun run scripts/resolve-audience-fit.ts --audience "luxury SaaS" --fit '{"strong":[...],"unexpected":[...]}'
  */
@@ -24,7 +24,11 @@ interface AudienceMarketFit {
 
 function matchesAny(query: string, candidates: ReadonlyArray<string>): boolean {
   const lower = query.toLowerCase();
-  return candidates.some((c) => c.toLowerCase() === lower);
+  const tokens = lower.split(/\s+/);
+  return candidates.some((c) => {
+    const cl = c.toLowerCase();
+    return cl === lower || lower.includes(cl) || tokens.some((t) => t === cl);
+  });
 }
 
 export function resolveAudienceFit(

@@ -2,7 +2,7 @@
  * resolve-convention-break.ts — Deterministic convention break selection.
  * Selects which convention break to apply based on design_variance dial.
  *
- * Run: bun run scripts/resolve-convention-break.ts --variance 8 --breaks '[...]'
+ * Run: bun run scripts/resolve-convention-break.ts --variance 8 --breaks '[...]' --intent "user intent"
  */
 import { Console, Effect, pipe } from "effect";
 
@@ -26,6 +26,7 @@ interface ConventionBreakEntry {
 export function resolveConventionBreak(
   designVariance: number,
   breaks: ReadonlyArray<ConventionBreakEntry>,
+  userIntent?: string,
 ): ConventionBreakSelection {
   if (breaks.length === 0) {
     return {
@@ -59,14 +60,16 @@ export function resolveConventionBreak(
   }
 
   if (designVariance < 9) {
-    const idx = designVariance % breaks.length;
-    const entry = breaks[idx];
+    const intentHash = new Bun.CryptoHasher("sha256").update(userIntent ?? "").digest("hex");
+    const intentOffset = parseInt(intentHash.slice(0, 8), 16);
+    const breakIndex = (intentOffset + designVariance) % breaks.length;
+    const entry = breaks[breakIndex];
     return {
       applied: true,
       dogma: entry.dogma,
       breakText: entry.break,
       injectionPoint: "prompt-suffix",
-      reason: `design_variance ${designVariance}: expressive break at index ${idx}`,
+      reason: `design_variance ${designVariance}: expressive break at index ${breakIndex}`,
     };
   }
 
@@ -93,6 +96,7 @@ const program = Effect.gen(function* () {
 
   const variance = Number(getArg("--variance") ?? "5");
   const rawBreaks = getArg("--breaks");
+  const intent = getArg("--intent");
   const breaks: ConventionBreakEntry[] = rawBreaks
     ? yield* Effect.try({
         try: () => JSON.parse(rawBreaks) as ConventionBreakEntry[],
@@ -100,7 +104,7 @@ const program = Effect.gen(function* () {
       })
     : [];
 
-  const result = resolveConventionBreak(variance, breaks);
+  const result = resolveConventionBreak(variance, breaks, intent);
   yield* Console.log(JSON.stringify(result, null, 2));
   return result;
 });

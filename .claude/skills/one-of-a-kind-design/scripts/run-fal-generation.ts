@@ -14,12 +14,20 @@ function buildDeterministicId(endpoint: string, prompt: string): string {
   return hasher.digest("hex").slice(0, 32);
 }
 
+function deriveHashSeed(prompt: string): number {
+  const hasher = new Bun.CryptoHasher("sha256");
+  hasher.update(prompt + Date.now().toString());
+  const hex = hasher.digest("hex").slice(0, 8);
+  return parseInt(hex, 16);
+}
+
 // --- Types ---
 
 interface FalGenerationInput {
   readonly endpoint: string;
   readonly prompt: string;
   readonly params: Record<string, unknown>;
+  readonly seed?: number;
 }
 
 interface FalGenerationResult {
@@ -46,6 +54,7 @@ export function runFalGeneration(
   input: FalGenerationInput,
 ): Effect.Effect<FalGenerationResult, Error> {
   const prompt = input.prompt;
+  const seed = input.seed ?? deriveHashSeed(input.prompt);
   return pipe(
     Effect.void,
     Effect.flatMap(() =>
@@ -55,7 +64,7 @@ export function runFalGeneration(
             fal.config({ credentials: Bun.env.FAL_KEY });
             const start = Date.now();
             const result = await fal.subscribe(input.endpoint, {
-              input: { prompt, seed: 42, ...input.params },
+              input: { prompt, seed, ...input.params },
               logs: true,
             });
             const timing = Date.now() - start;
