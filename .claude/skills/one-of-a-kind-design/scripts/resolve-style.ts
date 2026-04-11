@@ -37,6 +37,7 @@ interface ResolvedStyle {
     recommendedVideoModels: string[];
   };
   readonly conventionBreaks: Array<{ dogma: string; break: string }>;
+  readonly sceneTemplates: Record<string, string>;
   readonly audienceMarketFit: { strong: string[]; unexpected: string[] };
   readonly dialModifiers: DialModifiers;
   readonly conventionBreak: ConventionBreakSelection;
@@ -229,6 +230,8 @@ export const resolveStyle = (
     break: c.break ?? "",
   }));
 
+  const sceneTemplates = (profile?.scene_templates ?? {}) as Record<string, string>;
+
   const marketFit = (profile?.audience_market_fit ?? {
     strong: [],
     unexpected: [],
@@ -257,6 +260,7 @@ export const resolveStyle = (
       recommendedVideoModels: (genAi?.recommended_video_models ?? []) as string[],
     },
     conventionBreaks,
+    sceneTemplates,
     audienceMarketFit: marketFit,
     dialModifiers,
     conventionBreak,

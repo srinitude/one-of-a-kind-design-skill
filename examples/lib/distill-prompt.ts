@@ -3,12 +3,12 @@
  *
  * Flux Pro uses T5-XXL encoder which handles 512+ tokens.
  * No artificial truncation — the full creative prompt goes through.
- * Layers: oblique visual metaphor, style anchor, convention break, palette, composition.
+ * Layers: scene template (taxonomy-driven), style anchor, convention break, palette, composition.
  *
  * ROOT CAUSE FIXES (from visual evaluation):
  * 1. NEVER include text, typography, buttons, or UI elements — fal.ai can't render text
  * 2. Avoid visual cliches — no "saxophone in spotlight", no "gradient hero"
- * 3. Find an OBLIQUE visual metaphor, not a literal depiction of the subject
+ * 3. Use taxonomy scene_templates as the prompt BASE — specific, oblique, anti-cliche
  * 4. Pick ONE specific expression of the style for THIS project, not generic style tokens
  *
  * Pure string function — no LLM needed, deterministic.
@@ -36,6 +36,7 @@ interface StyleLike {
     breakText?: string;
   };
   readonly antiSlopOverrides?: string[];
+  readonly sceneTemplates?: Record<string, string>;
 }
 
 function truncateAtWord(text: string, maxChars: number): string {
@@ -70,70 +71,31 @@ function extractComposition(style: StyleLike): string {
 }
 
 /**
- * CLICHE MAP: for each output type + style combo, defines what to AVOID
- * and what OBLIQUE ANGLE to take instead.
- *
- * The key insight: a jazz album cover shouldn't show a saxophone.
- * A funeral home shouldn't show flowers. An architecture firm shouldn't
- * show a building facade. Those are the FIRST things anyone would think of.
- * One-of-a-kind means finding the SECOND or THIRD association.
+ * Maps intent strings to scene_template keys.
+ * The scene_templates in the taxonomy use these keys:
+ * website_hero, album_cover, event_poster, logo, video_keyframe, mobile_hero, product_shot, editorial
  */
-const OBLIQUE_ANGLES: Record<string, Record<string, string>> = {
-  // Output type → industry/subject → oblique visual
-  "album cover": {
-    jazz: "close-up of piano keys with condensation from a cold glass, warm amber light reflecting off lacquered wood, shallow depth of field",
-    electronic: "long-exposure light trails through rain-streaked window, abstracted city grid dissolving into frequency patterns",
-    ambient: "frozen lake surface with trapped air bubbles forming patterns, aerial perspective, muted silver-blue",
-    _default: "abstract texture that evokes the music's emotional core, not the instruments",
-  },
-  poster: {
-    techno: "thermal camera view of a concrete wall with body heat traces where dancers pressed against it, infrared palette",
-    concert: "empty stage with a single mic stand casting a long shadow across worn floorboards, dramatic side-light",
-    _default: "abstract environmental detail that captures the event's energy without showing people or text",
-  },
-  website: {
-    architecture: "macro detail of material intersection — where two different reclaimed materials meet, the joint itself tells the story of craft",
-    restaurant: "the surface of the counter or table, showing wear patterns from years of use, warm indirect light",
-    funeral: "soft light passing through textured glass, casting warm diffused patterns on stone, no flowers no crosses",
-    _default: "environmental texture or material detail that embodies the brand, not a screenshot of a website layout",
-  },
-  logo: {
-    _default: "abstract geometric mark on neutral background, single weight, no text no letters no words",
-  },
-  video: {
-    opera: "slow-motion fabric falling through fractured light, deconstructed and layered, no people",
-    _default: "single continuous camera movement through an environment that embodies the mood",
-  },
-  "mobile-app": {
-    _default: "abstract background texture with the brand's emotional temperature, not a UI screenshot",
-  },
-};
-
-/**
- * Finds an oblique visual angle for the given output type and subject.
- * Falls back through: exact match → output type default → generic.
- */
-function findObliqueAngle(intent: string, outputType: string): string | null {
+function detectSceneTemplateKey(intent: string): string {
   const lower = intent.toLowerCase();
-  const typeKey = detectOutputCategory(lower);
-  const typeMap = OBLIQUE_ANGLES[typeKey];
-  if (!typeMap) return null;
-
-  for (const [subject, angle] of Object.entries(typeMap)) {
-    if (subject === "_default") continue;
-    if (lower.includes(subject)) return angle;
-  }
-  return typeMap._default ?? null;
+  if (/album\s*cover/i.test(lower)) return "album_cover";
+  if (/poster|flyer|event/i.test(lower)) return "event_poster";
+  if (/logo|icon|mark|badge/i.test(lower)) return "logo";
+  if (/video|trailer|animation|keyframe/i.test(lower)) return "video_keyframe";
+  if (/mobile|app\s+screen|onboarding|phone/i.test(lower)) return "mobile_hero";
+  if (/product|e-?commerce|shop|store|catalog/i.test(lower)) return "product_shot";
+  if (/editorial|magazine|article|blog|journal/i.test(lower)) return "editorial";
+  return "website_hero";
 }
 
-function detectOutputCategory(intent: string): string {
-  if (/album\s*cover/i.test(intent)) return "album cover";
-  if (/poster|flyer/i.test(intent)) return "poster";
-  if (/website|site|landing|homepage/i.test(intent)) return "website";
-  if (/logo/i.test(intent)) return "logo";
-  if (/video|trailer|animation/i.test(intent)) return "video";
-  if (/mobile|app\s+screen|onboarding/i.test(intent)) return "mobile-app";
-  return "website";
+/**
+ * Finds the scene template for this style + output type combination.
+ * Falls back to website_hero if no specific match.
+ */
+function findSceneTemplate(style: StyleLike, intent: string): string | null {
+  const templates = style.sceneTemplates;
+  if (!templates || Object.keys(templates).length === 0) return null;
+  const key = detectSceneTemplateKey(intent);
+  return templates[key] ?? templates.website_hero ?? null;
 }
 
 /**
@@ -174,17 +136,17 @@ function pickStyleAnchor(style: StyleLike): string {
 /**
  * Distills a resolved style + user intent into a focused fal.ai prompt.
  *
- * Strategy: OBLIQUE ANGLE first (not literal depiction), then style anchor
- * (one specific expression), then palette, then quality markers.
+ * Strategy: SCENE TEMPLATE first (taxonomy-driven, specific, oblique),
+ * then style anchor (one specific expression), then palette, then quality markers.
  * NEVER includes text, UI elements, or layout terms.
  */
 export function distillPrompt(style: StyleLike, intent: string): string {
   const parts: string[] = [];
 
-  // 1. OBLIQUE visual angle — the surprising interpretation
-  const oblique = findObliqueAngle(intent, "");
-  if (oblique) {
-    parts.push(oblique);
+  // 1. SCENE TEMPLATE — taxonomy-driven, specific, anti-cliche
+  const template = findSceneTemplate(style, intent);
+  if (template) {
+    parts.push(template);
   } else {
     // Fallback: extract the core visual subject without cliches
     const cleaned = intent
@@ -219,8 +181,6 @@ export function distillPrompt(style: StyleLike, intent: string): string {
   parts.push("sharp, detailed");
 
   // Join and cap at word boundary
-  // NOTE: don't run removeBannedTerms on the output — it strips legitimate "no text" instructions
-  // Instead, the NEGATIVE prompt handles anti-text
   const raw = parts.join(", ");
   return truncateAtWord(raw, MAX_PROMPT_LENGTH);
 }

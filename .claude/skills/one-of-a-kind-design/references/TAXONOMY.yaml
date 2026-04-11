@@ -5549,6 +5549,15 @@ implementation:
         unexpected:
           - developer API docs (the geometric rigor maps to structured information)
           - music production tools (the 1920s-30s jazz connection)
+      scene_templates:
+        website_hero: "a single chrome chevron casting a geometric shadow across a midnight-navy marble floor, the reflection is sharper than the object, overhead spotlight"
+        album_cover: "the lid of a lacquered cigarette case half-open on black velvet, catching a thin line of platinum light along its beveled edge, extreme macro"
+        event_poster: "a row of empty champagne coupes on a mirrored bar surface after the last guest left, geometric reflections multiplied to infinity, warm tungsten"
+        logo: "abstract mark derived from the negative space between radiating sunburst lines, single stroke weight, no fill"
+        video_keyframe: "slow tracking shot along an etched glass partition, light filtering through Deco fan motifs casting moving shadow patterns on a terrazzo floor"
+        mobile_hero: "close-up of fluted column ridges in polished chrome, repeating vertical lines with soft gradient from warm at base to cool at top"
+        product_shot: "product resting in the angular shadow of a geometric room divider, lit by a single art deco sconce casting fan-shaped light"
+        editorial: "hands adjusting a platinum cufflink against a midnight lapel, shallow depth of field, the clasp mechanism is the subject"
     - style_id: impressionism
       dials:
         design_variance: 6
@@ -5579,6 +5588,15 @@ implementation:
         unexpected:
           - smart home controls (light/atmosphere is the product)
           - environmental monitoring dashboards (data as landscape)
+      scene_templates:
+        website_hero: "afternoon light dissolving through sheer curtains onto a wooden floor, the shadow patterns are soft-edged and shifting, every surface has a luminous glow"
+        album_cover: "a water surface reflecting broken color — not a lake scene but the reflection itself abstracted, oil-paint dabs of cerulean and cadmium yellow"
+        event_poster: "a garden chair left under a tree with dappled light pooling on its seat, the light is the event, not the chair"
+        logo: "abstract mark built from a single visible brushstroke that suggests a form without completing it, organic edge, one hue"
+        video_keyframe: "extremely slow pan across a field of wildflowers where each flower is a distinct color stroke, focus shifts like a painter's eye moving across a canvas"
+        mobile_hero: "soft color-field gradient that shifts like changing daylight — warm rose at bottom fading through lavender to pale sky, painterly grain texture"
+        product_shot: "product placed on a windowsill with natural light wrapping around it, the light spill on the surface is more prominent than the product shadow"
+        editorial: "a painter's hand mixing pigment on a worn wooden palette, the paint smears and wood grain tell the story, side light from a north-facing window"
     - style_id: constructivism
       dials:
         design_variance: 9
@@ -5607,6 +5625,15 @@ implementation:
         unexpected:
           - esports analytics (the aggressive hierarchy matches competitive intensity)
           - construction/logistics management (the industrial origin is literal)
+      scene_templates:
+        website_hero: "a diagonal red beam cutting across a concrete surface at 30 degrees, the beam's edge is razor-sharp against the raw texture, stark overhead industrial light"
+        album_cover: "a factory gear tooth in extreme close-up, the machined edge catching electric orange light, black oil residue in the valleys between teeth"
+        event_poster: "scaffolding poles crossing at aggressive angles against an overcast sky, the geometric intersection is the composition, no horizon line"
+        logo: "abstract mark from overlapping triangles and circles at dynamic angles, single stroke weight, asymmetric, suggests thrust and forward motion"
+        video_keyframe: "rapid mechanical pan across riveted steel plates, each rivet head catching a flash of light, the camera movement is metronomic and precise"
+        mobile_hero: "overlapping diagonal color blocks in signal orange and charcoal on cream, the overlap zone creates a third tone, hard edges only"
+        product_shot: "product mounted on an angled steel bracket against raw concrete, shot from below to exaggerate the diagonal energy, harsh directional flash"
+        editorial: "a worker's gloved hand gripping a lever or handle, the tendons visible through the leather, the mechanical connection between human and machine"
     - style_id: art-nouveau
       dials:
         design_variance: 6
@@ -5635,6 +5662,15 @@ implementation:
         unexpected:
           - biotech data visualization (organic forms for organic data)
           - audio waveform editors (curves are the content)
+      scene_templates:
+        website_hero: "a single tendril of wrought iron scrollwork casting a sinuous shadow across a cream plaster wall, late afternoon raking light, the shadow is more alive than the metal"
+        album_cover: "the unfurling tip of a fern frond in extreme macro, the spiral mathematics visible in every cell, amber backlight making the frond glow translucent"
+        event_poster: "an empty doorway with a stained glass transom casting colored light pools on the threshold, the light pattern on stone is the invitation"
+        logo: "abstract mark derived from a single organic whiplash curve that suggests both vine and wave, continuous line, no endpoints visible"
+        video_keyframe: "slow dolly along a balcony railing where iron tendrils interweave, the camera traces the curve like a hand following a vine"
+        mobile_hero: "organic gradient flowing like watercolor through stylized petal shapes, muted gold and forest green, the veining pattern visible within each form"
+        product_shot: "product nestled in the curve of a ceramic lily pad dish, natural overhead light, the organic container is more interesting than the product"
+        editorial: "a glassblower's rod with a gather of molten glass at the tip, the fluid organic form before it becomes an object, warm orange glow"
     - style_id: bauhaus
       dials:
         design_variance: 4
@@ -5664,6 +5700,15 @@ implementation:
         unexpected:
           - children's learning apps (the shapes-as-primitives language is actually pre-literate-friendly)
           - accessibility-first products (the systematic clarity is a feature, not a limitation)
+      scene_templates:
+        website_hero: "three primary-colored geometric shadows (circle, triangle, square) overlapping on a white surface, the shadow intersections create secondary forms, clean noon light"
+        album_cover: "a single red thread stretched taut across a white frame, the thread's tension visible in its slight curve, the shadow it casts is the real subject"
+        event_poster: "an empty Bauhaus chair casting a geometric shadow pattern that is more complex than the chair itself, direct overhead light on concrete floor"
+        logo: "abstract mark from the intersection of a circle, triangle, and line, reduced to absolute minimum strokes, equal weight throughout"
+        video_keyframe: "steady overhead shot of hands arranging colored geometric blocks on a white surface, each placement is precise and deliberate, stop-motion rhythm"
+        mobile_hero: "flat color field divided by a single horizontal line at the golden ratio, primary yellow above, warm gray below, no gradient"
+        product_shot: "product centered on a primary-colored geometric pedestal, white cyclorama background, single diffused overhead light, no drama"
+        editorial: "hands at a weaving loom threading a primary-colored warp, the grid of threads IS a Bauhaus composition, tight crop on the crossing point"
     - style_id: de-stijl
       dials:
         design_variance: 5
@@ -5692,6 +5737,15 @@ implementation:
         unexpected:
           - kanban boards and project management (the rectangular block structure is literally task cards)
           - calendar/scheduling apps (time blocks are Mondrian rectangles)
+      scene_templates:
+        website_hero: "a window frame casting black-line shadows that divide a white wall into asymmetric rectangles, late afternoon sun filling one rectangle with warm gold"
+        album_cover: "a cracked sidewalk where the fracture lines accidentally form a Mondrian composition, rain pooling in one rectangle, reflecting blue sky"
+        event_poster: "a building facade with asymmetric windows at night, some lit warm yellow, most dark, the lit windows form an unintentional grid painting"
+        logo: "abstract mark from asymmetric intersecting lines of varying thickness creating unequal rectangular zones, no curves, no diagonals"
+        video_keyframe: "slow zoom out from a single colored rectangle revealing progressively more of an asymmetric grid composition, each rectangle a different scale"
+        mobile_hero: "asymmetric blocks of primary color separated by thick black lines on white, one block significantly larger than the others, tension through proportion"
+        product_shot: "product placed at the intersection of two thick black lines painted on a white surface, the grid extends beyond the frame"
+        editorial: "hands laying out colored paper rectangles on a white table, the arrangement in progress, scissors and ruler visible at the edge"
     - style_id: rococo
       dials:
         design_variance: 7
@@ -5722,6 +5776,15 @@ implementation:
         unexpected:
           - AI/ML experiment playgrounds (the playful excess matches generative exploration)
           - creative brief tools (ornament as creative permission)
+      scene_templates:
+        website_hero: "a single gilt picture frame on a powder-blue wall, the frame is empty but the ornamental plasterwork around it is the subject, diffused chandelier light"
+        album_cover: "the inside of a porcelain teacup at macro scale, the hand-painted rose pattern cracking at the rim, soft top-light making the glaze luminous"
+        event_poster: "a ballroom floor reflecting crystal chandelier light in warped golden pools, no people, the reflections dance alone, shallow depth of field on the wood grain"
+        logo: "abstract mark derived from a single scrollwork flourish, asymmetric, suggesting movement in a spiral, thin-to-thick stroke variation"
+        video_keyframe: "slow tilt upward along a gilded mirror frame, the reflection shifts from floor to ceiling revealing layers of ornamental detail"
+        mobile_hero: "pale pastel gradient with a faint damask pattern emerging from the surface, powder pink through lavender to cream, the pattern is almost subliminal"
+        product_shot: "product on a marble-topped side table with carved cabriole legs, a single fresh peony beside it beginning to open, natural window light"
+        editorial: "a porcelain restorer's brush touching gold leaf to a chipped figurine, the junction between broken and repaired is the focus"
     - style_id: surrealism
       dials:
         design_variance: 10
@@ -5751,6 +5814,15 @@ implementation:
         unexpected:
           - mental health apps (the dreamlike quality can safely externalize internal experience)
           - paradigm-shifting product launches (disorientation as deliberate framing)
+      scene_templates:
+        website_hero: "a staircase that leads into a cloudbank from a library interior, the books on the nearest shelf transition smoothly into bird feathers, twilight amber light"
+        album_cover: "a grand piano floating in a shallow sea with its legs submerged, the water is perfectly still and reflects a sky that is a different time of day than the one above"
+        event_poster: "an ordinary door standing alone in an empty desert, slightly ajar, warm domestic light spilling from the gap onto sand, no building attached"
+        logo: "abstract mark where a circle melts into a rectangle, the transition zone is neither shape, single line weight, the ambiguity is the identity"
+        video_keyframe: "slow push-in through a hallway where the walls gradually become water, the transition is imperceptible until the camera is swimming"
+        mobile_hero: "gradient where the top half is sky and bottom half is ocean, but the horizon line is a shelf holding small domestic objects, scale is impossible"
+        product_shot: "product casting a shadow that is a completely different object, the shadow tells a story the product cannot, dramatic side light"
+        editorial: "hands reaching through a mirror surface where the reflection shows different hands performing a different task, the glass ripples like water at the wrists"
     - style_id: pop-art
       dials:
         design_variance: 7
@@ -5779,6 +5851,15 @@ implementation:
         unexpected:
           - data journalism (the comic-panel grid is a natural story structure)
           - internal dashboards that need to be engaging enough for non-analysts to use
+      scene_templates:
+        website_hero: "a single oversized halftone dot pattern dissolving into a solid color field, the transition zone where dots become continuous is the focal point, bold primary red and yellow"
+        album_cover: "a crushed soda can rendered in thick black outlines with flat color fills, the crumple lines are as deliberate as a brushstroke, Ben-Day dots in the shadows"
+        event_poster: "a rotary telephone receiver lifted off its cradle with the coiled cord stretching upward out of frame, bold black outline, speech-bubble-shaped negative space"
+        logo: "abstract mark built from overlapping halftone dot patterns at different scales, the moiré interference pattern creates the form, two colors only"
+        video_keyframe: "rapid zoom into a printed photograph until individual CMYK dots fill the frame, the image dissolves into pure abstract color pattern"
+        mobile_hero: "bold diagonal stripe pattern alternating saturated primary colors, each stripe slightly different width, the pattern is aggressive and confident"
+        product_shot: "product with thick black outline drawn around it on a flat color background, drop shadow rendered as visible diagonal lines, comic-panel treatment"
+        editorial: "hands peeling a screen-printed layer off a silkscreen, the partially separated ink still bridging between screen and paper, vivid process colors"
     - style_id: minimalism-fine-art
       dials:
         design_variance: 3
@@ -5806,6 +5887,15 @@ implementation:
         unexpected:
           - error/status pages (a single message with vast space conveys gravity)
           - API pricing pages (one plan per viewport forces comparison through memory rather than visual scanning)
+      scene_templates:
+        website_hero: "a single hairline horizontal divide on a vast empty surface, the divide creates two fields of nearly identical but subtly different white, the edge is everything"
+        album_cover: "one small imperfection on an otherwise blank surface — a single pressed crease, a pinhole of light, a grain of sand — the flaw is the composition"
+        event_poster: "the shadow of a person who has just left the frame, cast on an empty white wall, the absence is the presence, soft diffused daylight"
+        logo: "abstract mark reduced to the absolute minimum geometry that still communicates — a single angle, a gap in a line, a weight change at one point"
+        video_keyframe: "imperceptibly slow zoom on a white surface until a faint texture becomes visible — plaster grain, paper fiber, fabric weave — patience reveals everything"
+        mobile_hero: "vast field of warm white with a single thin horizontal line at the lower third, the line's color is almost but not quite the same as the background"
+        product_shot: "product alone on an infinite white surface, casting a soft shadow that is the only evidence of light direction, nothing else in frame"
+        editorial: "a single hand resting on a blank white surface, the skin texture and subtle shadows are the entire visual event, extreme stillness"
     - style_id: flat-design
       dials:
         design_variance: 3
@@ -5837,6 +5927,15 @@ implementation:
         unexpected:
           - scientific instrument panels (flat's clarity serves precision-demanding contexts)
           - municipal government portals (the systematic consistency serves diverse, accessibility-demanding audiences)
+      scene_templates:
+        website_hero: "overlapping geometric shapes in saturated flat colors casting no shadows, the overlap zones create new colors through transparency, clean vector precision"
+        album_cover: "a single everyday object (coffee cup, key, leaf) reduced to its simplest flat geometric form, two colors plus white, the reduction reveals essential character"
+        event_poster: "a crowd of identical geometric figures differentiated only by color, one figure at the edge is a different shape, the difference is the story"
+        logo: "abstract geometric mark using only circles and rectangles, no strokes, two flat colors with one transparency overlap, mathematically precise"
+        video_keyframe: "flat shapes assembling into a recognizable form through kinetic animation, each piece slides in from a different direction, satisfying mechanical precision"
+        mobile_hero: "tessellating geometric pattern in three analogous flat colors, the pattern tile is simple but the repetition creates visual rhythm, no gradients"
+        product_shot: "product silhouetted as a flat vector shape on a contrasting single-color background, the outline reduction makes the form iconic"
+        editorial: "hands typing on a keyboard reduced to flat graphic shapes, the simplification makes the ordinary gesture feel designed and intentional"
     - style_id: material-design
       dials:
         design_variance: 3
@@ -5867,6 +5966,15 @@ implementation:
         unexpected:
           - physical product configurators (the elevation system mirrors real depth)
           - education platforms (the systematic progression of surfaces mirrors learning scaffolding)
+      scene_templates:
+        website_hero: "layered paper sheets at different elevations casting soft directional shadows, the top sheet has a circular cutout revealing a colored surface beneath, clean white light"
+        album_cover: "a single folded paper form creating a dimensional letter shape through shadow alone, the fold catches a warm edge light, the material IS the message"
+        event_poster: "stacked circular paper discs in ascending size order seen from above, each a different tonal value, the shadows between layers create depth, overhead light"
+        logo: "abstract mark formed by the shadow cast between two overlapping geometric paper shapes, the negative shadow-space IS the mark"
+        video_keyframe: "paper sheets lifting off a surface one by one, each rising to a different elevation, their shadows shifting and separating, the choreography of depth"
+        mobile_hero: "subtle elevation gradient — surface transitions from low shadow at top to higher elevation at bottom, the depth shift is felt more than seen, warm gray tones"
+        product_shot: "product on a white surface with a Material-elevation shadow system — the product at elevation 4, its reflection at elevation 0, clean and systematic"
+        editorial: "hands folding a sheet of white paper, the crease creating a shadow line that divides the frame into two tonal zones, the fold in progress"
     - style_id: neomorphism
       dials:
         design_variance: 4
@@ -5896,6 +6004,15 @@ implementation:
         unexpected:
           - physical therapy apps (the tactile emboss feels 'pressable' which maps to exercise interfaces)
           - IoT device dashboards (the physical-object quality matches hardware-connected software)
+      scene_templates:
+        website_hero: "a single pressed circle and an extruded circle side by side on a soft gray surface, the light and shadow inversion between them is the entire composition, diffused overhead"
+        album_cover: "a volume knob embossed from a matte surface, turned to seven, the dual shadow (light above-left, dark below-right) makes it tactile enough to reach for"
+        event_poster: "a row of identical extruded pill shapes on a soft surface, one is pressed in instead of out, the inversion is the visual disruption, monochrome warm gray"
+        logo: "abstract mark that appears pressed INTO the surface rather than sitting on it, dual inner shadow creates the illusion, monochrome, single shape"
+        video_keyframe: "slow morph of a flat surface developing an embossed form, the shadows gradually appearing as if the shape is being inflated from behind the material"
+        mobile_hero: "soft extruded horizontal ridges on a warm gray surface, the ridges are shallow and wide, catching subtle highlight on their tops, haptic texture"
+        product_shot: "product on a neomorphic pedestal that appears pressed up from the surface beneath, matching surface color, the product floats on a tactile platform"
+        editorial: "a finger pressing into a soft silicone surface, the depression and the resulting shadow ring around the fingertip, the material yields and responds"
     - style_id: glassmorphism
       dials:
         design_variance: 5
@@ -5926,6 +6043,15 @@ implementation:
         unexpected:
           - mapping/GIS applications (glass panels over map content are both beautiful and functional)
           - microscopy/scientific imaging tools (glass UI over specimen images)
+      scene_templates:
+        website_hero: "a frosted glass panel floating over a slowly shifting color field, the glass edge catches a thin white refraction line, the content behind is beautifully indistinct"
+        album_cover: "raindrops on a window pane with city lights bokeh behind, one drop sliding and leaving a clear streak through the frost, the streak reveals a secret color"
+        event_poster: "an ice block with a single object frozen inside, the object is distorted by the ice's refraction, warm overhead light making the ice glow at its edges"
+        logo: "abstract mark that looks like it was etched into a frosted glass surface, the etched area is clear while the surrounding area is blurred, light passes through both"
+        video_keyframe: "slow camera push through layers of frosted glass panels, each panel adds more blur but also more color, the accumulation creates depth from transparency"
+        mobile_hero: "layered frosted glass gradient — each layer adds slight blur and color tint, the deepest layer is a rich saturated hue, surface layer is almost clear"
+        product_shot: "product visible through a frosted glass shelf, the glass diffuses the product's form just enough to create mystery, edge refraction light along the glass"
+        editorial: "hands cleaning a steamed mirror, the cleared area reveals a sharp reflection while the steam around it softens everything, the boundary between clear and fogged"
     - style_id: brutalist-web
       dials:
         design_variance: 10
@@ -5960,6 +6086,15 @@ implementation:
           - developer documentation (the raw structure mirrors code)
           - government transparency portals (the honesty of exposed structure signals institutional trust)
           - legal document platforms (the lack of decoration signals seriousness)
+      scene_templates:
+        website_hero: "raw concrete surface with a single form-input cursor blinking in the center, the concrete texture IS the interface, monospace text, no decoration whatsoever"
+        album_cover: "a stack of photocopied zines with ring stains and tape marks, the top one is slightly askew revealing a different cover beneath, harsh fluorescent light"
+        event_poster: "a wheat-pasted poster half-torn from a concrete wall, the tear reveals the wall texture which is more interesting than the poster, the damage is content"
+        logo: "the brand name typed in Courier at 12pt, period, that IS the logo, no mark no symbol no clever kerning, the refusal to design IS the design"
+        video_keyframe: "handheld camera walking through a concrete parking structure, each level number spray-painted on raw pillars, the wayfinding IS the aesthetic"
+        mobile_hero: "solid black background with a single line of white monospace text, the text might be a URL or a timestamp or raw data, the starkness is the texture"
+        product_shot: "product on raw plywood with visible grain and a printed sticker price, no styling, the anti-production-value IS the production value, flash on camera"
+        editorial: "hands setting metal type in a letterpress chase, the backwards letters in their metal blocks, ink-stained fingers, the craft of raw production"
     - style_id: skeuomorphism
       dials:
         design_variance: 6
@@ -5991,6 +6126,15 @@ implementation:
           - VR/AR interfaces (physical metaphors are necessary for spatial comprehension)
           - senior-focused apps (physical-world affordances reduce cognitive learning load)
           - children's educational apps (physical metaphors teach digital literacy)
+      scene_templates:
+        website_hero: "a leather-bound notebook open to a blank page on a mahogany desk, a mechanical pencil resting in the spine, the page texture has visible tooth, warm desk lamp"
+        album_cover: "a vinyl record half-out of its paper sleeve, the groove spirals catching light like a fingerprint, dust motes visible in the warm side light"
+        event_poster: "a cork bulletin board with a single brass pushpin and the ghost outline where a flyer was removed, the pin hole and faded rectangle tell the story"
+        logo: "abstract mark that appears to be stamped into brushed metal, the stamp impression has a slight bevel and the metal grain shows through, single material"
+        video_keyframe: "slow tracking shot across a desk surface, moving from leather to wood to glass to brass, each material transition is a chapter change"
+        mobile_hero: "brushed aluminum texture with a subtle radial mill pattern, the light source shifts to reveal the directional grain, cold to warm transition across the surface"
+        product_shot: "product on a surface that tells its story — a camera on darkroom-red leather, a watch on navigator's chart, the surface IS the context"
+        editorial: "a watchmaker's fingers adjusting a tiny gear with brass tweezers, the loupe still in their eye socket, the precision of material craft"
     - style_id: aurora-ui
       dials:
         design_variance: 6
@@ -6021,6 +6165,15 @@ implementation:
         unexpected:
           - healthcare patient portals (calming atmospheric backgrounds reduce clinical anxiety)
           - astronomy/space science tools (the cosmic quality is literal)
+      scene_templates:
+        website_hero: "two adjacent color zones slowly bleeding into each other at their border, not a gradient but a luminous gas-like diffusion, the boundary is alive and shifting"
+        album_cover: "a dark surface with a single aurora streak reflecting in it — a polished obsidian countertop or a still lake, the glow exists only in the reflection"
+        event_poster: "a dark sky with a single narrow band of aurora cutting horizontally across the frame, the landscape below is silhouetted and minimal, the light band is everything"
+        logo: "abstract mark where a simple geometric form has an aurora-glow edge bleed, the glow extends beyond the shape boundary, dark background required"
+        video_keyframe: "slow vertical pan from dark ground through an aurora band to dark sky, the color passes through the camera like passing through a curtain of light"
+        mobile_hero: "deep dark field with a single soft luminous glow in one corner, the glow is two adjacent hues (gold-to-rose or ice-to-mint), the rest is darkness"
+        product_shot: "product in darkness with only an aurora-colored edge light, the light appears to emanate from behind the product, no fill light, the glow IS the lighting"
+        editorial: "a glassblower's furnace viewed through dark safety glass, the molten glass glowing in aurora colors, the human figure barely visible as a silhouette"
     - style_id: claymorphism
       dials:
         design_variance: 5
@@ -6050,6 +6203,15 @@ implementation:
         unexpected:
           - fintech onboarding (the friendly tactility reduces money-anxiety)
           - complex B2B tool first-run experiences (clay elements guide attention without intimidating)
+      scene_templates:
+        website_hero: "a row of soft rounded shapes extruded from a warm-toned surface like clay pressed through a form, inner shadows give each shape weight, pastel overhead light"
+        album_cover: "a single clay fingerprint pressed into a soft surface, the whorls and ridges magnified, warm inner shadow making the impression feel deep and personal"
+        event_poster: "soft clay-like shapes stacked in a cairn formation, each a different pastel hue, the topmost one slightly tilted as if just placed, gentle top-down light"
+        logo: "abstract mark that looks thumb-pressed into a soft surface, the impression has rounded edges and a gentle inner shadow, organic and imperfect"
+        video_keyframe: "clay shapes morphing slowly from one form to another, the surface stays soft and consistent, transitions feel like a child squeezing putty"
+        mobile_hero: "soft raised bumps on a warm surface like braille or bubble wrap seen from an angle, each bump catches a tiny highlight and casts a tiny inner shadow"
+        product_shot: "product sitting in a custom clay-formed cradle that matches its contours, the cradle surface has visible fingermarks, warm diffused light from above"
+        editorial: "a potter's hands shaping a vessel on a slow wheel, the clay yielding under thumb pressure, the spiral groove of the wheel marks visible in the wet surface"
     - style_id: dark-mode-ui
       dials:
         design_variance: 3
@@ -6080,6 +6242,15 @@ implementation:
         unexpected:
           - photography/portfolio platforms (dark backgrounds are the professional standard for a reason)
           - cinema/theater apps (the dark context is literal)
+      scene_templates:
+        website_hero: "layered dark surfaces at different elevations, the highest surface catching a subtle edge light, the depth is communicated entirely through luminance steps, no color"
+        album_cover: "a single LED indicator glowing in a dark device panel, the light halos softly on the matte black surface around it, the glow color is the only color"
+        event_poster: "a dark room with a single screen casting cool light on surrounding surfaces, the screen content is blurred but the cast light on the desk and wall tells the story"
+        logo: "abstract mark in luminous desaturated color on near-black, the mark appears to emit light rather than reflect it, subtle glow at edges"
+        video_keyframe: "slow pan across a dark control surface where indicator lights activate sequentially, each light illuminating a small pool of the surrounding material"
+        mobile_hero: "near-black surface with an extremely subtle gradient revealing texture — the darkness is not flat but has depth and grain, elevation zero"
+        product_shot: "product lit by its own screen glow in a dark environment, the device light painting the surrounding surfaces, no external light source visible"
+        editorial: "hands on a backlit keyboard in darkness, the key legends glowing, the fingers and screen-light on skin are the only illuminated surfaces"
     - style_id: isometric
       dials:
         design_variance: 5
@@ -6111,6 +6282,15 @@ implementation:
           - city planning portals
           - warehouse/logistics management
           - electronic hardware documentation
+      scene_templates:
+        website_hero: "a single isometric room corner with three visible surfaces in three different colors meeting at a vanishing point, the geometric precision is satisfying, clean flat light"
+        album_cover: "an isometric stack of everyday objects (books, cups, tools) arranged like a miniature city skyline, each object's shadow contributes to the composition, flat color"
+        event_poster: "an isometric maze seen from above with one path highlighted, the maze walls cast consistent 30-degree shadows, the solved path is a different color"
+        logo: "abstract isometric cube with one face removed to reveal an inner form, the impossible geometry suggests depth within simplicity, three tones of one hue"
+        video_keyframe: "isometric world building itself piece by piece, each block sliding into place with mechanical precision, the assembly reveals a scene"
+        mobile_hero: "isometric grid of identical cubes where one cube is a different color, the pattern disruption is the focal point, clean geometric precision"
+        product_shot: "product rendered in isometric perspective on a grid surface, the grid lines visible beneath, technical-drawing precision, flat even lighting"
+        editorial: "hands assembling small colored blocks on an isometric grid, the blocks forming a recognizable structure, the act of building is the narrative"
     - style_id: risograph
       dials:
         design_variance: 7
@@ -6140,6 +6320,15 @@ implementation:
         unexpected:
           - sustainability-focused brands (the analog production ethos signals environmental consciousness)
           - food/restaurant branding (the printed-menu feel carries into digital)
+      scene_templates:
+        website_hero: "two color layers slightly misregistered on a cream paper texture — a geometric form in fluorescent pink overlapping a circle in teal, the overlap zone creates a third color"
+        album_cover: "a close-up of a misregistered portrait where the cyan and magenta layers have shifted 3mm, the face is recognizable but the color separation creates a ghostly double"
+        event_poster: "a fluorescent ink swatch printed on cheap newsprint, the ink pooling and bleeding at the edges, the paper fiber visible through the thin ink, the accident is the beauty"
+        logo: "abstract mark in two spot colors with deliberate misregistration — the offset between layers IS the design, printed on visible paper texture"
+        video_keyframe: "animation where color channels separate and rejoin, objects leaving color trails as they move, the misregistration follows the motion"
+        mobile_hero: "speckled paper texture with a single large geometric shape in fluorescent spot color, the ink coverage is uneven with characteristic risograph grain"
+        product_shot: "product photographed then reduced to a two-color risograph separation, the dot pattern visible at edges, printed on textured cream stock"
+        editorial: "hands pulling a risograph print from the drum, the wet ink still shiny, the paper curling slightly from the heat, the first impression in a run"
     - style_id: pixel-art
       dials:
         design_variance: 6
@@ -6169,6 +6358,15 @@ implementation:
         unexpected:
           - genomics/bioinformatics visualization (sequence data IS pixel data)
           - heat maps and activity matrices (GitHub's contribution graph is pixel art)
+      scene_templates:
+        website_hero: "a pixel-art window frame looking out at a landscape where each pixel is deliberately placed, the color count is restricted to 16, the constraint creates charm"
+        album_cover: "a musical instrument rendered at 64x64 pixels, every pixel a deliberate color choice, the reduction forces character — the instrument is more itself as pixels"
+        event_poster: "an 8-bit cityscape at night with individual lit windows, each window is a single bright pixel against dark building pixels, the grid IS the city"
+        logo: "abstract mark on a visible pixel grid, no anti-aliasing, the mark works at 16x16 and scales to any size, each pixel is load-bearing"
+        video_keyframe: "pixel-art scene where a single element animates with 4-frame loop, the rest is still, the limited animation budget forces expressive economy"
+        mobile_hero: "dithered gradient between two colors using a pixel checkerboard pattern, the dithering technique itself is the visual texture, retro-technical beauty"
+        product_shot: "product as a pixel-art sprite on a single-color background, the pixelation forces the essential silhouette to emerge, 32x32 maximum"
+        editorial: "a pixel artist's reference grid with a partially completed sprite, some pixels placed and others marked as guides, the creative process at pixel scale"
     - style_id: wabi-sabi
       dials:
         design_variance: 6
@@ -6199,6 +6397,15 @@ implementation:
         unexpected:
           - software changelogs (impermanence and iteration are wabi-sabi's core — release notes as 'marks of time')
           - construction project trackers (weathering as progress indicator)
+      scene_templates:
+        website_hero: "the junction where aged wood meets hand-troweled plaster, the meeting point of two imperfect materials is the subject, amber raking light reveals decades of patina"
+        album_cover: "a single cracked ceramic bowl in generous negative space, the crack has been repaired with visible gold, muted earth tones, the flaw IS the beauty"
+        event_poster: "wear patterns on a wooden threshold where thousands of feet have passed, the wood grain polished smooth in the path, rough at the edges, warm indirect light"
+        logo: "abstract mark derived from the shape of a natural crack or wood grain pattern, asymmetric, single weight, the imperfection is intentional and precise"
+        video_keyframe: "extreme slow pan across a weathered surface, the camera movement is meditative, textures shift from rough to smooth and back, each inch is a landscape"
+        mobile_hero: "organic plaster texture with subtle trowel marks, warm clay and sand palette, the imperfection IS the pattern, no digital perfection anywhere"
+        product_shot: "product on a raw material surface — the contrast between the crafted object and its imperfect context creates intimacy, natural overhead light"
+        editorial: "the specific mark of the maker's hand — chisel marks in wood, brush strokes in glaze, stitch holes in leather — zoomed in until the mark becomes landscape"
     - style_id: scandinavian-minimalism
       dials:
         design_variance: 3
@@ -6228,6 +6435,15 @@ implementation:
         unexpected:
           - medical/clinical interfaces (the calm clarity reduces patient anxiety)
           - legal tech (the warmth humanizes institutional software)
+      scene_templates:
+        website_hero: "a single piece of pale birch plywood leaning against a white wall, the wood grain is the only visual event, soft diffused northern light from a high window"
+        album_cover: "a ceramic mug on a linen cloth, both in nearly the same off-white tone, the subtle difference between the two whites is the entire composition, gentle shadow"
+        event_poster: "an empty room with one window, one chair, and a single plant, each object essential and none decorative, the simplicity is full not empty, natural light only"
+        logo: "abstract mark of extreme geometric simplicity — a single line with one angle change, or a circle with one flat edge, warm not cold, inviting not severe"
+        video_keyframe: "slow lateral tracking shot through a minimal interior, each object appears and disappears with careful spacing, the rhythm of objects IS the composition"
+        mobile_hero: "warm off-white field with the faintest wood-grain texture overlay, the texture is felt more than seen, the warmth distinguishes it from sterile white"
+        product_shot: "product on raw pine shelving, other objects removed to leave just the product and the wood, the pine knots and grain provide the only visual texture"
+        editorial: "hands sanding a wooden surface to silk-smoothness, the sawdust on skin, the grain emerging under touch, the care of finishing"
     - style_id: memphis-design
       dials:
         design_variance: 9
@@ -6256,6 +6472,15 @@ implementation:
         unexpected:
           - creative agency internal tools (the style signals 'we don't take ourselves too seriously' which attracts talent)
           - brainstorming/ideation apps (visual chaos gives permission to think freely)
+      scene_templates:
+        website_hero: "scattered geometric confetti frozen mid-fall — triangles, squiggles, and circles in clashing neon colors on a pastel background, each shape casts a hard shadow at a different angle"
+        album_cover: "a terrazzo surface made of oversized geometric chips in neon colors, one chip is metallic and catches light differently, the chaos has hidden order"
+        event_poster: "a lamp with a ridiculous zigzag base and a polka-dot shade, casting a geometric shadow that is equally absurd, the object's confidence IS the invitation"
+        logo: "abstract mark combining a geometric shape with a squiggle in clashing colors, deliberate bad taste that loops back to bold, no subtlety no apology"
+        video_keyframe: "geometric shapes bouncing in from all directions and assembling into an unexpected pattern, each shape has its own personality and trajectory"
+        mobile_hero: "bold geometric pattern mixing dots, stripes, and zigzags in neon on black, the patterns clash deliberately but the rhythm is controlled, visual cacophony"
+        product_shot: "product on a surface covered in clashing geometric patterns, the product is the calmest element in frame, the contrast makes it precious"
+        editorial: "hands arranging colored geometric foam shapes on a surface, the arrangement is deliberately wrong by classical standards but right by Memphis rules"
     - style_id: swiss-international
       dials:
         design_variance: 3
@@ -6285,6 +6510,15 @@ implementation:
         unexpected:
           - dense analytics dashboards (the mathematical grid was designed for exactly this data density)
           - government service portals (Swiss objectivity signals institutional reliability)
+      scene_templates:
+        website_hero: "a mathematical grid of thin lines on white, one cell highlighted with a single solid color block, the grid's precision is the aesthetic, no decoration"
+        album_cover: "a single Akzidenz-Grotesk letterform at massive scale filling the frame, the counter spaces and stroke terminals are the composition, one color on white"
+        event_poster: "an asymmetric arrangement of horizontal and vertical rules of varying thickness, the whitespace between rules is more active than the rules themselves"
+        logo: "abstract mark derived from the negative space within a grid intersection, the form emerges from structure not invention, mathematically positioned"
+        video_keyframe: "text and image blocks assembling on an invisible grid, each element snapping to position with mechanical precision, the grid reveals itself through use"
+        mobile_hero: "clean white field with a single narrow color band at a precise vertical position, the band's placement is mathematically determined, not decorative"
+        product_shot: "product photographed in black and white on a gridded surface, the grid lines visible through the product's shadow, objectivity as aesthetic"
+        editorial: "a typographer's ruler and triangle on a light table, the precision instruments ARE the aesthetic objects, the tools of order"
     - style_id: glitch
       dials:
         design_variance: 9
@@ -6315,6 +6549,15 @@ implementation:
         unexpected:
           - error/failure state design for any app
           - network monitoring dashboards (the corruption aesthetic maps to actual data corruption)
+      scene_templates:
+        website_hero: "a clean geometric form being torn apart by data corruption, color channels separating in bands, the destruction reveals hidden color layers beneath the surface"
+        album_cover: "a face-down phone screen cracked in a starburst pattern, each crack refracting a different color from the display beneath, the break pattern is beautiful"
+        event_poster: "a neon sign with half its letters malfunctioning, the working and broken letters together spell something different than intended, the malfunction is the message"
+        logo: "abstract mark that appears to be a clean form suffering a single glitch — one horizontal band shifted, or one color channel displaced, the error IS the mark"
+        video_keyframe: "clean footage that develops progressive corruption, starting from one corner and spreading, the corruption has its own rhythm and logic"
+        mobile_hero: "horizontal bands of shifted color channels on a dark background, each band a different displacement amount, data-corruption as color palette"
+        product_shot: "product photographed cleanly but with the image data deliberately corrupted in bands, the corruption reveals the image's hidden data structure"
+        editorial: "hands on a CRT monitor adjusting the horizontal hold, the rolling image partially stabilized, the moment between signal and noise"
     - style_id: noise-field
       dials:
         design_variance: 5
@@ -6345,6 +6588,15 @@ implementation:
         unexpected:
           - meditation/breathing apps (the flow matches breath rhythm)
           - weather applications (wind flow visualization is literally the product)
+      scene_templates:
+        website_hero: "a flowing vector field rendered in fine white lines on deep navy, the lines follow a mathematical function that creates an organic landscape, the math IS the beauty"
+        album_cover: "a single noise-field pattern where the flow direction changes at one point, creating a visual vortex, the attractor point is off-center, monochrome on cream"
+        event_poster: "flow lines converging toward a single point from all directions, the density increasing near the center, the convergence implies something without showing it"
+        logo: "abstract mark created by a constrained flow field — the field parameters define the brand, the output is unique but reproducible from the same seed"
+        video_keyframe: "noise field evolving slowly over time, the parameters shifting by fractional amounts, each frame is unique but the system is recognizable as continuous"
+        mobile_hero: "subtle flow-field texture in low-contrast tones, the lines barely visible but creating a directional energy across the surface, organic but mathematical"
+        product_shot: "product surrounded by flow-field lines that part around it like water around a stone, the field responds to the product's shape, procedural context"
+        editorial: "hands coding on a screen displaying flow-field source code, the code on screen generates the same pattern visible in the physical environment around the screen"
     - style_id: wireframe-mesh
       dials:
         design_variance: 6
@@ -6374,6 +6626,15 @@ implementation:
         unexpected:
           - automotive/product configurators (the wireframe-to-rendered transition is the 'build your car' experience)
           - architecture firms (showing structure beneath surface is the profession's core narrative)
+      scene_templates:
+        website_hero: "a wireframe sphere floating in dark space, the mesh density varying from tight at one pole to sparse at the other, each vertex catching a pinpoint of light"
+        album_cover: "a familiar object (guitar, face, cityscape) reduced to its wireframe skeleton, the mesh edges are the only geometry, the volume is implied by the cage alone"
+        event_poster: "wireframe terrain stretching to a digital horizon, the grid lines glowing on a dark void, one point on the terrain is marked, the wire grid IS the landscape"
+        logo: "abstract mark constructed from wireframe edges only — no fills, no surfaces, just the structural skeleton of a geometric form, glowing on dark"
+        video_keyframe: "slow orbit around a wireframe object, the mesh catching light at different angles, the structure reveals itself through rotation, the emptiness between wires is space"
+        mobile_hero: "perspective wireframe grid receding to a vanishing point, the grid lines luminous on dark background, the receding lines create depth from pure structure"
+        product_shot: "product shown alongside its wireframe model, the physical object and its digital skeleton in split-frame, the translation between solid and structure"
+        editorial: "hands rotating a wireframe model on screen with a stylus, the mesh vertices highlighted as editable points, the craft of digital structure"
     - style_id: cinematic
       dials:
         design_variance: 5
@@ -6407,6 +6668,15 @@ implementation:
         unexpected:
           - real estate listings (cinematic property photography is the industry standard that digital platforms fail to match)
           - restaurant/hospitality (the mood-lighting quality matches dining atmosphere)
+      scene_templates:
+        website_hero: "a single practical light source cutting through atmospheric haze in an empty architectural space, the beam itself is the subject, color-graded teal and warm amber"
+        album_cover: "close-up of a surface that holds the memory of the music — piano fallboard with condensation, guitar case lining worn smooth, vinyl groove under macro lens"
+        event_poster: "the environmental aftermath — empty venue with residual traces of what happened, a single overhead light still on, chairs still warm, dust still settling"
+        logo: "abstract letterbox frame shape derived from anamorphic lens characteristics, negative space creates the mark"
+        video_keyframe: "slow dolly forward through a narrow corridor of warm practical lights, shallow depth of field with the vanishing point in soft focus"
+        mobile_hero: "color-graded surface texture — the grain of 35mm film stock at 4x magnification, warm amber on one side fading to cool teal"
+        product_shot: "product lit by a single overhead practical light in otherwise darkness, dramatic directional shadow, color-graded warm amber with cool fill"
+        editorial: "hands in the craft of the industry — the specific gesture that defines the profession, shallow DOF, warm sidelight, film grain"
     - style_id: analog-film-grain
       dials:
         design_variance: 5
@@ -6436,6 +6706,15 @@ implementation:
         unexpected:
           - recipe/food apps (food photography in film aesthetic dramatically outperforms digital)
           - travel journals (the analog grain signals 'real experience, not curated content')
+      scene_templates:
+        website_hero: "a window casting soft light onto a wall, the entire image has the grain structure of Kodak Tri-X pushed two stops, the grain is as important as the light"
+        album_cover: "a hand holding an undeveloped roll of film up to window light, the film strip's sprocket holes and unexposed amber base are the composition, the potential image"
+        event_poster: "a developing tray with a print emerging from the chemicals, the image half-visible through the developer, the transition between nothing and something"
+        logo: "abstract mark that appears to emerge from film grain — the mark's edges dissolve into grain particles, the boundary between signal and noise IS the brand"
+        video_keyframe: "slow static shot through a window, the film grain dancing and breathing on the still scene, the grain's movement is the only motion, the film is alive"
+        mobile_hero: "pure film grain texture at high magnification — the silver halide crystals forming a random organic pattern, warm Portra tones, the medium itself as texture"
+        product_shot: "product photographed on expired film, the color shifts and light leaks becoming part of the aesthetic, unpredictable warmth and halation at edges"
+        editorial: "hands loading film into a camera in a changing bag, the tactile blindness of the process, the trust in material and muscle memory"
     - style_id: studio-product
       dials:
         design_variance: 2
@@ -6466,6 +6745,15 @@ implementation:
         unexpected:
           - software feature showcases (screenshot in studio-lit environment elevates perceived quality)
           - API documentation (treating code examples like studio-photographed objects)
+      scene_templates:
+        website_hero: "a single studio reflector card leaning against a white cyclorama, its silver surface catching the key light, the lighting tool becomes the subject of its own technique"
+        album_cover: "a single material sample — leather swatch, fabric cutting, metal blank — photographed with studio precision on white, the material's surface is the entire story"
+        event_poster: "an empty product pedestal with a perfect gradient background, the absence of the product is the invitation, the lighting setup waits for its subject"
+        logo: "abstract mark derived from the shape cast by studio lighting equipment shadows — a softbox shape, a reflector curve, the tools of presentation"
+        video_keyframe: "slow rotation of a product on a turntable, the highlights migrating across the surface, each degree reveals a new material quality"
+        mobile_hero: "seamless gradient background that could be behind any product — the transition from surface to background so smooth the horizon disappears, studio-grade"
+        product_shot: "product on white with a single graduated shadow beneath it, the shadow's softness precisely controlled, every surface reflection placed with intention"
+        editorial: "a studio photographer's hands adjusting a reflector card to redirect light onto a tiny surface detail, the precision of professional attention"
     - style_id: duotone
       dials:
         design_variance: 5
@@ -6496,6 +6784,15 @@ implementation:
         unexpected:
           - medical imaging display (false-color is how radiology actually works)
           - heatmap dashboards (duotone IS the native language of data-density visualization)
+      scene_templates:
+        website_hero: "a complex photographic scene collapsed to two tones — the loss of color reveals the structural composition that was hidden by the original palette, stark and graphic"
+        album_cover: "a familiar face or landmark in unexpected duotone pairing (coral and navy, sage and gold), the color pairing recontextualizes the known subject"
+        event_poster: "overlapping duotone photographs each using a different pair, the overlap zone creates a third tonal world, the collision of two palettes"
+        logo: "abstract mark where the form exists only in the transition between two tones, the gradient map IS the mark, no outline needed"
+        video_keyframe: "duotone footage where the tone pair slowly shifts over time — warm pair morphs to cool pair, the same scene transforms emotionally through color alone"
+        mobile_hero: "smooth duotone gradient between two carefully chosen tones, the gradient creates depth and warmth from just two values, graphic and bold"
+        product_shot: "product photograph converted to a duotone that uses the product's own brand colors as the pair, the product becomes a graphic object"
+        editorial: "hands mixing two ink colors on a press, the inks swirling into each other at the mixing point, two becoming infinite between them"
     - style_id: woodcut
       dials:
         design_variance: 6
@@ -6526,6 +6823,15 @@ implementation:
           - true-crime/investigative platforms
           - heritage conservation databases
           - labor union tools
+      scene_templates:
+        website_hero: "a single carved line deeply incised into end-grain wood, the line catches dark ink while the wood surface remains golden, extreme macro of the cut edge"
+        album_cover: "a hand-carved portrait where the gouge marks are visible as individual strokes, the face emerges from parallel lines of varying depth, bold black on cream"
+        event_poster: "wood shavings curled on a workbench around a carved block, the carved surface partially inked, the preparation before the print is pulled, warm workshop light"
+        logo: "abstract mark with the character of a woodcut — thick-to-thin line variation from blade angle, the relief edge visible, looks carved not drawn"
+        video_keyframe: "slow tracking shot across an inked woodblock surface, the raised areas glistening with black ink, the carved valleys showing raw wood, the texture is the journey"
+        mobile_hero: "bold parallel lines of varying width carved into a surface, the line pattern creates rhythm and texture, ink-black on warm paper, the cut marks are visible"
+        product_shot: "product placed on an inked woodblock, the ink slightly transferring to the product's base, the craft tool becomes the display surface"
+        editorial: "a printmaker's hands pressing paper onto an inked block with a baren, the moment of transfer, the pressure required for the image to exist"
     - style_id: retro-vintage-print
       dials:
         design_variance: 6
@@ -6555,6 +6861,15 @@ implementation:
         unexpected:
           - developer tooling with personality (a CLI with vintage print aesthetic stands out)
           - local government services (heritage aesthetic signals institutional continuity)
+      scene_templates:
+        website_hero: "a stack of vintage letterpress blocks in a typecase, each block showing its metal face and wooden body, the accumulated ink and wear on the type surface, warm workshop light"
+        album_cover: "a worn cardboard record sleeve with ring wear from the vinyl inside, the concentric circle worn into the surface IS the record's ghost, warm sepia tones"
+        event_poster: "a printing press detail — the chase locked with furniture and quoins around a type form, the metallic puzzle of preparation, ink-stained steel"
+        logo: "abstract mark with visible print artifacts — slight ink spread, registration variation, the imperfection of mechanical reproduction IS the character"
+        video_keyframe: "close-up of a letterpress printing, the type meeting paper, ink transferring under pressure, the physical mechanics of reproduction in slow motion"
+        mobile_hero: "vintage paper texture — cream stock with age spots and subtle foxing, the paper's history is the ornament, warm and organic, no digital perfection"
+        product_shot: "product photographed in a style referencing vintage catalog illustration, flat warm lighting, visible paper texture, as if printed in 1962"
+        editorial: "hands setting metal type letter by letter into a composing stick, each character reversed and reading right to left, the patient craft of backward assembly"
     - style_id: papercut
       dials:
         design_variance: 6
@@ -6584,6 +6899,15 @@ implementation:
         unexpected:
           - presentation/slide tools (each layer is a slide conceptually)
           - project planning (layered timelines as stacked paper)
+      scene_templates:
+        website_hero: "layered paper sheets cut into organic forms stacked with visible shadows between each layer, the depth created by real shadow not digital effect, warm overhead light"
+        album_cover: "a single sheet of colored paper with a complex cut-out shape, the cut paper held up to a window so light streams through the negative space, the absence is the art"
+        event_poster: "torn paper edge revealing a contrasting color layer beneath, the tear is organic and controlled, the ragged edge creates a natural border, paper-white surrounds"
+        logo: "abstract mark that appears to be cut from a single sheet — rounded interior corners where scissors change direction, the paper's edge is visible"
+        video_keyframe: "paper layers sliding apart to reveal depth, each layer a different color, the shadows between layers lengthening and shortening, a paper pop-up opening"
+        mobile_hero: "overlapping rounded rectangles in soft colors with subtle contact shadows, the shadow reveals they are separate paper layers, gentle depth"
+        product_shot: "product surrounded by cut paper props — paper leaves, paper clouds, paper shapes — the paper craft world frames the real object"
+        editorial: "hands with precision scissors cutting a silhouette from black paper, the cut shape emerging as the scissors advance, the discarded negative visible"
     - style_id: low-poly
       dials:
         design_variance: 6
@@ -6614,6 +6938,15 @@ implementation:
           - terrain/topographic visualization
           - 3D printing preview interfaces
           - network topology mapping
+      scene_templates:
+        website_hero: "a mountain landscape reduced to triangular facets, each triangle a flat color sample from the scene, the simplification reveals the essential structure of the terrain"
+        album_cover: "a familiar object (human head, animal, building) reduced to minimum triangles, each facet catching a different light angle, the polygon count IS the aesthetic"
+        event_poster: "a single low-poly crystal or gemstone on a dark surface, each facet a different value of one hue, the geometric reduction creates preciousness from mathematics"
+        logo: "abstract mark built from a minimum number of triangles that still reads as a recognizable form, the polygon edges are visible and celebrated, sharp and angular"
+        video_keyframe: "a smooth surface progressively triangulating — starting photorealistic and reducing to fewer and fewer polygons, each reduction revealing essential form"
+        mobile_hero: "triangulated gradient where each triangle is a flat color step, the faceted transition creates a jewel-like surface, geometric warmth from angular math"
+        product_shot: "product surrounded by a low-poly environment — the product is real but everything around it is faceted, the contrast between smooth product and angular world"
+        editorial: "hands modeling a low-poly form in 3D software, the wireframe visible with face normals, the digital sculpture at its most geometric stage"
     - style_id: line-art
       dials:
         design_variance: 4
@@ -6644,6 +6977,15 @@ implementation:
           - technical documentation diagrams
           - blueprint/architecture apps
           - mindmap/whiteboard tools
+      scene_templates:
+        website_hero: "a single continuous line that traces an entire scene without lifting — buildings, trees, sky — the line starts thick and confident and ends in a whisper, ink on cream"
+        album_cover: "a musical scene drawn in one stroke weight, the line as precise as an engraving but as flowing as handwriting, the subject emerges from the line's journey"
+        event_poster: "a building or venue drawn with only its contour lines, no fill, no shadow, the structure exists purely as outline, the interior is imagined"
+        logo: "abstract mark drawn in a single continuous stroke, the line crosses itself to create enclosed shapes, the start and end points are visible, hand-drawn character"
+        video_keyframe: "a line drawing itself across the frame, the stroke is being created in real-time, the drawing reveals itself as a journey from first point to last"
+        mobile_hero: "fine parallel horizontal lines varying subtly in spacing to create a moire-like texture, the line weight is consistent throughout, meditative repetition"
+        product_shot: "product illustrated as a line drawing next to the photographed original, the drawing captures what the photo cannot — the essential character in outline"
+        editorial: "a hand with a technical pen at the moment the nib touches paper, the first point of contact, the ink beginning to flow, the beginning of every line"
     - style_id: psychedelic
       dials:
         design_variance: 10
@@ -6674,6 +7016,15 @@ implementation:
         unexpected:
           - creative brainstorming tools (the visual chaos matches divergent thinking)
           - neuroscience visualization (the patterns mirror actual neural imagery)
+      scene_templates:
+        website_hero: "concentric organic shapes radiating from center, each ring a different saturated color, the rings undulate rather than forming perfect circles, the movement is biological"
+        album_cover: "a single eyeball with the iris rendered as a kaleidoscopic mandala of saturated color, the pupil is a void pulling the viewer in, hyper-detailed, symmetrical"
+        event_poster: "a melting landscape where solid objects become liquid streams of color, gravity pulling everything into flowing ribbons, the dissolution is beautiful not destructive"
+        logo: "abstract mark made of concentric warped outlines of the same shape, each outline a different color, the shape appears to vibrate or radiate energy"
+        video_keyframe: "slow kaleidoscopic rotation where organic forms multiply and mirror, the symmetry is hypnotic, colors shift through the spectrum continuously"
+        mobile_hero: "saturated color swirls that move like oil on water, the colors never settle, the pattern is always resolving and dissolving, liquid rainbow"
+        product_shot: "product surrounded by an aura of radiating color patterns, the product is the calm center of a visual explosion, the energy emanates outward"
+        editorial: "hands mixing pigments on glass, the colors swirling together but not blending, each color maintaining its identity while flowing, the marbling moment"
     - style_id: afrofuturism
       dials:
         design_variance: 8
@@ -6706,6 +7057,15 @@ implementation:
           - space/aerospace tech interfaces (the cosmic imagery is literal)
           - generative AI tools (the speculative-future philosophy matches the technology)
           - fashion-tech platforms
+      scene_templates:
+        website_hero: "a geometric pattern inspired by Kente cloth mathematics rendered in metallic materials — gold, bronze, oxidized copper — the ancestral algorithm made physical, dramatic rim light"
+        album_cover: "a ceremonial mask reflected in a polished spacecraft visor, the mask's carved lines merging with the visor's technological reflections, ancestral meets speculative"
+        event_poster: "a staircase made of stacked books ascending toward a star field, the book spines visible with titles from the African diaspora, the knowledge structure IS the ascension"
+        logo: "abstract mark combining Adinkra symbol geometry with circuit-board topology, the ancestral and technological are the same visual language, bold stroke weight"
+        video_keyframe: "slow push through a portal where geometric African textile patterns transform into digital particle systems, the patterns are the same math in different media"
+        mobile_hero: "dark surface with metallic geometric patterns — gold and copper on deep indigo, the patterns reference real African mathematical traditions, the geometry has ancestry"
+        product_shot: "product on a surface with parametric African geometric patterns etched or engraved, the mathematical heritage frames the contemporary object"
+        editorial: "hands weaving with metallic thread on a loom, the pattern emerging is simultaneously ancient and futuristic, the fiber catches light like circuitry"
     - style_id: vaporwave
       dials:
         design_variance: 8
@@ -6738,6 +7098,15 @@ implementation:
         unexpected:
           - personal knowledge management tools (the retro-computer aesthetic matches note-taking-as-collection)
           - CRM interfaces for creative industries (the aesthetic signals cultural fluency to the users)
+      scene_templates:
+        website_hero: "a sunset grid floor stretching to a neon horizon line, a single palm tree silhouette off-center, the sky is magenta-to-cyan gradient, the nostalgia is architectural"
+        album_cover: "a 90s desktop computer screen displaying a window with a sunset image, the screen reflections and scan lines visible, digital nostalgia for analog nostalgia, teal and pink"
+        event_poster: "a shopping mall fountain at night, the water lit from below in pink and teal, marble tiles reflecting neon, the commercial sublime, consumer cathedral"
+        logo: "abstract mark combining a sunset gradient with a grid pattern, the mark is both retro and timeless, hot pink and cyan on deep purple"
+        video_keyframe: "slow zoom toward a digital horizon where the grid floor meets a gradient sky, the perspective never arrives, perpetual approach to a destination that doesn't exist"
+        mobile_hero: "sunset gradient from hot pink at top through coral to teal at bottom, overlaid with a subtle scan-line pattern, the gradient IS the aesthetic"
+        product_shot: "product on a reflective black surface with neon edge lighting in pink and teal, the reflections create a grid-like pattern, consumer object as art object"
+        editorial: "hands browsing through a crate of vinyl in a neon-lit record store, the album spines creating colored stripes, the searching gesture in consumer paradise"
     - style_id: ukiyo-e
       dials:
         design_variance: 7
@@ -6767,6 +7136,15 @@ implementation:
         unexpected:
           - surf/ocean/marine brands (the wave imagery is both literal and culturally resonant)
           - travel apps with Japanese destinations
+      scene_templates:
+        website_hero: "layered flat-color mountain ridges receding into mist, each layer a subtly different blue-gray, no perspective projection, the depth is achieved through overlapping and value change"
+        album_cover: "a single wave crest about to break, rendered in flat color with bold outline, the wave's anatomy studied from a view no camera could capture, five colors maximum"
+        event_poster: "a bridge crossing a river with the reflection showing a different season than the reality above, the water surface is the boundary between time periods, flat color"
+        logo: "abstract mark drawn with ukiyo-e line quality — confident single-stroke outline that varies from hair-thin to bold, the brush speed visible in the stroke"
+        video_keyframe: "slow lateral scroll through a continuous landscape composition, the layered depth revealing itself as parallax, mountain layers at different speeds, flat color"
+        mobile_hero: "layered flat-color atmospheric depth — four bands of decreasing saturation from foreground to background, each band a subtly different hue, traditional restraint"
+        product_shot: "product illustrated in ukiyo-e flat-color technique with bold outline, the traditional rendering makes a modern object feel timeless, limited palette"
+        editorial: "a brush calligrapher's hand mid-stroke, the ink flowing from brush to paper, the arm's motion captured in the stroke's speed variation, decisive and irreversible"
     - style_id: generative-art
       dials:
         design_variance: 8
@@ -6797,6 +7175,15 @@ implementation:
         unexpected:
           - identity verification (generative patterns as unique visual fingerprints)
           - real-time data encoding (data-driven generative art as monitoring dashboard)
+      scene_templates:
+        website_hero: "a single generative algorithm's output at three different parameter settings side by side, the SYSTEM is the subject, the variation proves the intelligence of the rules"
+        album_cover: "a seed-based generative pattern unique to this album's release timestamp, the pattern is unrepeatable, the specific moment of creation encoded as visual form"
+        event_poster: "generative flow fields shaped by text data — the event's description converted to parameters that drive the visual, the information IS the decoration"
+        logo: "abstract mark generated from a fixed algorithm with brand-specific parameters — the same seed always produces the same mark, but the mark feels alive not designed"
+        video_keyframe: "generative system evolving in real-time, the parameters slowly drifting, each frame unique but the system recognizable, the process IS the content"
+        mobile_hero: "subtle generative texture — noise-based pattern with carefully constrained parameters, the randomness is bounded and intentional, organic but systematic"
+        product_shot: "product surrounded by a generative particle system that responds to the product's silhouette, the algorithm wraps the object in computed context"
+        editorial: "a split screen — code on one side, its visual output on the other, the connection between instruction and expression, the creative act of parameterization"
     - style_id: fractal
       dials:
         design_variance: 7
@@ -6826,6 +7213,15 @@ implementation:
         unexpected:
           - network security visualization (attack patterns exhibit fractal branching)
           - geological/climate data display
+      scene_templates:
+        website_hero: "a Mandelbrot set detail at extreme zoom where the boundary between inside and outside becomes an infinite landscape, the zoom level reveals a world that exists at every scale"
+        album_cover: "a Julia set with parameters chosen to create a form that resembles a biological structure — a neuron, a fern, a bronchial tree — mathematics discovering nature"
+        event_poster: "fractal branching from a single point — the event is the seed, the fractal is the consequence, the branching fills the space like a growing organism, one color on dark"
+        logo: "abstract mark from the silhouette of a fractal at a specific iteration depth — zoomed out enough to be simple, zoomed in enough to show self-similarity at the edge"
+        video_keyframe: "continuous zoom into a fractal boundary, each zoom level revealing the same shapes at smaller scale, the infinite regression is hypnotic and mathematical"
+        mobile_hero: "fractal texture at medium zoom — the self-similar pattern creates visual interest at any crop, the detail is resolution-independent, deep jewel tones"
+        product_shot: "product positioned at the center of a fractal composition, the fractal growing outward from the product as if the product is the seed of a mathematical organism"
+        editorial: "hands adjusting fractal parameters on a screen, the visualization updating in real-time, the relationship between numerical input and visual complexity"
     - style_id: ai-diffusion
       dials:
         design_variance: 7
@@ -6856,6 +7252,15 @@ implementation:
         unexpected:
           - placeholder systems for apps in development (AI-generated contextual imagery beats gray rectangles)
           - scenario planning tools (visualizing hypothetical futures)
+      scene_templates:
+        website_hero: "an impossible architectural space that could not be photographed — stairs that connect to themselves, light from no source, materials that blend at their boundaries, dreamlike"
+        album_cover: "a portrait where the subject's hair dissolves into the landscape behind them, the boundary between person and place is uncertain, the diffusion IS the meaning"
+        event_poster: "an environment that is simultaneously indoor and outdoor — walls that become sky, floors that become water — the transitional space exists only in latent space"
+        logo: "abstract mark that appears to have been generated and then cleaned up — subtle diffusion artifacts at edges give it uncanny life, not-quite-perfect geometry"
+        video_keyframe: "a scene that evolves through latent space interpolation, objects morphing into related objects, the transitions are smooth but the destinations are unexpected"
+        mobile_hero: "atmospheric texture that resembles nothing specific but evokes a feeling — the latent space between things, soft and uncertain, dreamlike but not dreamy"
+        product_shot: "product in an AI-generated environment that could not exist — impossible lighting, surreal context, the product is the only real thing in an imagined world"
+        editorial: "a denoising sequence — the same image at different diffusion timesteps from pure noise to final form, the emergence of coherence from chaos, the creative process of the machine"
     - style_id: cellular-automata
       dials:
         design_variance: 4
@@ -6883,6 +7288,15 @@ implementation:
         unexpected:
           - epidemiology dashboards (CA is literally how disease spread is modeled)
           - urban planning tools (zoning as cellular rules)
+      scene_templates:
+        website_hero: "Rule 110 automaton output rendered at high resolution, the emergent complexity from simple rules creates an organic textile-like pattern, monochrome on a dark field"
+        album_cover: "a Game of Life pattern at a critical generation — a glider gun producing a stream of gliders, the emergent behavior is more complex than its simple rules, grid visible"
+        event_poster: "a cellular automaton grid where the initial state spells something but after N generations it has evolved into an unrecognizable living pattern, birth from message"
+        logo: "abstract mark that IS a cellular automaton's stable pattern (still life or oscillator) — the mark is alive in a mathematical sense, pixel-grid alignment visible"
+        video_keyframe: "cellular automaton evolving generation by generation, each frame is one tick, the emergent patterns grow, die, and reorganize, the system has its own agenda"
+        mobile_hero: "1D cellular automaton output creating a triangular textile pattern from a single seed cell, the pattern grows downward like weaving, the rule number defines the aesthetic"
+        product_shot: "product placed on a surface printed with a cellular automaton pattern, the living pattern frozen at a specific generation, the mathematical context frames the physical object"
+        editorial: "hands on a grid drawing the initial state of an automaton with a marker, each cell colored or empty, the simple beginning of emergent complexity"
     - style_id: particle-systems
       dials:
         design_variance: 6
@@ -6912,6 +7326,15 @@ implementation:
         unexpected:
           - audio visualization in music apps
           - network traffic monitoring (each packet as a particle)
+      scene_templates:
+        website_hero: "a cloud of luminous particles mid-convergence, not yet a form but no longer random, the moment between chaos and pattern, each particle trailing a faint path line"
+        album_cover: "particles forming and dissolving a human silhouette, the figure exists only as a density in the particle field, the boundary is probabilistic not solid, deep space black"
+        event_poster: "particle trails recording the motion path of a dancer or performer no longer in frame, the movement's ghost remains as luminous traces, the absence dances"
+        logo: "abstract mark where particles cluster to define edges but never form solid lines, the mark exists as a probability density, different each render but always recognizable"
+        video_keyframe: "particles responding to an invisible force — attracting, repelling, orbiting — the force is the subject, the particles only reveal its shape, physics made visible"
+        mobile_hero: "sparse particle field drifting slowly on a dark background, each particle a slightly different luminous color, the movement is calming and organic, a digital night sky"
+        product_shot: "product surrounded by orbiting particles that trace the product's contour, the particles are caught in the product's gravitational field, motion blur on particles"
+        editorial: "hands interacting with a particle system on a touchscreen, the particles responding to finger pressure and movement, the dialogue between human gesture and digital physics"
     - style_id: tilt-shift
       dials:
         design_variance: 5
@@ -6941,6 +7364,15 @@ implementation:
         unexpected:
           - timeline/history apps (the miniaturization makes past events feel like diorama scenes)
           - recipe apps (overhead food photography is the norm — tilt-shift it)
+      scene_templates:
+        website_hero: "an aerial view of a city intersection where tilt-shift blur makes real buildings look like scale models, the miniaturization transforms the mundane into the precious"
+        album_cover: "a musical venue or recording studio photographed from above with tilt-shift effect, the real place becomes a dollhouse, the world of the music becomes toylike and intimate"
+        event_poster: "a venue or landscape tilt-shifted to diorama scale, the sharp focus band falls exactly on the event location, everything else is a soft miniature world"
+        logo: "abstract mark with a subtle blur gradient that makes flat shapes appear to exist at tilt-shift scale, the focus band creates implied depth on a 2D mark"
+        video_keyframe: "timelapse of a real scene with tilt-shift applied, tiny people and vehicles moving in fast-forward, the miniaturization makes time and motion look mechanical"
+        mobile_hero: "out-of-focus bokeh pattern from tilt-shift lens, the circular highlights of unfocused points of light at miniature scale, dreamy and colorful, no sharp elements"
+        product_shot: "product in sharp focus at the center of a tilt-shifted environment, the surrounding context becomes a miniature set, the product is the only full-scale element"
+        editorial: "hands assembling a physical scale model, the real hands at full scale working on the tiny world, the shift in scale between maker and made"
     - style_id: hdr-hyperrealism
       dials:
         design_variance: 4
@@ -6970,6 +7402,15 @@ implementation:
         unexpected:
           - food delivery apps (HDR food photography dramatically increases conversion)
           - automotive configurators (the detail visibility is the product)
+      scene_templates:
+        website_hero: "a single material surface with every micro-detail visible — every pore in leather, every fiber in fabric, every scratch in metal — the detail depth is overwhelming and real"
+        album_cover: "an everyday object with HDR detail extraction revealing textures invisible to the casual eye — the grain in a guitar's neck, the patina on a trumpet's valve, hyper-real"
+        event_poster: "an empty stage or venue photographed in HDR where every surface detail is equally crisp — the scuffs on the floor, the dust on the lights, the total memory of the space"
+        logo: "abstract mark with hyper-realistic material texture applied — the mark appears to be made of real metal or stone, every surface imperfection renders it physical"
+        video_keyframe: "extreme slow-motion detail of a surface being touched or used, HDR revealing textures the eye would miss at normal speed, the micro-world of material interaction"
+        mobile_hero: "HDR close-up of a natural texture — stone, wood, water, ice — every detail extracted and present, the texture is deeper than the eye normally perceives"
+        product_shot: "product in HDR with every material quality amplified — reflections sharper, textures deeper, edges crisper — the product becomes more real than reality"
+        editorial: "hands of a craftsperson at work, HDR revealing every callus, every ink stain, every line — the hands tell the complete biography of the craft"
     - style_id: infrared
       dials:
         design_variance: 7
@@ -6999,6 +7440,15 @@ implementation:
         unexpected:
           - agriculture/forestry monitoring (infrared imagery is literally how vegetation health is measured)
           - climate data visualization (thermal mapping)
+      scene_templates:
+        website_hero: "a treeline in false-color infrared where foliage is luminous white and sky is deep indigo, the reversal makes a familiar landscape alien and beautiful, dreamlike clarity"
+        album_cover: "a cityscape in infrared where buildings absorb and trees glow white, the thermal world reveals a hidden hierarchy of living and non-living, otherworldly palette"
+        event_poster: "a crowd scene in infrared — every person glows warm against a cool architectural background, the body heat is visible, the living energy made apparent, false color"
+        logo: "abstract mark in infrared palette — luminous white form on deep indigo, the mark suggests it was revealed by thermal imaging rather than designed, discovered not created"
+        video_keyframe: "slow pan across a landscape transitioning from visible light to infrared, the world transforming as the spectrum shifts, familiar becoming alien"
+        mobile_hero: "false-color gradient referencing the infrared palette — white through pink through deep blue, the otherworldly spectrum as a background texture"
+        product_shot: "product photographed in false-color infrared, the thermal properties of its materials revealed, warm components glow, cool components go dark, the hidden physics exposed"
+        editorial: "hands holding a thermal camera pointed at an ordinary scene, the camera screen showing the infrared version, two realities in one frame"
     - style_id: cyanotype
       dials:
         design_variance: 5
@@ -7026,6 +7476,15 @@ implementation:
         unexpected:
           - blueprint/engineering tools (the blue-and-white IS the blueprint aesthetic)
           - hardware documentation (circuit-diagram-as-cyanotype)
+      scene_templates:
+        website_hero: "a botanical silhouette on Prussian blue field — the white outline of a plant specimen against deep cyan, the photographic-negative-to-positive logic, sun-printed clarity"
+        album_cover: "musical objects (tuning fork, bow, reed) arranged as a cyanotype contact print, their white silhouettes overlapping on blue, the objects identified by outline alone"
+        event_poster: "an architectural plan or map rendered as cyanotype — white lines on blue, the blueprint aesthetic literal and beautiful, the plan IS the poster"
+        logo: "abstract mark created as a cyanotype positive — white shape on Prussian blue, the edges have the soft chemical bleeding of real cyanotype, sun-exposed not digitally drawn"
+        video_keyframe: "timelapse of a cyanotype exposure — paper darkening from pale to deep blue as UV light reacts with the chemistry, the image appearing in reverse, the sun as printer"
+        mobile_hero: "Prussian blue field with subtle tonal variation from the chemical process, the blue is not uniform but alive with the randomness of the coating, deep and calming"
+        product_shot: "product placed on a cyanotype print of its own technical drawing — the blueprint and the object together, the plan and its realization in one frame"
+        editorial: "hands coating paper with cyanotype chemistry using a brush, the blue-green liquid spreading on the white surface, the preparation before the sun does the work"
     - style_id: double-exposure
       dials:
         design_variance: 7
@@ -7055,6 +7514,15 @@ implementation:
         unexpected:
           - team/about pages (person + their domain creates instant narrative)
           - travel destination pages (visitor + destination merged)
+      scene_templates:
+        website_hero: "a city skyline merged with a close-up of moving water, the buildings become transparent and the water flows through the architecture, neither image dominates, both transform"
+        album_cover: "a portrait merged with the environment of the music — a face dissolving into a forest, a cityscape, an ocean — the person IS their world, multiply blend mode"
+        event_poster: "the venue merged with the sky above it in double exposure, the building becomes transparent to the cosmos, the event space opens to the infinite, ethereal light"
+        logo: "abstract mark created by double-exposing two simple geometric forms, their overlap creates a third form that is the actual mark, the combination is greater than the parts"
+        video_keyframe: "two footages blended in real-time — a person walking merged with a landscape passing, the movement creates shifting relationships between figure and ground"
+        mobile_hero: "double-exposed texture — organic form (foliage, cloud) over geometric pattern (architecture, grid), the blend creates depth and atmosphere, layered and luminous"
+        product_shot: "product double-exposed with its natural material source — leather item merged with hide, wooden item merged with forest, the origin story visible in the object"
+        editorial: "a portrait double-exposed with the tools of the subject's craft — a musician merged with their instrument, a chef merged with their kitchen, identity through practice"
     - style_id: miniature-diorama
       dials:
         design_variance: 6
@@ -7085,6 +7553,15 @@ implementation:
         unexpected:
           - supply chain visualization (the miniature scale makes logistics tangible)
           - factory/manufacturing dashboards (the diorama view is literally a factory floor model)
+      scene_templates:
+        website_hero: "a miniature world built on a tabletop, the tilt-shift blur creating selective focus on the central scene, real craft materials (moss, sand, tiny objects) visible at close inspection"
+        album_cover: "a tiny musical scene built in a shadow box — miniature instruments, tiny figures, a stage the size of a matchbox — the small scale creates emotional intimacy"
+        event_poster: "the event venue recreated as a miniature diorama in a glass case, visitors visible as tiny figures, the model is more inviting than a photograph of the real place"
+        logo: "abstract mark that appears to be a top-down view of a miniature architectural model, the mark has implied three-dimensionality from its diorama-like composition"
+        video_keyframe: "slow dolly across a miniature landscape, the tilt-shift focus band moving through the scene, tiny details becoming sharp and soft as the camera travels"
+        mobile_hero: "soft-focus bokeh from miniature scale photography, the out-of-focus lights and colors of a tiny world, warm and inviting, the blur is the miniature's signature"
+        product_shot: "product at full scale surrounded by a miniature world built to make the product appear enormous, the scale shift tells a story about the product's importance"
+        editorial: "hands placing a tiny tree into a model landscape with tweezers, the scale contrast between human fingers and miniature world, the craft of small things"
   cross_pollination:
     - recipe_id: terminal-nouveau
       parents:
