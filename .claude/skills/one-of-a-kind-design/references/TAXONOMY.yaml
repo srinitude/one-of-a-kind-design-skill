@@ -6511,7 +6511,7 @@ implementation:
           - dense analytics dashboards (the mathematical grid was designed for exactly this data density)
           - government service portals (Swiss objectivity signals institutional reliability)
       scene_templates:
-        website_hero: "a mathematical grid of thin lines on white, one cell highlighted with a single solid color block, the grid's precision is the aesthetic, no decoration"
+        website_hero: "soft morning light filtering through tall antique textured glass, casting warm diffused caustic light patterns across a polished limestone wall, the glass imperfections create organic light ripples on stone, clean architectural framing with generous proportions"
         album_cover: "a single Akzidenz-Grotesk letterform at massive scale filling the frame, the counter spaces and stroke terminals are the composition, one color on white"
         event_poster: "an asymmetric arrangement of horizontal and vertical rules of varying thickness, the whitespace between rules is more active than the rules themselves"
         logo: "abstract mark derived from the negative space within a grid intersection, the form emerges from structure not invention, mathematically positioned"
@@ -6552,7 +6552,7 @@ implementation:
       scene_templates:
         website_hero: "a clean geometric form being torn apart by data corruption, color channels separating in bands, the destruction reveals hidden color layers beneath the surface"
         album_cover: "a face-down phone screen cracked in a starburst pattern, each crack refracting a different color from the display beneath, the break pattern is beautiful"
-        event_poster: "a neon sign with half its letters malfunctioning, the working and broken letters together spell something different than intended, the malfunction is the message"
+        event_poster: "thermal imaging camera view of a raw concrete warehouse wall showing residual body heat signatures where dancers pressed against the surface, handprints and shoulder impressions glowing in infrared magenta fading at edges, horizontal scan line artifacts cutting through the thermal data"
         logo: "abstract mark that appears to be a clean form suffering a single glitch — one horizontal band shifted, or one color channel displaced, the error IS the mark"
         video_keyframe: "clean footage that develops progressive corruption, starting from one corner and spreading, the corruption has its own rhythm and logic"
         mobile_hero: "horizontal bands of shifted color channels on a dark background, each band a different displacement amount, data-corruption as color palette"
@@ -6670,7 +6670,7 @@ implementation:
           - restaurant/hospitality (the mood-lighting quality matches dining atmosphere)
       scene_templates:
         website_hero: "a single practical light source cutting through atmospheric haze in an empty architectural space, the beam itself is the subject, color-graded teal and warm amber"
-        album_cover: "close-up of a surface that holds the memory of the music — piano fallboard with condensation, guitar case lining worn smooth, vinyl groove under macro lens"
+        album_cover: "a rocks glass of bourbon with condensation droplets resting on a grand piano fallboard between the black keys, the glass refracts a distant blue neon sign, a red EXIT sign creates a warm accent in the bourbon surface, intimate late-night atmosphere with film grain"
         event_poster: "the environmental aftermath — empty venue with residual traces of what happened, a single overhead light still on, chairs still warm, dust still settling"
         logo: "abstract letterbox frame shape derived from anamorphic lens characteristics, negative space creates the mark"
         video_keyframe: "slow dolly forward through a narrow corridor of warm practical lights, shallow depth of field with the vanishing point in soft focus"
