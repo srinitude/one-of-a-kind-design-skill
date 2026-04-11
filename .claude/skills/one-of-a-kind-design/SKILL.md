@@ -264,3 +264,21 @@ When generating video:
 3. Apply identity lock and continuity lock blocks for multi-shot consistency
 4. Include the anti-failure block in negative prompts
 5. Evaluate output against the rubric in section 9
+
+### Surgical Image Editing (Nano Banana Pro Edit)
+
+When brief compliance check finds missing elements, or the user requests a specific edit to a generated image, use Nano Banana Pro Edit for surgical, localized changes that preserve the existing composition.
+
+```bash
+bun run scripts/edit-with-nano-banana.ts --image <url> --edit "Add three nail holes in the plaster surface, catching amber side-light"
+```
+
+The edit pipeline:
+1. Enhances the edit description into a precise Nano Banana prompt (enforcing spatial locality, dimensional integrity, photometric consistency)
+2. Executes the edit via `fal-ai/nano-banana-pro/edit` with `image_urls` array
+3. Returns the edited image URL
+
+Use this INSTEAD of image-to-image for adding missing elements. Nano Banana preserves the base image exactly — i2i re-generates too much.
+
+Endpoint: `fal-ai/nano-banana-pro/edit`
+Input: `{ prompt: string, image_urls: string[], seed: number }`
